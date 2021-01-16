@@ -29,12 +29,6 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String
     },
-    // roles: [
-    //     {
-    //       type: mongoose.Schema.Types.ObjectId,
-    //       ref: "role"
-    //     }
-    //   ],
     shop: {
         type: String,
         ref: "shop"
