@@ -4,7 +4,7 @@ const config = require('config');
 const router = express.Router();
 //const getShopbyAdress = require('../../controllers/shop');
 
-const auth = require('../../middleware/auth');
+//const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const Shop = require('../../models/Shop');
 
@@ -193,7 +193,7 @@ router.get('/type/:type', async (req, res) => {
 // @route   DELETE api/shop/:id
 // @desc    DELETE shop
 // @access  Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id',  async (req, res) => {
     try {
         const shop = await Shop.findById(req.params.id);
     

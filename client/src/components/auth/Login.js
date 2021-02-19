@@ -1,33 +1,58 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 
 export const Login = () => {
-    return ( <Fragment>
-        <html dir="rtl" lang="ar">
-        {/* <!-- Alert --> */}
-        <div class="alert alert-danger">
-                פרטים שגואים
-        </div>
+  const [formData, setFormData] = useState({
+    email:'',
+    password:''
+ 
+});
 
-            <h1 class="large text-primary">
-                התחברות
-              </h1>
-              <p class="lead"><i class="fas fa-user"></i> התחבר לשחבונך</p>
-              <form action="dashboard.html" class="form">
-                <div class="form-group">
-                  <input type="email" placeholder="כתובת אימייל" />
+const { email, password } = formData;
+
+const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+const onSubmit = async e => {
+    e.preventDefault();
+        console.log('SUCCESS')
+      };
+
+    return <Fragment>
+                <html dir="rtl" lang="ar">
+             <h1 className="large text-primary">התברות</h1>
+      <p className="lead"><i className="fas fa-user"></i>התחבר/י לחשבון שלך</p>
+      <form  className="form" onSubmit={e => onSubmit(e)}> 
+        <div className="form-group">
+                  <input   
+                  type="email"
+                  placeholder="כתובת אימייל"
+                  name="email" 
+                  value={email}
+                  onChange={e => onChange(e)}
+                  required
+                  />
                 </div>
-                <div class="form-group">
-                  <input type="password" placeholder="סיסמה" minlength="6" />
+                <div className="form-group">
+                  <input 
+                  type="password" 
+                  placeholder="סיסמה"
+                  name="password"
+                  value={password}
+                  onChange={e => onChange(e)}
+                  minlength="6"
+                   />
                 </div>
-                <input type="submit" value="התחבר/י" class="btn btn-primary" />
+                <input type="submit" value="התחבר/י" className="btn btn-primary" />
               </form>
-              <p class="my-1">
-                אין לך חשבון? <a href="login.html">הרשם</a>
+              <p className="my-1">
+                אין לך חשבון? <Link to="register">הרשם</Link>
               </p>
               </html>
-    </Fragment>
+           </Fragment> 
 
-    )
+    
 }
 
 export default Login

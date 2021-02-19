@@ -21,9 +21,9 @@ const connectDB = async () => {
         process.exit(1);
     }
 }
- connectDB.user = require("../models/User");
- connectDB.role = require("../models/Role");
+//  connectDB.user = require("../models/User");
+//  connectDB.role = require("../models/Role");
 
-connectDB.ROLES = ["user", "admin", "moderator"];
+// connectDB.ROLES = ["user", "admin", "moderator"];
 
 module.exports = connectDB;

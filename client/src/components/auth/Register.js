@@ -1,8 +1,15 @@
 import React, { Fragment, useState } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+//import axios from 'axios';
+import { setAlert } from '../../actions/alert';
+import { register  } from '../../actions/auth';
+import PropTypes from 'prop-types';
 
 
-export const Register = () => {
+
+
+ const Register = ({ setAlert, register }) => {
     const [formData, setFormData] = useState({
         name:'',
         email:'',
@@ -20,32 +27,34 @@ export const Register = () => {
     const onSubmit = async e => {
         e.preventDefault();
         if(password != password2) {
-            console.log('passwords do not much')
+            setAlert('passwords do not much', 'danger');
         } else {
-            const newUser = {
-                name,
-                email,
-                password,
-                phoneNumber,
-                birthday,
-                gender
-            }
-
-            try {
-                const config = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-
-                const body = JSON.stringify(newUser);
-
-                const res = await axios.post('/api/user/registerUser', body, config);
-                console.log(res.data);
-            } catch (err) {
-                console.error(err.response.data);
-            }
+            register({ name, email, password, phoneNumber, birthday, gender })
         }
+            //     const newUser = {
+        //         name,
+        //         email,
+        //         password,
+        //         phoneNumber,
+        //         birthday,
+        //         gender
+        //     }
+
+        //     try {
+        //         const config = {
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             }
+        //         }
+
+        //         const body = JSON.stringify(newUser);
+
+        //         const res = await axios.post('/api/user/registerUser', body, config);
+        //         console.log(res.data);
+        //     } catch (err) {
+        //         console.error(err.response.data);
+        //     }
+        // }
     }
 
     return <Fragment>
@@ -60,7 +69,7 @@ export const Register = () => {
            name="name"
            value={name}
            onChange={e => onChange(e)} 
-           required 
+            
           />
         </div>
         <div>
@@ -101,7 +110,7 @@ export const Register = () => {
                   name="email" 
                   value={email}
                   onChange={e => onChange(e)}
-                  required
+                  
                   />
                 </div>
                 <div className="form-group">
@@ -129,7 +138,7 @@ export const Register = () => {
                 <input type="submit" value="הרשם" className="btn btn-primary" />
               </form>
               <p className="my-1">
-                כבר יש לך חשבון? <a href="login.html">התחבר/י</a>
+                כבר יש לך חשבון? <Link to="login.html">התחבר/י</Link>
               </p>
               </html>
            </Fragment> 
@@ -137,4 +146,10 @@ export const Register = () => {
     
 }
 
-export default Register
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+  };
+
+export default connect(null, { setAlert, register })(Register);

@@ -5,7 +5,7 @@ const router = express.Router();
 const protect = require('../../middleware/authMiddleware');
 
 
-const auth = require('../../middleware/auth');
+//const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 //const ShopOwner = require('../../models/ShopOwner');
 const Coupon = require('../../models/Coupon');
