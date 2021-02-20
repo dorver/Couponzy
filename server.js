@@ -1,10 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db');
     
-
 //const Role = connectDB.role;
 const cors = require('cors');
-
 
 const app = express();
 
@@ -23,11 +21,6 @@ app.get('/', (req,res) => res.send('API Running'));
 app.use('/api/coupons', require('./routes/api/coupons'));
 app.use('/api/shops', require('./routes/api/shops'));
 app.use('/api/user', require('./routes/api/user'));
-
-
-
-
-
 
 const PORT = process.env.PORT || 5000;
 
