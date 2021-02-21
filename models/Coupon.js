@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
 
 const CouponSchema = new mongoose.Schema({
-      // shopOwner: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: 'shopOwner'
-      // },
+     
       id:{
-          type: String
+        type: String
       },
       name: {
         type: String
@@ -16,18 +13,32 @@ const CouponSchema = new mongoose.Schema({
         default: false
       },
       expireDate: {
-          type: String
+        type: Date,
       },
       couponCode: {
-          type: String
+        type: String
       },
-      price: {
-          type: Number
+      NewPrice: {
+        type: Number
       },
-      date: {
-        type: Date,
-        default: Date.now
-      }
+      oldPrice: {
+        type: Number
+      },
+      decription: {
+        type: String
+      },
+      shop:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'shop'
+      },
+      couponType:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'couponType'
+      },
+      order:{
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'order'
+      },
     });
 
 module.exports = Coupon = mongoose.model('coupon', CouponSchema);
