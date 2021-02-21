@@ -6,9 +6,12 @@ const UserSchema = new mongoose.Schema({
     id: {
         type: String
     },
-    name: {
+    firstName: {
         type: String,
        // required: true
+    },
+    lastName: {
+        type: String
     },
     email: {
         type: String,
@@ -28,9 +31,8 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String
     },
-    shop: {
-        type: String,
-        ref: "shop"
+    pictureName: {
+        type: String
     },
     isAdmin: {
         type: Boolean,
@@ -43,11 +45,15 @@ const UserSchema = new mongoose.Schema({
     isCustomer: {
         type: Boolean,
         //required: true
-    } 
-    // date: {
-    //     type: Date,
-    //     default: Date.now
-    // }
+    },
+    shop: {
+        type: String,
+        ref: "shop"
+    },
+    orders: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'order'
+    }, 
 });
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {

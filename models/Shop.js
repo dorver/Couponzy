@@ -8,19 +8,20 @@ const ShopSchema = new mongoose.Schema({
       name: {
         type: String
       },
-      adress: {
-        type: String
-      },
       type: {
         type: String
-      },
-      date: {
-        type: Date,
-        default: Date.now
       },
       coupons: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'coupon'
+      },
+      branches: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'branch'
+      },
+      users: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'user'
       }
     });
 
