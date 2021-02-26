@@ -6,9 +6,13 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dashboard": {
+    "a2Admin": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -16,44 +20,36 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/dashboard",
+            "outputPath": "dist/a2Admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "hammerjs",
+              "chart.js"
+            ],
+            
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css",
-              "node_modules/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
-              "node_modules/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css",
-              "node_modules/admin-lte/plugins/jqvmap/jqvmap.min.css",
-              "node_modules/admin-lte/dist/css/adminlte.min.css",
-              "node_modules/admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css",
-              "node_modules/admin-lte/plugins/daterangepicker/daterangepicker.css",
-              "node_modules/admin-lte/plugins/summernote/summernote-bs4.min.css"
+              "src/styles.scss",
+              "src/assets/css/font-awesome.min.css",
+        			"src/assets/sass/bootstrap.scss",
+        			"src/assets/sass/loader.scss",
+							"src/assets/sass/custom-material-theme.scss",
+							"node_modules/@swimlane/ngx-datatable/release/index.css",
+        			"node_modules/@swimlane/ngx-datatable/release/themes/material.css",
+        			"node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
+							"node_modules/angular-calendar/css/angular-calendar.css",
+        			"node_modules/leaflet/dist/leaflet.css",
+        			"src/assets/sass/styles.scss"
             ],
             "scripts": [
-              "node_modules/admin-lte/plugins/jquery/jquery.min.js",
-              "node_modules/admin-lte/plugins/jquery-ui/jquery-ui.min.js",
-              "node_modules/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js",
-              "node_modules/admin-lte/plugins/chart.js/Chart.min.js",
-              "node_modules/admin-lte/plugins/sparklines/sparkline.js",
-              "node_modules/admin-lte/plugins/jqvmap/jquery.vmap.min.js",
-              "node_modules/admin-lte/plugins/jqvmap/maps/jquery.vmap.usa.js",
-              "node_modules/admin-lte/plugins/jquery-knob/jquery.knob.min.js",
-              "node_modules/admin-lte/plugins/moment/moment.min.js",
-              "node_modules/admin-lte/plugins/daterangepicker/daterangepicker.js",
-              "node_modules/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js",
-              "node_modules/admin-lte/plugins/summernote/summernote-bs4.min.js",
-              "node_modules/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js",
-              "node_modules/admin-lte/dist/js/adminlte.js",
-              "node_modules/admin-lte/dist/js/demo.js",
-              "node_modules/admin-lte/dist/js/pages/dashboard.js"
+              "node_modules/chart.js/dist/Chart.min.js"
             ]
           },
           "configurations": {
@@ -89,18 +85,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "dashboard:build"
+            "browserTarget": "a2Admin:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "dashboard:build:production"
+              "browserTarget": "a2Admin:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "dashboard:build"
+            "browserTarget": "a2Admin:build"
           }
         },
         "test": {
@@ -115,11 +111,20 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "src/assets/css/font-awesome.min.css",
+        			"src/assets/sass/bootstrap.scss",
+        			"src/assets/sass/loader.scss",
+        			"src/assets/sass/custom-material-theme.scss",
+        			"node_modules/angular-calendar/dist/css/angular-calendar.css",
+							"node_modules/@swimlane/ngx-datatable/release/index.css",
+        			"node_modules/@swimlane/ngx-datatable/release/themes/material.css",
+        			"node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
+							"node_modules/angular-calendar/css/angular-calendar.css",
+        			"node_modules/leaflet/dist/leaflet.css",
+        			"src/assets/sass/styles.scss"
             ],
-            "scripts": [
-              
-            ]
+            "scripts": ["node_modules/chart.js/dist/Chart.min.js"]
           }
         },
         "lint": {
@@ -139,16 +144,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "dashboard:serve"
+            "devServerTarget": "a2Admin:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "dashboard:serve:production"
+              "devServerTarget": "a2Admin:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "dashboard"
+  "defaultProject": "a2Admin"
 }
