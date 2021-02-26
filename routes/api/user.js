@@ -40,6 +40,7 @@ const generateToken = require('../../utils/generateToken');
 // import generateToken from '../utils/generateToken.js'
 const User = require('../../models/User');
 // import User from '../models/userModel.js'
+const { check, validationResult } = require('express-validator');
 const express = require('express');
 // import express from 'express'
 const router = express.Router()
@@ -71,7 +72,24 @@ router.post("/userLogin", asyncHandler(async (req, res) => {
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
-router.post("/registerUser", asyncHandler(async (req, res) => {
+router.post("/registerUser",
+[
+     
+  [
+    check('name', 'חובה להזין שם').notEmpty(),
+    check('email', 'חובה להזין אימייל תקין').isEmail(),
+    check('password', 'חובה להזין סיסמא בעלת 6 תוים או יותר').isLength({ min: 6 }),
+    check('phoneNumber', 'חובה להזין מספר טלפון תקין').notEmpty(),
+    check('phoneNumber','חובה להזין מספר טלפון בעל 10 ספרות').isNumeric().isLength({ min:10, max:10}),
+    check('birthday', 'חובה להזין תאריך לידה' ).notEmpty() 
+  ]
+],
+
+asyncHandler(async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   const { name, email, password, isAdmin, phoneNumber, birthday, gender } = req.body
 
   const userExists = await User.findOne({ email })
@@ -105,7 +123,9 @@ router.post("/registerUser", asyncHandler(async (req, res) => {
       birthday: user.birthday,
       gender: user.gender,
       token: generateToken(user._id),
+
     })
+
   } else {
     res.status(400)
     throw new Error('Invalid user data')

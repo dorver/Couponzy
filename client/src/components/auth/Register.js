@@ -30,6 +30,7 @@ import PropTypes from 'prop-types';
             setAlert('passwords do not much', 'danger');
         } else {
             register({ name, email, password, phoneNumber, birthday, gender })
+            
         }
             //     const newUser = {
         //         name,
@@ -55,7 +56,7 @@ import PropTypes from 'prop-types';
         //         console.error(err.response.data);
         //     }
         // }
-    }
+    };
 
     return <Fragment>
                 <html dir="rtl" lang="ar">
@@ -100,8 +101,6 @@ import PropTypes from 'prop-types';
             <label for="male">זכר</label><br/>
             <input type="radio" id="female" name="gender" value={gender} onChange={e => onChange(e)}/>
             <label for="female">נקבה</label><br/>
-            <input type="radio" id="other" name="gender" value={gender} onChange={e => onChange(e)}/>
-            <label for="other">אחר</label>
         </div> 
         <div className="form-group">
                   <input   
@@ -149,7 +148,7 @@ import PropTypes from 'prop-types';
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
     register: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
+   // isAuthenticated: PropTypes.bool
   };
 
 export default connect(null, { setAlert, register })(Register);
