@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
 
+
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
+import { RealtimeService } from '../../realtime.service';
 
 const folders: any[] = [
   {
@@ -80,9 +82,11 @@ export class PageDashboardComponent implements OnInit {
   options: any;
   layersControl: any;
   layers: any[];
+  counter : Number;
 
-  constructor( private _sharedService: SharedService ) {
+  constructor( private _sharedService: SharedService,  private _realtime: RealtimeService) {
     this._sharedService.emitChange(this.pageTitle);
+    this._realtime.currentCounter.subscribe(counter => this.counter = counter);
   }
 
   ngOnInit(){
