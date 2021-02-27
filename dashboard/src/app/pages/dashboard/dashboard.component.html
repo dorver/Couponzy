@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6 col-xl-3">
       <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'" class="info-card">
-        <div class="title text-uppercase">Orders</div>
+        <div class="title text-uppercase">כמות המשתמשים</div>
         <div class="count">2,145</div>
         <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+17%</badge> <small>from previous period</small>
       </card>
@@ -9,15 +9,15 @@
   
     <div class="col-md-6 col-xl-3">
       <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'" class="info-card">
-        <div class="title text-uppercase">Revenue</div>
-        <div class="count">$ 50,24</div>
+        <div class="title text-uppercase">משתמשים מחוברים</div>
+        <div class="count">{{counter}}</div>
         <small>11750</small>
       </card>
     </div>
   
     <div class="col-md-6 col-xl-3">
       <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'" class="info-card">
-        <div class="title text-uppercase">Products</div>
+        <div class="title text-uppercase">רכישת קופונים מתחילת החודש</div>
         <div class="count">2,543</div>
         <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+210</badge>
       </card>
@@ -25,7 +25,7 @@
   
     <div class="col-md-6 col-xl-3">
       <card [customBgColor]="'rgba(0,128,0,0.8)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-7.jpg'" class="info-card">
-        <div class="title text-uppercase">Sold</div>
+        <div class="title text-uppercase">ממוצע רכישת קופונים חודשי</div>
         <div class="count">1,005</div>
         <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+24%</badge>
       </card>

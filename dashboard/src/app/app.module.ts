@@ -14,6 +14,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DefaultLayoutComponent } from './layouts/default/default.component';
 
+// For a realtime.service.ts get the amount of users connected
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
+
 // A2 Components
 import { SidebarComponent } from './a2-components/sidebar/sidebar.component';
 import { LogoComponent } from './a2-components/logo/logo.component';
@@ -54,6 +58,7 @@ import { FooterComponent } from './a2-components/footer/footer.component';
     MaterialModule,
     LeafletModule,
     ChartsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]

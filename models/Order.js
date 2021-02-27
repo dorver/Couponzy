@@ -5,8 +5,9 @@ const OrderSchema = new mongoose.Schema({
       id:{
         type: String
       },
-      name: {
-        type: String
+      orderDate: {
+        type: Date,
+        default: Date.now
       },  
       coupons:{
         type: mongoose.Schema.Types.ObjectId,
