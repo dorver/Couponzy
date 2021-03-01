@@ -5,8 +5,9 @@ const OrderSchema = new mongoose.Schema({
       id:{
         type: String
       },
-      name: {
-        type: String
+      orderDate: {
+        type: Date,
+        default: Date.now
       },  
       coupons:{
         type: mongoose.Schema.Types.ObjectId,
@@ -22,4 +23,4 @@ const OrderSchema = new mongoose.Schema({
       },
     });
 
-module.exports = Coupon = mongoose.model('order', CouponSchema);
+module.exports = Order = mongoose.model('order', OrderSchema);

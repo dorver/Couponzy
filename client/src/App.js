@@ -4,6 +4,10 @@ import { Container } from 'react-bootstrap';
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomeScreen from './screens/HomeScreen';
+import io from "socket.io-client";
+
+
+const socket = io.connect("http://localhost:5000", { transport : ['websocket'] });
 
 
 
@@ -19,7 +23,6 @@ const App = () => {
      <Footer />
      </>
    )
-   
  
 }
 export default App;

@@ -1,0 +1,79 @@
+[
+  {
+    "title": "ראשי",
+    "icon": "",
+    "active": true,
+    "groupTitle" : true,
+    "sub": "",
+    "routing": "",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "לוח מחוונים",
+    "icon": "fa fa-tachometer",
+    "active": false,
+    "groupTitle": false,
+    "sub": "",
+    "routing": "/default-layout/dashboard",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "ניהול משתמשים",
+    "icon": "fa fa-users",
+    "active": false,
+    "groupTitle" : false,
+    "sub": "",
+    "routing": "/default-layout/users",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "ניהול חנויות",
+    "icon": "fa fa-shopping-basket",
+    "active": false,
+    "groupTitle" : false,
+    "sub": "",
+    "routing": "/default-layout/shops",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "מפת חנויות",
+    "icon": "fa fa-map-marker",
+    "active": false,
+    "groupTitle" : false,
+    "sub": "",
+    "routing": "/default-layout/map",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "הסטוריית רכישת קופונים",
+    "icon": "fa fa-money",
+    "active": false,
+    "groupTitle": false,
+    "sub": "",
+    "routing": "/default-layout/orders",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  },
+  {
+    "title": "סטטיסטיקה",
+    "icon": "fa fa-area-chart",
+    "active": false,
+    "groupTitle": false,
+    "sub": "",
+    "routing": "/default-layout/statistics",
+    "externalLink": "",
+    "budge": "",
+    "budgeColor": ""
+  }
+]
