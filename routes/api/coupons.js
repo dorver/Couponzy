@@ -3,14 +3,9 @@ const request = require('request');
 const config = require('config');
 const router = express.Router();
 const protect = require('../../middleware/authMiddleware');
-
-
-//const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
-//const ShopOwner = require('../../models/ShopOwner');
 const Coupon = require('../../models/Coupon');
 const Shop = require('../../models/Shop');
-//const { getShopbyAdress } = require('../../controllers/shop');
 
  // @route   POST api/coupon
 // @desc     Create coupon
@@ -38,7 +33,14 @@ router.post( // check for body errors
      inStock,
      expireDate,
      couponCode,
-     price
+     newPrice,
+     oldPrice,
+     description,
+     pictureName,
+     published,
+     couponType,
+     shop,
+     orders
       } = req.body;
 
     console.log("1");
@@ -50,19 +52,22 @@ router.post( // check for body errors
     if(inStock) CouponFields.inStock = inStock;
     if(expireDate) CouponFields.expireDate = expireDate;
     if(couponCode) CouponFields.couponCode = couponCode;
-    if(price) CouponFields.price = price;
+    if(newPrice) CouponFields.newPrice = newPrice;
+    if(description) CouponFields.description = description;
+    if(pictureName) CouponFields.pictureName = pictureName;
+    if(published) CouponFields.published = published;
+    if(couponType) CouponFields.couponType = couponType;
+    if(shop) CouponFields.shop = shop;
+
+    if(orders) {
+      BranchFields.orders = orders.split(',').map(order => order.trim());
+   }
 
      try {
        let coupon = await Coupon.findOne({name : name}); //look for a coupon
 
        if (coupon) {
-           //Update
-          //  profile = await Profile.findOneAndUpdate(
-          //      { user: req.user.id },
-          //      { $set: CouponFields },
-          //      { new: true }
-          //  );
-
+       
            return res.json("coupon already exists");
        }
 
@@ -102,20 +107,35 @@ router.post( // check for body errors
         inStock,
         expireDate,
         couponCode,
-        price
+        newPrice,
+        oldPrice,
+        description,
+        pictureName,
+        published,
+        couponType,
+        shop,
+        orders
          } = req.body;
    
        console.log("1");
    
-       //Build coupon object
-       const CouponFields = {}; // build up coupon fields object to insert into the db and check if coming in
+       //Build shop object
+       const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
        if(id) CouponFields.id = id;
        if(name) CouponFields.name = name;
        if(inStock) CouponFields.inStock = inStock;
        if(expireDate) CouponFields.expireDate = expireDate;
        if(couponCode) CouponFields.couponCode = couponCode;
-       if(price) CouponFields.price = price;
+       if(newPrice) CouponFields.newPrice = newPrice;
+       if(description) CouponFields.description = description;
+       if(pictureName) CouponFields.pictureName = pictureName;
+       if(published) CouponFields.published = published;
+       if(couponType) CouponFields.couponType = couponType;
+       if(shop) CouponFields.shop = shop;
    
+       if(orders) {
+         BranchFields.orders = orders.split(',').map(order => order.trim());
+      }
 
        try {
          let coupon = await Coupon.findOne({id : id}); //look for a coupon and update

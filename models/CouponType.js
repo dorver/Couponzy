@@ -16,4 +16,4 @@ const CouponTypeSchema = new mongoose.Schema({
   ]
 });
 
-module.exports = Coupon = mongoose.model('couponType', CouponSchema);
+module.exports = CouponType = mongoose.model('couponType', CouponTypeSchema);

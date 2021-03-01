@@ -26,7 +26,7 @@ const CouponSchema = new mongoose.Schema({
   oldPrice: {
     type: Number
   },
-  decription: {
+  description: {
     type: String
   },
   pictureName: {
