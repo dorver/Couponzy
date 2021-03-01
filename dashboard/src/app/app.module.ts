@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule }	from '@angular/platform-browser/animations';
 
 import { ChartsModule }	from 'ng2-charts';
+//import { AgmCoreModule }	from '@agm/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -58,7 +59,10 @@ import { FooterComponent } from './a2-components/footer/footer.component';
     MaterialModule,
     LeafletModule,
     ChartsModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    //AgmCoreModule.forRoot({
+    //  apiKey: 'AIzaSyBSxKND1KrrmSMyqdOdcPyglfSU11-YDKY'
+    //})
   ],
   providers: [],
   bootstrap: [AppComponent]

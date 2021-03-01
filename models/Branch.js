@@ -6,34 +6,41 @@ const BranchSchema = new mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   city: {
-    type: String
+    type: String,
+    required: true
   },
-  adress: {
-    type: String
+  address: {
+    type: String,
+    required: true
   },
   phoneNumber: {
-    type: String
+    type: String,
+    required: true
   },
   lat: {
-    type: Number
+    type: Number,
+    required: true
   },
   long: {
-    type: Number
+    type: Number,
+    required: true
   },
   isOpen: {
-    type: Boolean
+    type: Boolean,
+    default: true
   },
   shop: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'shop'
   },
-  order: [
+  orders: [
     {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'orders'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'order'
     }
   ]
 });

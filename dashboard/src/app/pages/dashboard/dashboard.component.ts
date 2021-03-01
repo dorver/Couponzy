@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
 
-
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
 import { RealtimeService } from '../../realtime.service';
 
+// To do list -----> DB-Mongodb ההזמנות האחרונות- להביא מבסיס הנתונים
 const folders: any[] = [
   {
     icon: 'android',
@@ -43,6 +43,8 @@ const folders: any[] = [
     updated: 'March 28, 2017'
   }
 ];
+
+// Time line -------> עדיין בתכנון
 const timelineData: any[] = [
   {
     'timeline': [
@@ -76,20 +78,28 @@ const timelineData: any[] = [
   styleUrls: ['./dashboard.component.scss']
 })
 export class PageDashboardComponent implements OnInit {
-  pageTitle: string = 'Dashboard';
+  pageTitle: string = 'עמוד ראשי';
   folders: any[] = folders;
   timelineData: any[] = timelineData;
   options: any;
   layersControl: any;
   layers: any[];
+
+  // Amount of users connected
   counter : Number;
 
+  // Constractor
   constructor( private _sharedService: SharedService,  private _realtime: RealtimeService) {
     this._sharedService.emitChange(this.pageTitle);
     this._realtime.currentCounter.subscribe(counter => this.counter = counter);
   }
 
   ngOnInit(){
+
+    // Display map use Leaflet --> is an awesome JavaScript library for creating maps,
+                                // It comes packed with nice features and is extremely 
+                                // mobile-friendly. Let’s see how we can integrate Leaflet 
+                                // into our Angular app.
     this.options = {
       layers: [
         tileLayer(
@@ -135,14 +145,12 @@ export class PageDashboardComponent implements OnInit {
     responsive: true,
     responsiveAnimationDuration: 500
   };
+
+  // get all the Shops -- עמודה לכל חנות/רשת חנויות
   public barChartLabels: string[] = [
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017'
+    '2012', '2013', '2014', '2015', '2016', '2017'
   ];
+
   public barChartType: string = 'bar';
   public barChartLegend: boolean = true;
 
@@ -161,6 +169,7 @@ export class PageDashboardComponent implements OnInit {
     }
   ];
 
+  // צריך לבדוק מה הפונקציה הזאת עושה והיכן היא מוצגת על המסך
   fetch(cb) {
     const req = new XMLHttpRequest();
     req.open('GET', 'assets/table-data.json');
@@ -172,6 +181,7 @@ export class PageDashboardComponent implements OnInit {
     req.send();
   }
 
+  /*
   // Pie
   public pieChartLabels: string[] = [
     'Angular',
@@ -260,5 +270,5 @@ export class PageDashboardComponent implements OnInit {
       }
     },
     tooltips: false
-  };
+  };*/
 }

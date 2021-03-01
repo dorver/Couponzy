@@ -6,14 +6,15 @@ const CouponTypeSchema = new mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   coupons: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'coupons'
+      ref: 'coupon'
     }
   ]
 });
 
-module.exports = Coupon = mongoose.model('couponType', CouponSchema);
+module.exports = CouponType = mongoose.model('couponType', CouponSchema);

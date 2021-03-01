@@ -54,7 +54,6 @@ router.post( // check for body errors
 
      try {
        let coupon = await Coupon.findOne({name : name}); //look for a coupon
-
        if (coupon) {
            //Update
           //  profile = await Profile.findOneAndUpdate(

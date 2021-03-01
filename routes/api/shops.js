@@ -12,7 +12,7 @@ const Shop = require('../../models/Shop');
 //const User = require('../../models/User');
 
 
- // @route   POST api/shops
+// @route   POST api/shops
 // @desc     Create shop
 // @access   Private
 router.post( // check for body errors

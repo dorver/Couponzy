@@ -6,7 +6,8 @@ const CouponSchema = new mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   inStock: {
     type: Boolean,
@@ -14,23 +15,31 @@ const CouponSchema = new mongoose.Schema({
   },
   expireDate: {
     type: Date,
+    required: true
   },
   couponCode: {
     type: String,
     minlength: 6,
-    maxlength: 6
+    maxlength: 6,
+    index: { unique: true },
+    required: true
   },
   newPrice: {
-    type: Number
+    type: Number,
+    required: true
   },
   oldPrice: {
-    type: Number
+    type: Number,
+    required: true
   },
   decription: {
-    type: String
+    type: String,
+    maxlength: 60,
+    required: true
   },
   pictureName: {
-    type: String
+    type: String,
+    required: true
   },
   published: {
     type: Date,
@@ -38,11 +47,11 @@ const CouponSchema = new mongoose.Schema({
   },
   couponType: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'couponType'
+    ref: 'couponTypes'
   },
   shop: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'shop'
+    ref: 'shops'
   },
   order: [
     {
@@ -52,4 +61,4 @@ const CouponSchema = new mongoose.Schema({
   ]
 });
 
-module.exports = Coupon = mongoose.model('coupon', CouponSchema);
+module.exports = Coupon = mongoose.model('coupons', CouponSchema);
