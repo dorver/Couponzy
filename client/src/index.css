@@ -6,6 +6,18 @@ h3 {
   padding: 1rem 0;
 }
 
+.card-body {
+  text-align: right;
+}
+
+.container {
+  text-align: right;
+}
+
+/* h3 {
+  padding: 1rem 0;
+}
+
 h1 {
   font-size: 1.8rem;
   padding: 1rem 0;
@@ -21,7 +33,7 @@ h2 {
 }
 
 /* carousel */
-.carousel-item-next,
+/* .carousel-item-next,
 .carousel-item-prev,
 .carousel-item.active {
   display: flex;
@@ -49,5 +61,4 @@ h2 {
 @media (max-width: 900px) {
   .carousel-caption h2 {
     font-size: 2.5vw;
-  }
-}
+  } */
