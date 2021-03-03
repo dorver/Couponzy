@@ -5,7 +5,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const Shop = require('../../models/Shop');
 
- // @route   POST api/shops
+// @route   POST api/shops
 // @desc     Create shop
 // @access   Private
 router.post( // check for body errors

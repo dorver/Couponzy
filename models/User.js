@@ -8,46 +8,48 @@ const UserSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        // required: true
+        required: true
     },
     lastName: {
-        type: String
+        type: String,
+        required: true
     },
     email: {
         type: String,
-        // required: true,
+        required: true,
         unique: true
     },
     password: {
         type: String,
-        //required: true
+        required: true
     },
     phoneNumber: {
-        type: String
+        type: String,
+        required: true
     },
     birthday: {
-        type: String
+        type: Date,
+        required: true
     },
     gender: {
-        type: String
+        type: Boolean,
+        required: true
     },
     pictureName: {
-        type: String
+        type: String,
+        required: true
     },
     isAdmin: {
         type: Boolean,
-        //required: true
     },
     isSeller: {
         type: Boolean,
-        //required: true
     },
     isCustomer: {
         type: Boolean,
-        //required: true
     },
     shop: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "shop"
     },
     orders: [
