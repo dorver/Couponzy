@@ -24,6 +24,12 @@ app.get('/', (req, res) => res.send('API Running'));
 app.use('/api/coupons', require('./routes/api/coupons'));
 app.use('/api/shops', require('./routes/api/shops'));
 app.use('/api/user', require('./routes/api/user'));
+app.use('/api/branches', require('./routes/api/branches'));
+app.use('/api/orders', require('./routes/api/orders'));
+app.use('/api/couponsTypes', require('./routes/api/couponsTypes'));
+
+
+
 
 const server = http.createServer(app);
 

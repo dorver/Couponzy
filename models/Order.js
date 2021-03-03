@@ -23,4 +23,4 @@ const OrderSchema = new mongoose.Schema({
       },
     });
 
-module.exports = Coupon = mongoose.model('order', CouponSchema);
+module.exports = Order = mongoose.model('order', OrderSchema);

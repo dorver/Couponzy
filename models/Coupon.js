@@ -32,10 +32,12 @@ const CouponSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+
   decription: {
     type: String,
     maxlength: 60,
     required: true
+
   },
   pictureName: {
     type: String,

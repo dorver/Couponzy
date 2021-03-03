@@ -1,36 +1,30 @@
-import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Navbar from './components/layout/Navbar';
-import Landing from './components/layout/Landing';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import Alert from './components/layout/Alert';
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomeScreen from './screens/HomeScreen';
+import CouponScreen from './screens/CouponScreen';
 
-// Redux
-import { Provider } from 'react-redux';
-import store from './store';
+import io from 'socket.io-client';
 
-import './App.css';
+const socket = io.connect('http://localhost:5000', {
+  transport: ['websocket'],
+});
 
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:5000");
+const App = () => {
+  return (
+    <Router>
+      <Header />
+      <main className='py-3'>
+        <Container>
+          <Route path='/' component={HomeScreen} exact />
+          <Route path='/coupon/:id' component={CouponScreen} />
+        </Container>
+      </main>
+      <Footer />
+    </Router>
+  );
+};
 
-const App = () => (
-   
-  <Provider store={store}>
-  <Router>
-   <Fragment>
-      <Navbar />
-      <Route exact path='/' component={Landing} />
-      <section className="container">
-        <Alert />
-        <Switch>
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-        </Switch>    
-      </section> 
-   </Fragment>
-  </Router>
-  </Provider>
-);
 export default App;

@@ -45,4 +45,4 @@ const BranchSchema = new mongoose.Schema({
   ]
 });
 
-module.exports = Shop = mongoose.model('branch', ShopSchema);
+module.exports = Branch = mongoose.model('branch', BranchSchema);
