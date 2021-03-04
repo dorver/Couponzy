@@ -15,7 +15,7 @@ const OrderSchema = new mongoose.Schema({
       },
       branch:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'branche'
+        ref: 'branch'
       },
       user:{
         type: mongoose.Schema.Types.ObjectId,

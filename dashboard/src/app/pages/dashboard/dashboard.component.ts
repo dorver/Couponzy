@@ -81,9 +81,6 @@ export class PageDashboardComponent implements OnInit {
   pageTitle: string = 'עמוד ראשי';
   folders: any[] = folders;
   timelineData: any[] = timelineData;
-  options: any;
-  layersControl: any;
-  layers: any[];
 
   // Amount of users connected
   counter : Number;
@@ -94,50 +91,7 @@ export class PageDashboardComponent implements OnInit {
     this._realtime.currentCounter.subscribe(counter => this.counter = counter);
   }
 
-  ngOnInit(){
-
-    // Display map use Leaflet --> is an awesome JavaScript library for creating maps,
-                                // It comes packed with nice features and is extremely 
-                                // mobile-friendly. Let’s see how we can integrate Leaflet 
-                                // into our Angular app.
-    this.options = {
-      layers: [
-        tileLayer(
-          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...' }
-        )
-      ],
-      zoom: 5,
-      center: latLng(46.879966, -121.726909)
-    };
-    this.layersControl = {
-      baseLayers: {
-        'Open Street Map': tileLayer(
-          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...' }
-        ),
-        'Open Cycle Map': tileLayer(
-          'http://{s}.tile.opencyclemap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...'
-          })
-      },
-      overlays: {
-        'Big Circle': circle([ 46.95, -122 ], { radius: 5000 }),
-        'Big Square': polygon([[ 46.8, -121.55 ], [ 46.9, -121.55 ], [ 46.9, -121.7 ], [ 46.8, -121.7 ]])
-      }
-    };
-    this.layers = [
-      circle([ 46.95, -122 ], { radius: 5000 }),
-      polygon([[ 46.8, -121.85 ], [ 46.92, -121.92 ], [ 46.87, -121.8 ]]),
-      marker([ 46.879966, -121.726909 ])
-    ];
-  }
-
-  onMapReady(map) {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }
+  ngOnInit(){}
 
   // barChart
   public barChartOptions: any = {

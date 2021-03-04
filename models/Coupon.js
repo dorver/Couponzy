@@ -49,18 +49,18 @@ const CouponSchema = new mongoose.Schema({
   },
   couponType: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'couponTypes'
+    ref: 'couponType'
   },
   shop: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'shops'
+    ref: 'shop'
   },
   order: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'orders'
+      ref: 'order'
     }
   ]
 });
 
-module.exports = Coupon = mongoose.model('coupons', CouponSchema);
+module.exports = Coupon = mongoose.model('coupon', CouponSchema);
