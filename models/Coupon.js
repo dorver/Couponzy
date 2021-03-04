@@ -6,7 +6,8 @@ const CouponSchema = new mongoose.Schema({
     type: String
   },
   name: {
-    type: String
+    type: String,
+    required: true
   },
   inStock: {
     type: Boolean,
@@ -14,23 +15,33 @@ const CouponSchema = new mongoose.Schema({
   },
   expireDate: {
     type: Date,
+    required: true
   },
   couponCode: {
     type: String,
     minlength: 6,
-    maxlength: 6
+    maxlength: 6,
+    index: { unique: true },
+    required: true
   },
   newPrice: {
-    type: Number
+    type: Number,
+    required: true
   },
   oldPrice: {
-    type: Number
+    type: Number,
+    required: true
   },
-  description: {
-    type: String
+
+  decription: {
+    type: String,
+    maxlength: 60,
+    required: true
+
   },
   pictureName: {
-    type: String
+    type: String,
+    required: true
   },
   published: {
     type: Date,
@@ -47,7 +58,7 @@ const CouponSchema = new mongoose.Schema({
   order: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'orders'
+      ref: 'order'
     }
   ]
 });

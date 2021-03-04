@@ -1,41 +1,42 @@
 import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field'; 
 import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule
+	MatAutocompleteModule,
+	MatButtonModule,
+	MatButtonToggleModule,
+	MatCardModule,
+	MatCheckboxModule,
+	MatChipsModule,
+	MatDatepickerModule,
+	MatDialogModule,
+	MatExpansionModule,
+	MatGridListModule,
+	MatInputModule,
+	MatListModule,
+	MatMenuModule,
+	MatNativeDateModule,
+	MatPaginatorModule,
+	MatProgressBarModule,
+	MatProgressSpinnerModule,
+	MatRadioModule,
+	MatRippleModule,
+	MatSelectModule,
+	MatSidenavModule,
+	MatSliderModule,
+	MatSlideToggleModule,
+	MatSnackBarModule,
+	MatSortModule,
+	MatTableModule,
+	MatTabsModule,
+	MatToolbarModule,
+	MatTooltipModule
 } from '@angular/material';
 
 @NgModule({
-  
-  imports: [
-    MatAutocompleteModule,
+
+	imports: [
+		MatAutocompleteModule,
 		MatButtonModule,
 		MatButtonToggleModule,
 		MatCardModule,
@@ -64,7 +65,8 @@ import {
 		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule,
-		MatTooltipModule
+		MatTooltipModule,
+		MatFormFieldModule
 	],
 	exports: [
 		MatAutocompleteModule,
@@ -96,7 +98,8 @@ import {
 		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule,
-		MatTooltipModule
+		MatTooltipModule,
+		MatFormFieldModule
 	]
 
 })

@@ -65,7 +65,6 @@ router.post( // check for body errors
 
      try {
        let coupon = await Coupon.findOne({name : name}); //look for a coupon
-
        if (coupon) {
        
            return res.json("coupon already exists");

@@ -9,15 +9,15 @@ const OrderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
       },  
-      coupons:{
+      coupon:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'coupon'
       },
-      branches:{
+      branch:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'branch'
       },
-      users:{
+      user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
       },
