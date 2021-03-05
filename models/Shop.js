@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
 const ShopSchema = new mongoose.Schema({
-  id: {
-    type: String,
-  },
-  name: {
+  shopName: {
     type: String,
     required: true,
   },

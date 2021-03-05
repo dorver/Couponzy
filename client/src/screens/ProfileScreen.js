@@ -67,7 +67,7 @@ const ProfileScreen = ({ location, history }) => {
             <Form.Control
               type='firstName'
               placeholder='הכנס/י שם פרטי'
-              value={userInfo.firstName}
+              value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             ></Form.Control>
           </Form.Group>

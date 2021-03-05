@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
 
-
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
 import { RealtimeService } from '../../realtime.service';
 
+// To do list -----> DB-Mongodb ההזמנות האחרונות- להביא מבסיס הנתונים
 const folders: any[] = [
   {
     icon: 'android',
@@ -43,6 +43,8 @@ const folders: any[] = [
     updated: 'March 28, 2017'
   }
 ];
+
+// Time line -------> עדיין בתכנון
 const timelineData: any[] = [
   {
     'timeline': [
@@ -76,58 +78,20 @@ const timelineData: any[] = [
   styleUrls: ['./dashboard.component.scss']
 })
 export class PageDashboardComponent implements OnInit {
-  pageTitle: string = 'Dashboard';
+  pageTitle: string = 'עמוד ראשי';
   folders: any[] = folders;
   timelineData: any[] = timelineData;
-  options: any;
-  layersControl: any;
-  layers: any[];
+
+  // Amount of users connected
   counter : Number;
 
+  // Constractor
   constructor( private _sharedService: SharedService,  private _realtime: RealtimeService) {
     this._sharedService.emitChange(this.pageTitle);
     this._realtime.currentCounter.subscribe(counter => this.counter = counter);
   }
 
-  ngOnInit(){
-    this.options = {
-      layers: [
-        tileLayer(
-          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...' }
-        )
-      ],
-      zoom: 5,
-      center: latLng(46.879966, -121.726909)
-    };
-    this.layersControl = {
-      baseLayers: {
-        'Open Street Map': tileLayer(
-          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...' }
-        ),
-        'Open Cycle Map': tileLayer(
-          'http://{s}.tile.opencyclemap.org/{z}/{x}/{y}.png',
-          { maxZoom: 18, attribution: '...'
-          })
-      },
-      overlays: {
-        'Big Circle': circle([ 46.95, -122 ], { radius: 5000 }),
-        'Big Square': polygon([[ 46.8, -121.55 ], [ 46.9, -121.55 ], [ 46.9, -121.7 ], [ 46.8, -121.7 ]])
-      }
-    };
-    this.layers = [
-      circle([ 46.95, -122 ], { radius: 5000 }),
-      polygon([[ 46.8, -121.85 ], [ 46.92, -121.92 ], [ 46.87, -121.8 ]]),
-      marker([ 46.879966, -121.726909 ])
-    ];
-  }
-
-  onMapReady(map) {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }
+  ngOnInit(){}
 
   // barChart
   public barChartOptions: any = {
@@ -135,14 +99,12 @@ export class PageDashboardComponent implements OnInit {
     responsive: true,
     responsiveAnimationDuration: 500
   };
+
+  // get all the Shops -- עמודה לכל חנות/רשת חנויות
   public barChartLabels: string[] = [
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017'
+    '2012', '2013', '2014', '2015', '2016', '2017'
   ];
+
   public barChartType: string = 'bar';
   public barChartLegend: boolean = true;
 
@@ -161,6 +123,7 @@ export class PageDashboardComponent implements OnInit {
     }
   ];
 
+  // צריך לבדוק מה הפונקציה הזאת עושה והיכן היא מוצגת על המסך
   fetch(cb) {
     const req = new XMLHttpRequest();
     req.open('GET', 'assets/table-data.json');
@@ -172,6 +135,7 @@ export class PageDashboardComponent implements OnInit {
     req.send();
   }
 
+  /*
   // Pie
   public pieChartLabels: string[] = [
     'Angular',
@@ -260,5 +224,5 @@ export class PageDashboardComponent implements OnInit {
       }
     },
     tooltips: false
-  };
+  };*/
 }

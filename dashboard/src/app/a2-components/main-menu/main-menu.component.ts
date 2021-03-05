@@ -38,5 +38,4 @@ export class MainMenuComponent  {
       item.active = true;
     }
   }
-
 }

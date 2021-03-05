@@ -3,8 +3,6 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const config = require("../config/default.json");
 
-
-
 const protect = asyncHandler(async (req, res, next) => {
   let token
 

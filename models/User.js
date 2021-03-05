@@ -3,9 +3,6 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-    },
     firstName: {
       type: String,
       required: true,
@@ -25,37 +22,31 @@ const UserSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      //required: true,
+      required: true,
     },
     birthday: {
-      type: String,
-      //required: true,
+      type: Date,
+      required: true,
     },
     gender: {
-      type: String,
-      //required: true,
+      type: Boolean,
+      required: true,
     },
     pictureName: {
       type: String,
+      required: true,
     },
     isAdmin: {
       type: Boolean,
-      //required: true,
       default: false,
     },
     isSeller: {
       type: Boolean,
-      //required: true,
       default: false,
     },
     isCustomer: {
       type: Boolean,
-      //required: true,
       default: true,
-    },
-    shop: {
-      type: String,
-      ref: 'shop',
     },
     orders: [
       {

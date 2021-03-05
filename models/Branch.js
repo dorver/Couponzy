@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const BranchSchema = new mongoose.Schema({
-  id: {
-    type: String,
-  },
   name: {
     type: String,
     required: true,
@@ -12,7 +9,7 @@ const BranchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  adress: {
+  address: {
     type: String,
     required: true,
   },
@@ -22,13 +19,14 @@ const BranchSchema = new mongoose.Schema({
   },
   lat: {
     type: Number,
+    required: true,
   },
   long: {
     type: Number,
+    required: true,
   },
   isOpen: {
     type: Boolean,
-    required: true,
     default: true,
   },
   shop: {
@@ -37,7 +35,7 @@ const BranchSchema = new mongoose.Schema({
   },
   orders: [
     {
-      type: [mongoose.Schema.Types.ObjectId],
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'order',
     },
   ],
