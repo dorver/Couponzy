@@ -1,34 +1,35 @@
 const mongoose = require('mongoose');
 
 const ShopSchema = new mongoose.Schema({
-
   id: {
-    type: String
+    type: String,
   },
   name: {
-    type: String
+    type: String,
+    required: true,
   },
   pictureName: {
-    type: String
+    type: String,
+    required: true,
   },
   coupons: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'coupons'
-    }
+      ref: 'coupon',
+    },
   ],
   branches: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'branchs'
-    }
+      ref: 'branch',
+    },
   ],
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'users'
-    }
-  ]
+      ref: 'user',
+    },
+  ],
 });
 
 module.exports = Shop = mongoose.model('shop', ShopSchema);

@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const CouponTypeSchema = new mongoose.Schema({
-
   id: {
-    type: String
+    type: String,
   },
   name: {
-    type: String
+    type: String,
+    required: true,
   },
   coupons: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'coupons'
-    }
-  ]
+      ref: 'coupon',
+    },
+  ],
 });
 
 module.exports = CouponType = mongoose.model('couponType', CouponTypeSchema);

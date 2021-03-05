@@ -1,41 +1,46 @@
 const mongoose = require('mongoose');
 
 const BranchSchema = new mongoose.Schema({
-
   id: {
-    type: String
+    type: String,
   },
   name: {
-    type: String
+    type: String,
+    required: true,
   },
   city: {
-    type: String
+    type: String,
+    required: true,
   },
   adress: {
-    type: String
+    type: String,
+    required: true,
   },
   phoneNumber: {
-    type: String
+    type: String,
+    required: true,
   },
   lat: {
-    type: Number
+    type: Number,
   },
   long: {
-    type: Number
+    type: Number,
   },
   isOpen: {
-    type: Boolean
+    type: Boolean,
+    required: true,
+    default: true,
   },
   shop: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'shop'
+    ref: 'shop',
   },
-  order: [
+  orders: [
     {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'orders'
-    }
-  ]
+      ref: 'order',
+    },
+  ],
 });
 
 module.exports = Branch = mongoose.model('branch', BranchSchema);
