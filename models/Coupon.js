@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 
 const CouponSchema = new mongoose.Schema({
 
-  id: {
-    type: String
-  },
   name: {
     type: String,
     required: true
@@ -35,7 +32,7 @@ const CouponSchema = new mongoose.Schema({
 
   decription: {
     type: String,
-    maxlength: 60,
+    maxlength: 100,
     required: true
 
   },
@@ -55,7 +52,7 @@ const CouponSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'shop'
   },
-  order: [
+  orders: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'order'
