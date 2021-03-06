@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+//import { DatePicker } from 'react-bootstrap-date-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -18,8 +19,8 @@ const RegisterScreen = ({ location, history }) => {
   //const [isCustomer, setIsCustomer] = useState('');
   //const [isSeller, setIsSeller] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  //const [birthday, setBirthday] = useState('');
-  //const [gender, setGender] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [gender, setGender] = useState('');
 
   const dispatch = useDispatch();
 
@@ -48,9 +49,9 @@ const RegisterScreen = ({ location, history }) => {
           //  isAdmin,
           //  isCustomer,
           //  isSeller,
-          phoneNumber
-          // birthday,
-          //gender
+          phoneNumber,
+          birthday,
+          gender
         )
       );
     }
@@ -74,7 +75,6 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setFirstName(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group controlId='lastName'>
           <Form.Label>שם משפחה</Form.Label>
           <Form.Control
@@ -84,7 +84,6 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setLastName(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group controlId='email'>
           <Form.Label>כתובת אימייל</Form.Label>
           <Form.Control
@@ -94,7 +93,6 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group controlId='password'>
           <Form.Label>סיסמה</Form.Label>
           <Form.Control
@@ -104,7 +102,6 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group controlId='confirmedPassword'>
           <Form.Label>אשר סיסמה</Form.Label>
           <Form.Control
@@ -114,7 +111,6 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setConfirmedPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
-
         <Form.Group controlId='phoneNumber'>
           <Form.Label>מספר טלפון</Form.Label>
           <Form.Control
@@ -124,6 +120,24 @@ const RegisterScreen = ({ location, history }) => {
             onChange={(e) => setPhoneNumber(e.target.value)}
           ></Form.Control>
         </Form.Group>
+        <Form.Group as={Col} controlId='gender'>
+          <Form.Label>מגדר</Form.Label>
+          <Form.Control
+            as='select'
+            defaultValue='בחר...'
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          >
+            <option>בחר...</option>
+            <option>זכר</option>
+            <option>נקבה</option>
+          </Form.Control>
+        </Form.Group>
+
+        {/* <Form.Group controlId='date' bsSize='large'>
+          <Form.Label>Birthday</Form.Label>
+          <Form.Control type='date' style={{ width: '100%' }} />
+        </Form.Group> */}
 
         <Button type='submit' variant='primary'>
           הרשם/ הרשמי

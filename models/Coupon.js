@@ -29,7 +29,7 @@ const CouponSchema = new mongoose.Schema({
     required: true,
   },
 
-  decription: {
+  description: {
     type: String,
     maxlength: 100,
     required: true,

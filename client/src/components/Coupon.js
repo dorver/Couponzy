@@ -26,9 +26,9 @@ const Coupon = ({ coupon }) => {
           </Card.Text>
         )}
 
-        <Card.Text as='h3'>${coupon.newPrice}</Card.Text>
+        <Card.Text> מחיר חדש ${coupon.newPrice}</Card.Text>
 
-        <Card.Text as='h3'>${coupon.oldPrice}</Card.Text>
+        <Card.Text> מחיר קודם ${coupon.oldPrice}</Card.Text>
       </Card.Body>
     </Card>
   );

@@ -4,7 +4,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, updateUserProfile } from '../actions/userActions';
 
 const ProfileScreen = ({ location, history }) => {
   const [firstName, setFirstName] = useState('');
@@ -17,8 +17,9 @@ const ProfileScreen = ({ location, history }) => {
   //const [isCustomer, setIsCustomer] = useState('');
   //const [isSeller, setIsSeller] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  //const [birthday, setBirthday] = useState('');
-  //const [gender, setGender] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [gender, setGender] = useState('');
+  const [pictureName, setPictureName] = useState('');
 
   const dispatch = useDispatch();
 
@@ -28,19 +29,27 @@ const ProfileScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  //   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  //   const { success } = userUpdateProfile;
+
   useEffect(() => {
-    if (!userInfo) {
-      history.push('/userLogin');
+    // if (!userInfo) {
+    //   history.push('/userLogin');
+    // } else {
+    if (!user.firstName) {
+      console.log('if');
+      dispatch(getUserDetails('getUserProfile'));
     } else {
-      if (!user) {
-        dispatch(getUserDetails('getUserProfile'));
-      } else {
-        setFirstName(userInfo.firstName);
-        setLastName(userInfo.lastName);
-        setEmail(userInfo.email);
-        setPhoneNumber(userInfo.phoneNumber);
-      }
+      console.log('else');
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setEmail(user.email);
+      setPhoneNumber(user.phoneNumber);
+      setPictureName(user.pictureName);
+      setBirthday(user.birthday);
+      setGender(user.gender);
     }
+    //}
   }, [dispatch, history, userInfo, user]);
 
   const submitHandler = (e) => {
@@ -48,7 +57,20 @@ const ProfileScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('ססמאות לא תואמות');
     } else {
-      //DISPATCH UPDATE PROFILE
+      console.log(userInfo._id);
+      dispatch(
+        updateUserProfile({
+          id: userInfo._id,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          phoneNumber: phoneNumber,
+          gender: gender,
+          birthday: birthday,
+          pictureName: pictureName,
+        })
+      );
     }
   };
 
@@ -57,9 +79,8 @@ const ProfileScreen = ({ location, history }) => {
       <Col md={3}>
         <h2>חשבון משתמש</h2>
         {message && <Message variant='danger'>{message}</Message>}
-
         {error && <Message variant='danger'>{error}</Message>}
-
+        {/* {success && <Message variant='success'>{success}</Message>} */}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='firstName'>

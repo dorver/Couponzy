@@ -16,14 +16,21 @@ router.post(
     console.log(req.body);
     const user = await User.findOne({ email });
 
+    console.log(user);
+
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
+        gender: user.gender,
+        orders: user.orders,
+        birthday: user.birthday,
         email: user.email,
         isAdmin: user.isAdmin,
+        isSeller: user.isSeller,
+        isCustomer: user.isCustomer,
         token: generateToken(user._id),
       });
     } else {
@@ -51,6 +58,7 @@ router.post(
       birthday,
       gender,
     } = req.body;
+    console.log(req.body);
 
     const userExists = await User.findOne({ email });
 
@@ -64,9 +72,6 @@ router.post(
       lastName,
       email,
       password,
-      // isAdmin,
-      //isCustomer,
-      //isSeller,
       phoneNumber,
       birthday,
       gender,
@@ -78,12 +83,13 @@ router.post(
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        //   isAdmin: user.isAdmin,
-        // isCustomer: user.isCustomer,
-        //isSeller: user.isSeller,
+        isAdmin: user.isAdmin,
+        isCustomer: user.isCustomer,
+        isSeller: user.isSeller,
         phoneNumber: user.phoneNumber,
         birthday: user.birthday,
         gender: user.gender,
+        orders: user.orders,
         token: generateToken(user._id),
       });
     } else {
@@ -98,10 +104,10 @@ router.post(
 // @access   Private
 router.get(
   '/getUserProfile',
-  // protect,
+  protect,
   asyncHandler(async (req, res) => {
     console.log('server/getUserProfile');
-    console.log(req.user);
+    console.log(req);
 
     const user = await User.findById(req.user._id);
 
@@ -148,6 +154,43 @@ router.put(
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
         token: generateToken(updatedUser._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  })
+);
+
+// @route    PUT api/user/setUserSeller
+// @desc     set User as Seller
+// @access   Private
+router.put(
+  '/setUserSeller',
+  protect,
+  asyncHandler(async (req, res) => {
+    console.log(req.user);
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      user.isSeller = true;
+      user.isCustomer = false;
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isCustomer: user.isCustomer,
+        isSeller: user.isSeller,
+        phoneNumber: user.phoneNumber,
+        birthday: user.birthday,
+        gender: user.gender,
+        orders: user.orders,
+        token: generateToken(user._id),
       });
     } else {
       res.status(404);
