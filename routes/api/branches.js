@@ -223,13 +223,16 @@ router.get('/city/:city', async (req, res) => {
     }
   });
 
-  // @route   GET api/branch
+// @route   GET api/branch
 // @desc    Get all branches
 // @access  Public
 router.get('/', async (req, res) => {
+  
     try {
-      const branches = await Branch.find();
-      res.json(branches);  
+      Branch.find({}).populate({path: 'shop'}).exec(function (err, docs) {
+        if (err) console.error(err.stack||err);
+        res.json(docs);
+      });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');  
@@ -256,5 +259,21 @@ router.delete('/name/:name',  async (req, res) => {
         res.status(500).send('Server Error');
       }
     });
+
+// @route   GET api/branch
+// @desc    Search by {} branches
+// @access  Public
+router.get('/', async (req, res) => {
+  
+  try {
+    Branch.find({}).populate({path: 'shop'}).exec(function (err, docs) {
+      if (err) console.error(err.stack||err);
+      res.json(docs);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');  
+  }
+});
 
 module.exports = router;

@@ -1,5 +1,115 @@
-<card>
-    <agm-map [latitude]="lat" [longitude]="lng">
-        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-    </agm-map>
-</card>
+<!-- Row 1 --- Branches map -->
+<div class="row mb-lg-4">
+    <div class="col-lg map-col mb-4 mb-lg-0">
+        <card [title]="'מפת חנויות'">
+            <agm-map [latitude]="lat" [longitude]="lng" [zoom]="10  ">
+                <agm-marker *ngFor="let branch of branches; let i = index" [latitude]="branch.lat"
+                    [longitude]="branch.long" (dragEnd)="markerDragEnd(m, $event)">
+                    <agm-info-window>
+                        חנות: {{branch.shop.shopName}}<br />
+                        שם: {{branch.name}}<br />
+                        עיר: {{branch.city}}<br />
+                        כתובת: {{branch.address}}<br />
+                        טלפון: {{branch.phoneNumber}}<br />
+                        סטאטוס: {{branch.stateOpen}}
+                    </agm-info-window>
+                </agm-marker>
+            </agm-map>
+        </card>
+    </div>
+</div>
+<div class="row mb-lg-4 search">
+    <div class="col-lg">
+        <card [title]="'חיפוש'">
+            <mat-form-field>
+                <mat-select placeholder="בחר רשת חנויות" [(ngModel)]="selectedShop">
+                    <mat-option *ngFor="let branch of branches; let i = index" [value]="branch.shop.shopName">
+                        {{branch.shop.shopName}}
+                    </mat-option>
+                </mat-select>
+                
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="בחר עיר" [(ngModel)]="selectedCity">
+                    <mat-option *ngFor="let branch of branches; let i = index" [value]="branch.city">
+                        {{branch.city}}
+                    </mat-option>
+                </mat-select>
+               
+            </mat-form-field>
+            <div class="mb-4">
+                <mat-checkbox (checked)="selectedOpen" [(ngModel)]="selectedOpen" color="accent">
+                    החנות פתוחה
+                </mat-checkbox>
+            </div>
+
+            <button mat-raised-button color="accent" (click)="onSearch(selectedShop)">חיפוש מתקדם</button>
+
+            <br /><br />         
+            <div class="table-responsive" *ngIf="pageTitle">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>שם החנות</th>
+                            <th>שם הסניף</th>
+                            <th>שם הסניף</th>
+                            <th>עיר</th>
+                            <th>כתובת</th>
+                            <th>טלפון</th>
+                            <th>האם פתוח?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let currentBranch of currentSearchBranches; let i = index;">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{currentBranch.shop.shopName}}</td>
+                            <td><img [src]="currentBranch.shop.pictureName" /></td>
+                            <td>{{currentBranch.name}}</td>
+                            <td>{{currentBranch.city}}</td>
+                            <td>{{currentBranch.address}}</td>
+                            <td>{{currentBranch.phoneNumber}}</td>
+                            <td>{{currentBranch.stateOpen}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </card>
+    </div>
+</div>
+<!-- Row 2 --- Branches table -->
+<div class="row mb-lg-4" >
+    <div class="col-lg">
+        <card title="רשימת החנויות והסניפים" class="mb-0">
+
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>שם החנות</th>
+                            <th>סמל החנות</th>
+                            <th>שם הסניף</th>
+                            <th>עיר</th>
+                            <th>כתובת</th>
+                            <th>טלפון</th>
+                            <th>האם פתוח?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let branch of branches; let i = index;" class="table-active">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{branch.shop.shopName}}</td>
+                            <td><img [src]="branch.shop.pictureName" /></td>
+                            <td>{{branch.name}}</td>
+                            <td>{{branch.city}}</td>
+                            <td>{{branch.address}}</td>
+                            <td>{{branch.phoneNumber}}</td>
+                            <td>{{branch.stateOpen}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </card>
+    </div>
+</div>
