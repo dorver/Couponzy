@@ -35,9 +35,7 @@ const importData = async () => {
     const createdUsers = await User.insertMany(usersJson);
     console.log('User Imported!'.green.inverse)
 
-    const sellersUserId = createdUsers.map(user => {
-      return { userid: user._id }
-    });
+     
 
     // Add sellersUserId to Shop Collection
     var i = 1;
