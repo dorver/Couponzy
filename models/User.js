@@ -26,15 +26,15 @@ const UserSchema = new mongoose.Schema(
     },
     birthday: {
       type: Date,
-      required: true,
+      // required: true,
     },
     gender: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     pictureName: {
       type: String,
-      required: true,
+      //required: true,
     },
     isAdmin: {
       type: Boolean,

@@ -46,6 +46,13 @@ const Header = () => {
                     </Nav.Link>
                   </LinkContainer>
                 )}
+                {userInfo && userInfo.isSeller && (
+                  <NavDropdown title='מוכר' id='sellermenu'>
+                    <LinkContainer to='seller/couponlist'>
+                      <NavDropdown.Item>קופונים</NavDropdown.Item>
+                    </LinkContainer>
+                  </NavDropdown>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>

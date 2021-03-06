@@ -8,6 +8,7 @@ import CouponScreen from './screens/CouponScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import CouponListScreen from './screens/CouponListScreen';
 
 import io from 'socket.io-client';
 
@@ -25,6 +26,8 @@ const App = () => {
           <Route path='/registerUser' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/coupon/:id' component={CouponScreen} />
+          <Route path='/seller/couponlist' component={CouponListScreen} />
+
           <Route path='/' component={HomeScreen} exact />
         </Container>
       </main>

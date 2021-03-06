@@ -2,7 +2,7 @@ const express = require('express');
 const request = require('request');
 const config = require('config');
 const router = express.Router();
-const protect = require('../../middleware/authMiddleware');
+const { protect, seller } = require('../../middleware/authMiddleware');
 const { check, validationResult } = require('express-validator');
 const Coupon = require('../../models/Coupon');
 const Shop = require('../../models/Shop');
@@ -85,7 +85,7 @@ router.post(
   // check for body errors
   '/createAndAddCouponToShop/:id',
 
-  protect.protect,
+  protect,
 
   [
     [
@@ -126,6 +126,7 @@ router.post(
     if (expireDate) CouponFields.expireDate = expireDate;
     if (couponCode) CouponFields.couponCode = couponCode;
     if (newPrice) CouponFields.newPrice = newPrice;
+    if (oldPrice) CouponFields.oldPrice = oldPrice;
     if (description) CouponFields.description = description;
     if (pictureName) CouponFields.pictureName = pictureName;
     if (published) CouponFields.published = published;
@@ -199,6 +200,7 @@ router.post(
     if (expireDate) CouponFields.expireDate = expireDate;
     if (couponCode) CouponFields.couponCode = couponCode;
     if (newPrice) CouponFields.newPrice = newPrice;
+    if (oldPrice) CouponFields.oldPrice = oldPrice;
     if (description) CouponFields.description = description;
     if (pictureName) CouponFields.pictureName = pictureName;
     if (published) CouponFields.published = published;
@@ -229,34 +231,39 @@ router.post(
   }
 );
 
-// @route   DELETE api/coupon/:id
+// @route   DELETE api/coupons/:id
 // @desc    DELETE coupon
-// @access  Private
-router.delete('/delete/:couponId/:shopId', async (req, res) => {
-  try {
-    const coupon = await Coupon.findOne({ id: `${req.params.couponId}` });
+// @access  Private/seller
+router.delete(
+  '/delete/:couponId/:shopId',
+  protect,
+  seller,
+  async (req, res) => {
+    try {
+      const coupon = await Coupon.findById(req.params.id);
 
-    if (!coupon) {
-      return res.status(404).json({ msg: 'Coupon not found' });
+      if (!coupon) {
+        return res.status(404).json({ msg: 'Coupon not found' });
+      }
+
+      const shop = await Shop.findOne({ id: `${req.params.shopId}` });
+      if (!shop) {
+        return res.status(404).json({ msg: 'Shop not found' });
+      }
+
+      await shop.coupons.pull(coupon);
+      await shop.save();
+
+      await coupon.remove();
+
+      res.json({ msg: 'Coupon removed' });
+    } catch (err) {
+      console.error(err.message);
+
+      res.status(500).send('Server Error');
     }
-
-    const shop = await Shop.findOne({ id: `${req.params.shopId}` });
-    if (!shop) {
-      return res.status(404).json({ msg: 'Shop not found' });
-    }
-
-    await shop.coupons.pull(coupon);
-    await shop.save();
-
-    await coupon.remove();
-
-    res.json({ msg: 'Coupon removed' });
-  } catch (err) {
-    console.error(err.message);
-
-    res.status(500).send('Server Error');
   }
-});
+);
 
 // @route    GET api/coupon/:shopName
 // @desc     Get coupon by shop name
@@ -290,6 +297,9 @@ router.get('/', async (req, res) => {
   }
 });
 
+// @route    GET api/couponbyid
+// @desc     Get coupon by id
+// @access   Private
 router.get('/:id', async (req, res) => {
   try {
     const couponn = await Coupon.findById(req.params.id);
