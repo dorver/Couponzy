@@ -58,9 +58,15 @@ const Coupon = ({ coupon }) => {
           </Card.Text>
         )}
 
+<<<<<<< HEAD
         <Card.Text as='h3'>₪{coupon.newPrice}</Card.Text>
 
         <Card.Text as='h3'>₪<del>{coupon.oldPrice}</del></Card.Text>
+=======
+        <Card.Text> מחיר חדש ₪{coupon.newPrice}</Card.Text>
+
+        <Card.Text> מחיר קודם ₪<del>{coupon.oldPrice}</del></Card.Text>
+>>>>>>> 54d2952187306b9150d92652d639fca853f0652c
       </Card.Body>
     </Card>
   );

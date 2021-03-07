@@ -5,6 +5,9 @@ import {
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
   COUPON_DETAILS_FAIL,
+  COUPON_SHOP_LIST_REQUEST,
+  COUPON_SHOP_LIST_SUCCESS,
+  COUPON_SHOP_LIST_FAIL,
 } from '../constants/couponConstants';
 
 export const couponListReducer = (state = { coupons: [] }, action) => {
@@ -34,6 +37,19 @@ export const couponDetailReducer = (
     case COUPON_DETAILS_SUCCESS:
       return { loading: false, coupon: action.payload };
     case COUPON_DETAILS_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const couponShopListReducer = (state = { coupons: [] }, action) => {
+  switch (action.type) {
+    case COUPON_SHOP_LIST_REQUEST:
+      return { loading: true };
+    case COUPON_SHOP_LIST_SUCCESS:
+      return { loading: false, coupons: action.payload };
+    case COUPON_SHOP_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

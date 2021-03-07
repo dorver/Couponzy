@@ -39,6 +39,7 @@ import { PageShopsMapComponent } from './pages/shops-map/shops-map.component';
 //Roadstart pages
 import { PageSignInSocialComponent } from './pages/roadstart-pages/sign-in-social/sign-in-social.component';
 import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.component';
+import { ManageBranchesService } from './services/manage-branches.service';
 
 
 
@@ -78,10 +79,7 @@ import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.com
     SocketIoModule.forRoot(config),
     
   ],
-  exports: [
-		MaterialModule
-	],
-  providers: [],
+  providers: [ManageBranchesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,6 +5,9 @@ import {
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
   COUPON_DETAILS_FAIL,
+  COUPON_SHOP_LIST_REQUEST,
+  COUPON_SHOP_LIST_SUCCESS,
+  COUPON_SHOP_LIST_FAIL,
   COUPON_DELETE_SUCCESS,
   COUPON_DELETE_REQUEST,
   COUPON_DELETE_FAIL,
@@ -57,6 +60,27 @@ export const listCouponDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: COUPON_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message //future fix
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const listShopCoupons = (shopId) => async (dispatch) => {
+  try {
+    dispatch({ type: COUPON_SHOP_LIST_REQUEST });
+
+    const { data } = await axios.get(`/api/coupons/byShopId/${shopId}`);
+
+    dispatch({
+      type: COUPON_SHOP_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: COUPON_SHOP_LIST_FAIL,
       payload:
         error.response && error.response.data.message //future fix
           ? error.response.data.message

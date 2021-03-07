@@ -25,11 +25,13 @@ const Header = () => {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto'>
-                <LinkContainer to='/coupons'>
-                  <Nav.Link>
-                    <i className='fas fa-receipt'></i>קופונים
-                  </Nav.Link>
-                </LinkContainer>
+                {userInfo && userInfo.isCustomer && (
+                  <LinkContainer to='/myCoupons'>
+                    <Nav.Link>
+                      <i className='fas fa-receipt'></i>הקופונים שלי
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
                 {userInfo ? (
                   <NavDropdown title={userInfo.firstName} id='username'>
                     <LinkContainer to='profile'>
@@ -45,6 +47,13 @@ const Header = () => {
                       <i className='fas fa-user'></i>התחבר/י
                     </Nav.Link>
                   </LinkContainer>
+                )}
+                {userInfo && userInfo.isSeller && (
+                  <NavDropdown title='מוכר' id='sellermenu'>
+                    <LinkContainer to='seller/couponlist'>
+                      <NavDropdown.Item>קופונים</NavDropdown.Item>
+                    </LinkContainer>
+                  </NavDropdown>
                 )}
               </Nav>
             </Navbar.Collapse>
