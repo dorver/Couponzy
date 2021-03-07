@@ -17,10 +17,11 @@ router.post(
   '/create',
 
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    console.log('create ordeerrr');
+    //const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
     // try{
     const { orderDate, couponId, branch, userId } = req.body;
 
@@ -29,7 +30,7 @@ router.post(
       if (!coupon) {
         return res.json('Coupon not found');
       }
-
+      console.log(coupon);
       let user = await User.findById({ _id: userId });
 
       //Build branch object
@@ -44,10 +45,13 @@ router.post(
 
       //add order to user
       user.orders.push(order);
+      coupon.orders.push(order);
 
       await order.save();
       await user.save();
-      res.json(order);
+      await coupon.save();
+
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');

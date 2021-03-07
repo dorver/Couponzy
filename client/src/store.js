@@ -11,6 +11,7 @@ import {
   userDetailsReducer,
   userUpdatePrpfileReducer,
 } from './reducers/userReducers';
+import { newOrderReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdatePrpfile: userUpdatePrpfileReducer,
+  newOrder: newOrderReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
