@@ -5,13 +5,15 @@ import {
   couponListReducer,
   couponDetailReducer,
 } from './reducers/couponReducers';
+
 import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
   userUpdatePrpfileReducer,
 } from './reducers/userReducers';
-import { newOrderReducer } from './reducers/orderReducers';
+
+import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
@@ -20,7 +22,8 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdatePrpfile: userUpdatePrpfileReducer,
-  newOrder: newOrderReducer,
+  order: newOrderReducer,
+  orderList: getOrdersReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

@@ -180,4 +180,30 @@ router.delete('/id/:id', async (req, res) => {
   }
 });
 
+// @route    GET api/ordersByUserId/:id
+// @desc     Get order by ID
+// @access   Private
+router.get('/ordersByUserId/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).populate({
+      path: 'orders',
+      populate: { path: 'coupon' },
+    });
+
+    if (!user) {
+      return res.status(404).json({ msg: 'user not found' });
+    }
+
+    const orders = user.orders;
+
+    console.log(orders);
+
+    res.json(orders);
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;

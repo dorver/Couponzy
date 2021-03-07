@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
-import Coupon from '../components/Coupon';
+import Order from '../components/Order';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listCoupons } from '../actions/couponActions';
+import { listOrders } from '../actions/orderActions';
 
 const MyCouponsScreen = () => {
   const dispatch = useDispatch();
 
-  const couponList = useSelector((state) => state.couponList);
-  const { loading, error, coupons } = couponList;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const orderList = useSelector((state) => state.orderList);
+  const { loading, error, orders } = orderList;
 
   useEffect(() => {
-    dispatch(listCoupons());
+    dispatch(listOrders(userInfo._id));
   }, [dispatch]);
 
   return (
@@ -25,9 +28,9 @@ const MyCouponsScreen = () => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <Row>
-          {coupons.map((coupon) => (
-            <Col key={coupon._id} sm={12} md={6} lg={4} xl={3}>
-              <Coupon coupon={coupon} />
+          {orders.map((order) => (
+            <Col key={order._id} sm={12} md={6} lg={4} xl={3}>
+              <Order order={order} />
             </Col>
           ))}
         </Row>
