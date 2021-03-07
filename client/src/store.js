@@ -6,6 +6,10 @@ import {
   couponDetailReducer,
 } from './reducers/couponReducers';
 import {
+  shopListReducer,
+  shopDetailReducer,
+} from './reducers/shopReducers';
+import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
@@ -13,6 +17,7 @@ import {
 
 const reducer = combineReducers({
   couponList: couponListReducer,
+  shopList: shopListReducer,
   couponDetails: couponDetailReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,

@@ -42,18 +42,18 @@ const CouponScreen = ({ match }) => {
       ) : (
         <Row>
           <Col md={3}>
-            <Image src={coupon.image} alt={coupon.name} fluid />
+            <Image src={coupon.pictureName}  alt={coupon.name} fluid />
           </Col>
           <Col md={3}>
             <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h3>{coupon.name}</h3>
               </ListGroup.Item>
-              <ListGroup.Item>מחיר קודם: ${coupon.oldPrice}</ListGroup.Item>
-              <ListGroup.Item>מחיר חדש: ${coupon.newPrice}</ListGroup.Item>
-              <ListGroup.Item>בתוקף עד: {coupon.expireDate}</ListGroup.Item>
+              <ListGroup.Item>מחיר קודם: ₪<del>{coupon.oldPrice}</del></ListGroup.Item>
+              <ListGroup.Item>מחיר חדש: ₪{coupon.newPrice}</ListGroup.Item>
+              <ListGroup.Item>בתוקף עד: <br></br>{coupon.expireDate}</ListGroup.Item>
               <ListGroup.Item>קוד קופון: {coupon.couponCode}</ListGroup.Item>
-              <ListGroup.Item>פירוט: {coupon.description}</ListGroup.Item>
+              <ListGroup.Item>פירוט: {coupon.decription}</ListGroup.Item>
             </ListGroup>
           </Col>
           <Col md={4}>
