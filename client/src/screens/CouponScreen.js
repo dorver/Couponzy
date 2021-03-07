@@ -59,7 +59,10 @@ const CouponScreen = ({ match }) => {
               </ListGroup.Item>
               <ListGroup.Item>מחיר קודם: ${coupon.oldPrice}</ListGroup.Item>
               <ListGroup.Item>מחיר חדש: ${coupon.newPrice}</ListGroup.Item>
-              <ListGroup.Item>בתוקף עד: {coupon.expireDate}</ListGroup.Item>
+              <ListGroup.Item>
+                בתוקף עד:{' '}
+                {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+              </ListGroup.Item>
               <ListGroup.Item>פירוט: {coupon.description}</ListGroup.Item>
             </ListGroup>
           </Col>

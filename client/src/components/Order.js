@@ -29,7 +29,10 @@ const Order = ({ order }) => {
 
         <Card.Text> מחיר קודם ${order.coupon.oldPrice}</Card.Text>
 
-        <Card.Text> תאריך מימוש ${order.orderDate}</Card.Text>
+        <Card.Text>
+          {' '}
+          תאריך מימוש {new Date(order.orderDate).toLocaleDateString('he-IL')}
+        </Card.Text>
       </Card.Body>
     </Card>
   );

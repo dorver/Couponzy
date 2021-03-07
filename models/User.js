@@ -48,6 +48,10 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    shop: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'shop',
+    },
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   couponListReducer,
   couponDetailReducer,
+  couponShopListReducer,
 } from './reducers/couponReducers';
 
 import {
@@ -17,6 +18,7 @@ import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
+  couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,

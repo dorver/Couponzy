@@ -4,12 +4,12 @@ import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listCoupons } from '../actions/couponActions';
+import { listShopCoupons } from '../actions/couponActions';
 
 const CouponListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
-  const couponList = useSelector((state) => state.couponList);
+  const couponList = useSelector((state) => state.couponShopList);
   const { loading, error, coupons } = couponList;
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -17,7 +17,7 @@ const CouponListScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isSeller) {
-      dispatch(listCoupons());
+      dispatch(listShopCoupons(userInfo.shop));
     } else {
       history.push('/userLogin');
     }
@@ -84,9 +84,13 @@ const CouponListScreen = ({ history, match }) => {
                       </Card.Text>
                     )}
                   </td>
-                  <td>{coupon.expireDate}</td>
+                  <td>
+                    {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+                  </td>
                   <td>{coupon.decription}</td>
-                  <td>{coupon.published}</td>
+                  <td>
+                    {new Date(coupon.published).toLocaleDateString('he-IL')}
+                  </td>
                   <td>
                     <LinkContainer to={`/seller/coupon/${coupon._id}/edit`}>
                       <Button variant='light' className='btn-sm'>
