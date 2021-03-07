@@ -30,7 +30,6 @@ router.post(
       if (!coupon) {
         return res.json('Coupon not found');
       }
-      console.log(coupon);
       let user = await User.findById({ _id: userId });
 
       //Build branch object
