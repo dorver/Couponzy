@@ -6,6 +6,8 @@ const protect = require('../../middleware/authMiddleware');
 const { check, validationResult } = require('express-validator');
 const Branch = require('../../models/Order');
 const Order = require('../../models/Order');
+const User = require('../../models/User');
+const Coupon = require('../../models/Coupon');
 
 // @route   POST api/branches
 // @desc     Create branch
@@ -14,43 +16,37 @@ router.post(
   // check for body errors
   '/create',
 
-  [[check('id', 'id is required').not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     // try{
-    const {
-      // pull out everything form the body
-      id,
-      orderDate,
-      coupons,
-      branches,
-      users,
-    } = req.body;
-
-    console.log('1');
-
-    //Build branch object
-    const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
-    if (id) OrderFields.id = id;
-    if (orderDate) OrderFields.orderDate = orderDate;
-    if (coupons) OrderFields.coupons = coupons;
-    if (branches) OrderFields.branches = branches;
-    if (users) OrderFields.users = users;
+    const { orderDate, couponId, branch, userId } = req.body;
 
     try {
-      let order = await Order.findOne({ id: id }); //look for a order
-
-      if (order) {
-        return res.json('order already exists');
+      let coupon = await Coupon.findOne({ _id: couponId });
+      if (!coupon) {
+        return res.json('Coupon not found');
       }
+
+      let user = await User.findById({ _id: userId });
+
+      //Build branch object
+      const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
+      if (orderDate) OrderFields.orderDate = orderDate;
+      if (coupon) OrderFields.coupon = coupon;
+      if (branch) OrderFields.branche = branch;
+      if (user) OrderFields.user = user;
 
       //Create
       order = new Order(OrderFields);
 
+      //add order to user
+      user.orders.push(order);
+
       await order.save();
+      await user.save();
       res.json(order);
     } catch (err) {
       console.error(err.message);
