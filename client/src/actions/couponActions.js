@@ -88,3 +88,41 @@ export const listShopCoupons = (shopId) => async (dispatch) => {
     });
   }
 };
+
+export const deleteCoupon = (couponId, shopId) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: COUPON_DELETE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.delete(`/api/coupons/delete/${couponId}/${shopId}`, config);
+    console.log({ shopId });
+    console.log({ couponId });
+    dispatch({
+      type: COUPON_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    console.log({ shopId });
+    console.log({ couponId });
+    dispatch({
+      type: COUPON_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.massage
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

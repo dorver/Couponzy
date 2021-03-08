@@ -4,13 +4,20 @@ import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listShopCoupons } from '../actions/couponActions';
+import { listShopCoupons, deleteCoupon } from '../actions/couponActions';
 
 const CouponListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const couponList = useSelector((state) => state.couponShopList);
   const { loading, error, coupons } = couponList;
+
+  const couponDelete = useSelector((state) => state.couponDelete);
+  const {
+    loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = couponDelete;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -21,11 +28,11 @@ const CouponListScreen = ({ history, match }) => {
     } else {
       history.push('/userLogin');
     }
-  }, [dispatch, history, userInfo]);
+  }, [dispatch, history, userInfo, successDelete]);
 
-  const deleteHandler = (id) => {
+  const deleteHandler = (couponId, shopId) => {
     if (window.confirm('Are you sure')) {
-      //DELEYTE COUPON
+      dispatch(deleteCoupon(couponId, shopId));
     }
   };
 
@@ -45,6 +52,8 @@ const CouponListScreen = ({ history, match }) => {
           </Button>
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -100,7 +109,7 @@ const CouponListScreen = ({ history, match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(coupon._id)}
+                      onClick={() => deleteHandler(coupon._id, coupon.shop)}
                     >
                       <i className='fas fa-trash'></i>
                     </Button>

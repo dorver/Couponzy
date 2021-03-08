@@ -37,10 +37,8 @@ const ProfileScreen = ({ location, history }) => {
     //   history.push('/userLogin');
     // } else {
     if (!user.firstName) {
-      console.log('if');
       dispatch(getUserDetails('getUserProfile'));
     } else {
-      console.log('else');
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setEmail(user.email);
@@ -57,7 +55,6 @@ const ProfileScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('ססמאות לא תואמות');
     } else {
-      console.log(userInfo._id);
       dispatch(
         updateUserProfile({
           id: userInfo._id,

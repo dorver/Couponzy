@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 
 const Coupon = ({ coupon }) => {
-  console.log(coupon);
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/coupon/${coupon._id}`}>

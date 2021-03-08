@@ -33,8 +33,6 @@ router.post(
     } = req.body;
     console.log(name);
 
-    console.log('1');
-
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
     if (name) CouponFields.name = name;
@@ -115,8 +113,6 @@ router.post(
       shop,
       orders,
     } = req.body;
-
-    console.log('1');
 
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
@@ -231,8 +227,8 @@ router.post(
   }
 );
 
-// @route   DELETE api/coupons/:id
-// @desc    DELETE coupon
+// @route   DELETE api/coupons/:couponId/shopId
+// @desc    DELETE coupon and remove from shop
 // @access  Private/seller
 router.delete(
   '/delete/:couponId/:shopId',
@@ -240,13 +236,17 @@ router.delete(
   seller,
   async (req, res) => {
     try {
-      const coupon = await Coupon.findById(req.params.id);
+      const coupon = await Coupon.findById(req.params.couponId);
+      console.log(req.params.couponId);
+      console.log(req.params.shopId);
 
       if (!coupon) {
         return res.status(404).json({ msg: 'Coupon not found' });
       }
 
-      const shop = await Shop.findOne({ id: `${req.params.shopId}` });
+      const shop = await Shop.findById(req.params.shopId);
+      console.log(req.params.shopId);
+
       if (!shop) {
         return res.status(404).json({ msg: 'Shop not found' });
       }
@@ -285,11 +285,10 @@ router.get('/byName/:shopName', async (req, res) => {
 });
 
 // @route    GET api/coupon/:shopId
-// @desc     Get coupon by shop name
+// @desc     Get coupon by shop id
 // @access   Private
 router.get('/byShopId/:shopId', async (req, res) => {
   try {
-    console.log('====');
     console.log(req.params.shopId);
     const shop = await Shop.findOne({ _id: req.params.shopId }).populate(
       'coupons'

@@ -5,6 +5,7 @@ import {
   couponListReducer,
   couponDetailReducer,
   couponShopListReducer,
+  couponDeleteReducer,
 } from './reducers/couponReducers';
 
 import {
@@ -20,6 +21,7 @@ const reducer = combineReducers({
   couponList: couponListReducer,
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
+  couponDelete: couponDeleteReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
