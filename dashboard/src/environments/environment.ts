@@ -7,7 +7,8 @@ const PORT = 5000;
 export const environment = {
   production: false,
   branchesUrl : `http://localhost:${PORT}/api/branches`,
-  shopsUrl : `http://localhost:${PORT}/api/shops`
+  shopsUrl : `http://localhost:${PORT}/api/shops`,
+  brandsUrl : 'http://localhost:5000/brands'
 };
 
 /*

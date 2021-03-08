@@ -40,6 +40,7 @@ import { PageShopsMapComponent } from './pages/shops-map/shops-map.component';
 import { PageSignInSocialComponent } from './pages/roadstart-pages/sign-in-social/sign-in-social.component';
 import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.component';
 import { ManageBranchesService } from './services/manage-branches.service';
+import { ListComponent } from './components/list/list.component';
 
 
 
@@ -61,7 +62,8 @@ import { ManageBranchesService } from './services/manage-branches.service';
     PageShopsMapComponent,
     RoadstartLayoutComponent,
     PageSignInSocialComponent,
-    PageSignUpComponent
+    PageSignUpComponent,
+    ListComponent,
     ],
   imports: [
     BrowserModule,
