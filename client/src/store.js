@@ -9,6 +9,10 @@ import {
 } from './reducers/couponReducers';
 
 import {
+  shopListReducer,
+  shopDetailReducer,
+} from './reducers/shopReducers';
+import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
@@ -19,6 +23,7 @@ import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
+  shopList: shopListReducer,
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
   couponDelete: couponDeleteReducer,

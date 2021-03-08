@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+
 import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -7,6 +8,8 @@ import Loader from '../components/Loader';
 import { listShopCoupons, deleteCoupon } from '../actions/couponActions';
 
 const CouponListScreen = ({ history, match }) => {
+  const [message, setMessage] = useState(null);
+
   const dispatch = useDispatch();
 
   const couponList = useSelector((state) => state.couponShopList);
@@ -30,9 +33,13 @@ const CouponListScreen = ({ history, match }) => {
     }
   }, [dispatch, history, userInfo, successDelete]);
 
-  const deleteHandler = (couponId, shopId) => {
+  const deleteHandler = (coupon, couponId, shopId) => {
     if (window.confirm('Are you sure')) {
-      dispatch(deleteCoupon(couponId, shopId));
+      if (coupon.orders) {
+        setMessage('לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות');
+      } else {
+        dispatch(deleteCoupon(couponId, shopId));
+      }
     }
   };
 
@@ -45,6 +52,7 @@ const CouponListScreen = ({ history, match }) => {
       <Row className='align-items-center'>
         <Col>
           <h1>קופונים</h1>
+          {message && <Message variant='danger'>{message}</Message>}
         </Col>
         <Col className='text-right'>
           <Button className='my-3' onClick={createCouponHandler}>
@@ -109,7 +117,9 @@ const CouponListScreen = ({ history, match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(coupon._id, coupon.shop)}
+                      onClick={() =>
+                        deleteHandler(coupon, coupon._id, coupon.shop)
+                      }
                     >
                       <i className='fas fa-trash'></i>
                     </Button>

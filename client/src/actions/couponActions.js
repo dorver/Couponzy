@@ -107,7 +107,6 @@ export const deleteCoupon = (couponId, shopId) => async (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-
     await axios.delete(`/api/coupons/delete/${couponId}/${shopId}`, config);
     console.log({ shopId });
     console.log({ couponId });
