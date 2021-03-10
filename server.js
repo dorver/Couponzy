@@ -29,9 +29,6 @@ app.use('/api/orders', require('./routes/api/orders'));
 app.use('/api/couponsTypes', require('./routes/api/couponsTypes'));
 app.use('/brands' , require('./routes/api/brands'));
 
-
-
-
 const server = http.createServer(app);
 
 const whitelist = ["http://localhost:4200", "http://localhost:3000"];

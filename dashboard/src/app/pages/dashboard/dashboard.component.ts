@@ -4,7 +4,6 @@ import { Brand } from '../../models/brands';
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
 import { RealtimeService } from '../../services/realtime.service';
 
-import { RealtimeService } from '../../realtime.service';
 import { BrandsService } from 'src/app/services/brands.service';
 import { CurrentBrandService } from 'src/app/services/current-brand.service';
 
