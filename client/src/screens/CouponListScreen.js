@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-
+import { Link } from 'react-router-dom';
 import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listShopCoupons, deleteCoupon } from '../actions/couponActions';
+import {
+  listShopCoupons,
+  deleteCoupon,
+  setCouponToExpired,
+  createCoupon,
+  listCoupons,
+} from '../actions/couponActions';
+import { COUPON_CREATE_RESET } from '../constants/couponConstants';
 
 const CouponListScreen = ({ history, match }) => {
   const [message, setMessage] = useState(null);
@@ -22,20 +29,41 @@ const CouponListScreen = ({ history, match }) => {
     success: successDelete,
   } = couponDelete;
 
+  const couponCreate = useSelector((state) => state.couponCreate);
+  const {
+    loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdCoupon,
+  } = couponCreate;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (userInfo && userInfo.isSeller) {
-      dispatch(listShopCoupons(userInfo.shop));
-    } else {
+    dispatch({ type: COUPON_CREATE_RESET });
+
+    if (!userInfo.isSeller) {
       history.push('/userLogin');
     }
-  }, [dispatch, history, userInfo, successDelete]);
+    if (successCreate) {
+      history.push(`/admin/product/${createdCoupon._id}`);
+    } else {
+      dispatch(listCoupons());
+    }
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdCoupon,
+  ]);
 
   const deleteHandler = (coupon, couponId, shopId) => {
     if (window.confirm('Are you sure')) {
       if (coupon.orders) {
+        dispatch(setCouponToExpired(couponId));
         setMessage('לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות');
       } else {
         dispatch(deleteCoupon(couponId, shopId));
@@ -43,25 +71,22 @@ const CouponListScreen = ({ history, match }) => {
     }
   };
 
-  const createCouponHandler = (coupon) => {
-    //CREATE COUPON
-  };
-
   return (
     <>
+      <Link className='btn btn-light my-3' to='/seller/couponCreate'>
+        הוספת קופון
+      </Link>
+
       <Row className='align-items-center'>
         <Col>
           <h1>קופונים</h1>
           {message && <Message variant='danger'>{message}</Message>}
         </Col>
-        <Col className='text-right'>
-          <Button className='my-3' onClick={createCouponHandler}>
-            <i className='fas fa-plus'></i> צור קופון חדש
-          </Button>
-        </Col>
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+      {loadingCreate && <Loader />}
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
