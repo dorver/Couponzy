@@ -4,7 +4,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   couponListReducer,
   couponDetailReducer,
+  couponShopListReducer,
 } from './reducers/couponReducers';
+
+import {
+  shopListReducer,
+  shopDetailReducer,
+} from './reducers/shopReducers';
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -12,13 +18,19 @@ import {
   userUpdatePrpfileReducer,
 } from './reducers/userReducers';
 
+import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
+
 const reducer = combineReducers({
   couponList: couponListReducer,
+  shopList: shopListReducer,
+  couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdatePrpfile: userUpdatePrpfileReducer,
+  order: newOrderReducer,
+  orderList: getOrdersReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

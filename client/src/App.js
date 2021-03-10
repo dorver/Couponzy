@@ -11,6 +11,8 @@ import ProfileScreen from './screens/ProfileScreen';
 import CouponListScreen from './screens/CouponListScreen';
 
 import io from 'socket.io-client';
+import useCouponScreen from './screens/UseCouponScreen';
+import MyCouponsScreen from './screens/MyCouponsScreen';
 
 const socket = io.connect('http://localhost:5000', {
   transport: ['websocket'],
@@ -27,6 +29,8 @@ const App = () => {
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/coupon/:id' component={CouponScreen} />
           <Route path='/seller/couponlist' component={CouponListScreen} />
+          <Route path='/useCoupon' component={useCouponScreen} />
+          <Route path='/myCoupons' component={MyCouponsScreen} />
 
           <Route path='/' component={HomeScreen} exact />
         </Container>

@@ -41,7 +41,7 @@ import { PageSignInSocialComponent } from './pages/roadstart-pages/sign-in-socia
 import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.component';
 import { ManageBranchesService } from './services/manage-branches.service';
 import { AlertComponent } from './a2-components/alert/alert.component';
-
+import { ListComponent } from './components/list/list.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +63,7 @@ import { AlertComponent } from './a2-components/alert/alert.component';
     PageSignInSocialComponent,
     PageSignUpComponent,
     AlertComponent
+    ListComponent,
     ],
   imports: [
     BrowserModule,

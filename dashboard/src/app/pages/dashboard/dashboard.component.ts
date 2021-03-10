@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
-
+import { Brand } from '../../models/brands';
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
 import { RealtimeService } from '../../services/realtime.service';
+
+import { RealtimeService } from '../../realtime.service';
+import { BrandsService } from 'src/app/services/brands.service';
+import { CurrentBrandService } from 'src/app/services/current-brand.service';
 
 // To do list -----> DB-Mongodb ההזמנות האחרונות- להביא מבסיס הנתונים
 const folders: any[] = [
@@ -76,6 +80,7 @@ const timelineData: any[] = [
   selector: 'page-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
+
 })
 export class PageDashboardComponent implements OnInit {
   pageTitle: string = 'עמוד ראשי';
@@ -84,14 +89,19 @@ export class PageDashboardComponent implements OnInit {
 
   // Amount of users connected
   counter : Number;
+  
 
   // Constractor
   constructor( private _sharedService: SharedService,  private _realtime: RealtimeService) {
     this._sharedService.emitChange(this.pageTitle);
     this._realtime.currentCounter.subscribe(counter => this.counter = counter);
+  
+  
+  }
+  ngOnInit() {
+  
   }
 
-  ngOnInit(){}
 
   // barChart
   public barChartOptions: any = {

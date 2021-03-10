@@ -284,6 +284,30 @@ router.get('/byName/:shopName', async (req, res) => {
   }
 });
 
+// @route    GET api/coupon/:shopId
+// @desc     Get coupon by shop name
+// @access   Private
+router.get('/byShopId/:shopId', async (req, res) => {
+  try {
+    console.log('====');
+    console.log(req.params.shopId);
+    const shop = await Shop.findOne({ _id: req.params.shopId }).populate(
+      'coupons'
+    );
+    console.log(shop);
+
+    if (!shop) {
+      return res.status(404).json({ msg: 'Shop not found' });
+    }
+
+    res.json(shop.coupons);
+  } catch (err) {
+    console.error(err.message);
+
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route    GET api/coupons
 // @desc     Get all coupons
 // @access   Private

@@ -31,6 +31,7 @@ router.post(
         isAdmin: user.isAdmin,
         isSeller: user.isSeller,
         isCustomer: user.isCustomer,
+        shop: user.shop,
         token: generateToken(user._id),
       });
     } else {

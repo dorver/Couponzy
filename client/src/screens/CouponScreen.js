@@ -15,6 +15,7 @@ import {
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listCouponDetails } from '../actions/couponActions';
+import { newOrder } from '../actions/orderActions';
 
 const CouponScreen = ({ match }) => {
   //const coupon = coupons.find((p) => p._id === match.params.id);
@@ -23,12 +24,19 @@ const CouponScreen = ({ match }) => {
   const couponDetails = useSelector((state) => state.couponDetails);
   const { loading, error, coupon } = couponDetails;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
     console.log(match.params.id);
     dispatch(listCouponDetails(match.params.id));
   }, [dispatch, match]);
 
-  console.log('vla');
+  const buyHandler = () => {
+    console.log('buyyyy');
+    dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
+  };
+
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
@@ -42,18 +50,21 @@ const CouponScreen = ({ match }) => {
       ) : (
         <Row>
           <Col md={3}>
-            <Image src={coupon.image} alt={coupon.name} fluid />
+            <Image src={coupon.pictureName}  alt={coupon.name} fluid />
           </Col>
           <Col md={3}>
             <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h3>{coupon.name}</h3>
               </ListGroup.Item>
-              <ListGroup.Item>מחיר קודם: ${coupon.oldPrice}</ListGroup.Item>
-              <ListGroup.Item>מחיר חדש: ${coupon.newPrice}</ListGroup.Item>
-              <ListGroup.Item>בתוקף עד: {coupon.expireDate}</ListGroup.Item>
-              <ListGroup.Item>קוד קופון: {coupon.couponCode}</ListGroup.Item>
-              <ListGroup.Item>פירוט: {coupon.description}</ListGroup.Item>
+
+              <ListGroup.Item>מחיר קודם: ₪<del>{coupon.oldPrice}</del></ListGroup.Item>
+              <ListGroup.Item>מחיר חדש: ₪{coupon.newPrice}</ListGroup.Item>
+              <ListGroup.Item>
+                בתוקף עד:{' '}
+                {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+              </ListGroup.Item>
+              <ListGroup.Item>פירוט: {coupon.decription}</ListGroup.Item>
             </ListGroup>
           </Col>
           <Col md={4}>
@@ -67,7 +78,6 @@ const CouponScreen = ({ match }) => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
-
                 <ListGroup.Item>
                   <Row>
                     <Col>סטטוס:</Col>
@@ -97,16 +107,17 @@ const CouponScreen = ({ match }) => {
                       </Row>
                     </ListGroup.Item>
                   )} */}
-
-                <ListGroup.Item>
+                <Link to='/useCoupon'>
                   <Button
                     className='btn-block'
                     type='button'
                     disabled={coupon.countInStock === 0}
+                    onClick={() => buyHandler()}
                   >
                     למימוש
                   </Button>
-                </ListGroup.Item>
+                </Link>
+                ;
               </ListGroup>
             </Card>
           </Col>

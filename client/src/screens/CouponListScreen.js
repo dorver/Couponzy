@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col } from 'react-bootstrap';
+import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listCoupons } from '../actions/couponActions';
+import { listShopCoupons } from '../actions/couponActions';
 
 const CouponListScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
-  const couponList = useSelector((state) => state.couponList);
+  const couponList = useSelector((state) => state.couponShopList);
   const { loading, error, coupons } = couponList;
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -17,7 +17,7 @@ const CouponListScreen = ({ history, match }) => {
 
   useEffect(() => {
     if (userInfo && userInfo.isSeller) {
-      dispatch(listCoupons());
+      dispatch(listShopCoupons(userInfo.shop));
     } else {
       history.push('/userLogin');
     }
@@ -72,9 +72,25 @@ const CouponListScreen = ({ history, match }) => {
                   <td>{coupon.name}</td>
                   <td>${coupon.oldPrice}</td>
                   <td>${coupon.newPrice}</td>
-                  <td>{coupon.inStock}</td>
-                  <td>{coupon.expireDate}</td>
-                  <td>{coupon.published}</td>
+                  <td>
+                    {' '}
+                    {coupon.inStock ? (
+                      <Card.Text as='div'>
+                        <div className='my-3'>במלאי</div>
+                      </Card.Text>
+                    ) : (
+                      <Card.Text as='div'>
+                        <div className='my-3'>לא במלאי</div>
+                      </Card.Text>
+                    )}
+                  </td>
+                  <td>
+                    {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+                  </td>
+                  <td>{coupon.decription}</td>
+                  <td>
+                    {new Date(coupon.published).toLocaleDateString('he-IL')}
+                  </td>
                   <td>
                     <LinkContainer to={`/seller/coupon/${coupon._id}/edit`}>
                       <Button variant='light' className='btn-sm'>
