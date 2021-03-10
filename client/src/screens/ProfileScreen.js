@@ -135,9 +135,6 @@ const ProfileScreen = ({ location, history }) => {
           </Button>
         </Form>
       </Col>
-      <Col md={9}>
-        <h2>הקופונים שלי</h2>
-      </Col>
     </Row>
   );
 };
