@@ -1,7 +1,6 @@
 export interface Branches {
     _id: string,
     name: string,
-    shopName: string,
     city: string,
     address: string,
     phoneNumber: string,
