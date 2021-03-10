@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
 import { SharedService } from '../../layouts/shared.service';
 import { ManageBranchesService } from '../../services/manage-branches.service';
-import { SearchBranchesService } from 'src/app/services/search-branches.service';
-import { Subscription } from 'rxjs';
-
 import { Branches } from '../../models/branches';
-import { Params } from '../../models/params';
 
 
 @Component({
@@ -22,16 +17,14 @@ export class PageShopsMapComponent implements OnInit {
   branches: Branches[] = [];
   currentSearchBranches: Branches[] = []
 
-  subscription: Subscription;
   selectedShop: string = '';
   selectedCity: string = '';
-  selectedOpen: boolean = false;
-  state: boolean = false;
+  selectedOpen: boolean = true;
 
   // Constractor
-  constructor(private _sharedService: SharedService, 
-              private ShowBranchesService: ManageBranchesService,) {
-    this._sharedService.emitChange(this.pageTitle); 
+  constructor(  private _sharedService: SharedService,
+                private ShowBranchesService: ManageBranchesService,) {
+    this._sharedService.emitChange(this.pageTitle);
   }
 
   ngOnInit(): void {
@@ -47,17 +40,19 @@ export class PageShopsMapComponent implements OnInit {
           branch.stateOpen = "סגור";
       });
       this.branches = branches;
-      console.log(this.branches);     
     })
   }
 
-  onSearch(selectedShop: string){
+  onSearch(selectedShop: string) {
     let termShop = selectedShop;
     let termCity = this.selectedCity;
     let termOpen = this.selectedOpen;
-    this.currentSearchBranches = this.branches.filter(function(tag) {
-        return (tag.city.indexOf(termCity) > 0) || (tag.isOpen == termOpen);
-    }); 
+    this.currentSearchBranches = this.branches.filter(object => {
+      return object['city'] === termCity || object['isOpen'] === termOpen || object.shop['shopName'] === termShop;
+    });
+  }
+
+  onStopSearch(selectedShop: string) {
+    this.currentSearchBranches.splice(0, this.currentSearchBranches.length)
   }
 }
-  

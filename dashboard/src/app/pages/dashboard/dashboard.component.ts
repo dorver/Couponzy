@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
 
 import { latLng, tileLayer, circle, polygon, marker } from 'leaflet';
-import { RealtimeService } from '../../realtime.service';
+import { RealtimeService } from '../../services/realtime.service';
 
 // To do list -----> DB-Mongodb ההזמנות האחרונות- להביא מבסיס הנתונים
 const folders: any[] = [
