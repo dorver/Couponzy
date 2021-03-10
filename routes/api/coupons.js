@@ -100,25 +100,26 @@ router.post(
       oldPrice,
       newPrice,
       description,
+      couponType,
       pictureName,
       // published,
     } = req.body;
     console.log('bla');
     const couponShop = req.params.id;
     console.log(couponShop);
+    console.log(couponShop);
+    const couponCodeExist = await Coupon.findOne({ couponCode: couponCode });
 
-    // const newInStock = new Boolean();
-    // if (inStock == 'כן') {
-    //   newInStock == true;
-    // } else {
-    //   newInStock == false;
-    // }
-    console.log(inStock);
-    // console.log(newInStock);
+    if (couponCodeExist) {
+      res.status(400);
+
+      //throw new Error('קוד קופון כבר קיים');
+    }
+
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
     if (name) CouponFields.name = name;
-    if (inStock) CouponFields.inStock = inStock;
+    CouponFields.inStock = inStock;
     //if (expireDate) CouponFields.expireDate = expireDate;
     if (couponCode) CouponFields.couponCode = couponCode;
     if (newPrice) CouponFields.newPrice = newPrice;
@@ -126,9 +127,9 @@ router.post(
     if (description) CouponFields.description = description;
     if (pictureName) CouponFields.pictureName = pictureName;
     //if (published) CouponFields.published = published;
-    //if (couponType) CouponFields.couponType = couponType;
-    if (couponShop) CouponFields.couponShop = couponShop;
-
+    if (couponType) CouponFields.couponType = couponType;
+    if (couponShop) CouponFields.shop = couponShop;
+    console.log(couponType);
     try {
       //Create
       coupon = new Coupon(CouponFields);

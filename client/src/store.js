@@ -20,6 +20,7 @@ import {
 
 import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
 import { setCouponToExpired } from './actions/couponActions';
+import { couponTypesListReducer } from './reducers/couponTypesReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
@@ -35,6 +36,7 @@ const reducer = combineReducers({
   userUpdatePrpfile: userUpdatePrpfileReducer,
   order: newOrderReducer,
   orderList: getOrdersReducer,
+  couponTypesList: couponTypesListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

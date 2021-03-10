@@ -168,6 +168,7 @@ export const createCoupon = (
   oldPrice,
   newPrice,
   decription,
+  couponType,
   pictureName,
   published
 ) => async (dispatch, getState) => {
@@ -175,7 +176,6 @@ export const createCoupon = (
     dispatch({
       type: COUPON_CREATE_REQUEST,
     });
-    console.log(oldPrice);
     const {
       userLogin: { userInfo },
     } = getState();
@@ -185,6 +185,7 @@ export const createCoupon = (
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
+
     const { data } = await axios.post(
       `/api/coupons/createAndAddCouponToShop/${userInfo.shop}`,
       {
@@ -195,6 +196,7 @@ export const createCoupon = (
         oldPrice,
         newPrice,
         decription,
+        couponType,
         pictureName,
         published,
       },
