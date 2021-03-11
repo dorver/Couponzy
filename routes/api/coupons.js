@@ -113,9 +113,7 @@ router.post(
     const couponCodeExist = await Coupon.findOne({ couponCode: couponCode });
 
     if (couponCodeExist) {
-      res.status(400);
-
-      //throw new Error('קוד קופון כבר קיים');
+      res.status(400).json({ message: 'coupon code exists' });
     }
 
     //Build shop object
