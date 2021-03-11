@@ -36,7 +36,7 @@ const ProfileScreen = ({ location, history }) => {
     // if (!userInfo) {
     //   history.push('/userLogin');
     // } else {
-    if (!user) {
+    if (!user || !user.firstName) {
       dispatch(getUserDetails('getUserProfile'));
     } else {
       setFirstName(user.firstName);

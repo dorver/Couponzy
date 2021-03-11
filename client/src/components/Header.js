@@ -37,9 +37,11 @@ const Header = () => {
                     <LinkContainer to='profile'>
                       <NavDropdown.Item>פרופיל</NavDropdown.Item>
                     </LinkContainer>
-                    <NavDropdown.Item onClick={logoutHandler}>
-                      התנתק/י
-                    </NavDropdown.Item>
+                    <LinkContainer to='/userLogin'>
+                      <NavDropdown.Item onClick={logoutHandler}>
+                        התנתק/י
+                      </NavDropdown.Item>
+                    </LinkContainer>
                   </NavDropdown>
                 ) : (
                   <LinkContainer to='/userLogin'>

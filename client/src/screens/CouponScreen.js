@@ -32,10 +32,9 @@ const CouponScreen = ({ match }) => {
   }, [dispatch, match]);
 
   const buyHandler = () => {
-    // if (!userInfo) {
-    //   dispatch('/userLogin');
-    // } else {
-    dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
+    if (userInfo) {
+      dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
+    }
   };
 
   return (
@@ -110,11 +109,10 @@ const CouponScreen = ({ match }) => {
                       </Row>
                     </ListGroup.Item>
                   )} */}
-                <Link to='/useCoupon'>
+                <Link to={userInfo ? `/useCoupon` : '/userLogin'}>
                   <Button
                     className='btn-block'
                     type='button'
-                    disabled={coupon.countInStock == 0 || !userInfo}
                     onClick={() => buyHandler()}
                   >
                     למימוש
