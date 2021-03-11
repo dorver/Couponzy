@@ -163,7 +163,7 @@ export const setCouponToExpired = (couponId) => async (dispatch, getState) => {
 export const createCoupon = (
   name,
   inStock,
-  //expireDate,
+  expireDate,
   couponCode,
   oldPrice,
   newPrice,
@@ -191,7 +191,7 @@ export const createCoupon = (
       {
         name,
         inStock,
-        //expireDate,
+        expireDate,
         couponCode,
         oldPrice,
         newPrice,
@@ -210,6 +210,43 @@ export const createCoupon = (
   } catch (error) {
     dispatch({
       type: COUPON_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.massage
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const updateCoupon = (coupon) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: COUPON_UPDATE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/coupons/edit/${coupon._id}`,
+      coupon,
+      config
+    );
+
+    dispatch({
+      type: COUPON_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: COUPON_UPDATE_FAIL,
       payload:
         error.response && error.response.data.massage
           ? error.response.data.message

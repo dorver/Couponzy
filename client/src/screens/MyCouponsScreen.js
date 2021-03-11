@@ -22,11 +22,9 @@ const MyCouponsScreen = () => {
   return (
     <>
       <h1 style={{ textAlign: 'center' }}>הקופונים שלי</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
+      {loading && <Loader />}
+      {error && <Message variant='danger'>{error}</Message>}
+      {orders && (
         <Row>
           {orders.map((order) => (
             <Col key={order._id} sm={12} md={6} lg={4} xl={3}>

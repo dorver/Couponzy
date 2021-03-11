@@ -32,6 +32,9 @@ const CouponScreen = ({ match }) => {
   }, [dispatch, match]);
 
   const buyHandler = () => {
+    // if (!userInfo) {
+    //   dispatch('/userLogin');
+    // } else {
     dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
   };
 
@@ -111,7 +114,7 @@ const CouponScreen = ({ match }) => {
                   <Button
                     className='btn-block'
                     type='button'
-                    disabled={coupon.countInStock === 0}
+                    disabled={coupon.countInStock == 0 || !userInfo}
                     onClick={() => buyHandler()}
                   >
                     למימוש

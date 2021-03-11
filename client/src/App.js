@@ -34,7 +34,7 @@ const App = () => {
           <Route path='/useCoupon' component={UseCouponScreen} />
           <Route path='/myCoupons' component={MyCouponsScreen} />
           <Route path='/seller/couponCreate' component={CouponCreateScreen} />
-          <Route path='/seller/couponEdit/:id' component={CouponEditScreen} />
+          <Route path='/seller/coupon/edit/:id' component={CouponEditScreen} />
 
           <Route path='/' component={HomeScreen} exact />
         </Container>

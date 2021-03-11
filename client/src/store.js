@@ -8,6 +8,7 @@ import {
   couponDeleteReducer,
   couponSetToExpiredReducer,
   couponCreateReducer,
+  couponUpdateReducer,
 } from './reducers/couponReducers';
 
 import { shopListReducer, shopDetailReducer } from './reducers/shopReducers';
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
   couponCreate: couponCreateReducer,
+  couponUpdate: couponUpdateReducer,
   couponDelete: couponDeleteReducer,
   setCouponToExpired: couponSetToExpiredReducer,
   userLogin: userLoginReducer,

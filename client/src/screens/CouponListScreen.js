@@ -41,14 +41,6 @@ const CouponListScreen = ({ history, match }) => {
     success: successDelete,
   } = couponDelete;
 
-  const couponCreate = useSelector((state) => state.couponCreate);
-  const {
-    loadingCreate,
-    error: errorCreate,
-    success: successCreate,
-    product: createdCoupon,
-  } = couponCreate;
-
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -80,7 +72,7 @@ const CouponListScreen = ({ history, match }) => {
 
   const deleteHandler = (coupon, couponId, shopId) => {
     if (window.confirm('Are you sure')) {
-      if (coupon.orders) {
+      if (coupon.orders.length) {
         dispatch(setCouponToExpired(couponId));
         setMessage('לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות');
       } else {
@@ -120,8 +112,6 @@ const CouponListScreen = ({ history, match }) => {
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
-      {loadingCreate && <Loader />}
-      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (

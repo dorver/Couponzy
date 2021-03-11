@@ -5,7 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { listCouponDetails } from '../actions/couponActions';
+import { listCouponDetails, updateCoupon } from '../actions/couponActions';
+import { listCouponTypes } from '../actions/couponTypesActions';
+import {
+  COUPON_UPDATE_RESET,
+  COUPON_DETAILS_RESET,
+} from '../constants/couponConstants';
 
 const CouponEditScreen = ({ match, history }) => {
   const couponId = match.params.id;
@@ -14,7 +19,7 @@ const CouponEditScreen = ({ match, history }) => {
   const [inStock, setInStock] = useState('');
   const [oldPrice, setOldPrice] = useState(0);
   const [newPrice, setNewPrice] = useState(0);
-  //const [expiredDate, setExpireDate] = useState('');
+  const [expireDate, setExpireDate] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [pictureName, setPictureName] = useState('');
   const [published, setPublished] = useState('');
@@ -29,36 +34,54 @@ const CouponEditScreen = ({ match, history }) => {
   const couponTypesList = useSelector((state) => state.couponTypesList);
   const { loadingCouponTypes, errorCouponTypes, couponTypes } = couponTypesList;
 
+  const couponUpdate = useSelector((state) => state.couponUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = couponUpdate;
+
   useEffect(() => {
-    if (!coupon.name || coupon._id !== couponId) {
-      dispatch(listCouponDetails(couponId));
+    dispatch(listCouponTypes());
+
+    if (successUpdate) {
+      dispatch({ type: COUPON_DETAILS_RESET });
+      dispatch({ type: COUPON_UPDATE_RESET });
+      history.push('/seller/couponlist');
     } else {
-      setName(coupon.name);
-      setInStock(coupon.inStock);
-      setOldPrice(coupon.oldPrice);
-      setNewPrice(coupon.newPrice);
-      //setExpireDate(coupon.expiredDate);
-      setCouponCode(coupon.couponCode);
-      setPictureName(coupon.pictureName);
-      setPublished(coupon.published);
-      setDecription(coupon.decription);
+      if (!coupon.name || coupon._id !== couponId) {
+        dispatch(listCouponDetails(couponId));
+      } else {
+        setName(coupon.name);
+        setInStock(coupon.inStock);
+        setOldPrice(coupon.oldPrice);
+        setNewPrice(coupon.newPrice);
+        setExpireDate(coupon.expireDate);
+        setCouponCode(coupon.couponCode);
+        setPictureName(coupon.pictureName);
+        setPublished(coupon.published);
+        setDecription(coupon.decription);
+        setCouponType(coupon.couponType);
+      }
     }
-  }, [dispatch, history, couponId, coupon]);
+  }, [dispatch, history, couponId, coupon, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    // dispatch(
-    //   updateProduct({
-    //     _id: productId,
-    //     name,
-    //     price,
-    //     image,
-    //     brand,
-    //     category,
-    //     description,
-    //     countInStock,
-    //   })
-    //)
+    dispatch(
+      updateCoupon({
+        _id: couponId,
+        name,
+        inStock,
+        expireDate,
+        couponCode,
+        newPrice,
+        oldPrice,
+        decription,
+        pictureName,
+        couponType,
+      })
+    );
   };
 
   return (
@@ -68,17 +91,17 @@ const CouponEditScreen = ({ match, history }) => {
       </Link>
       <FormContainer>
         <h1>עריכת קופון</h1>
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message variant='danger'>{error}</Message>
-        ) : (
+        {(loadingUpdate || loading) && <Loader />}
+        {(errorUpdate || error) && (
+          <Message variant='danger'>{errorUpdate}</Message>
+        )}
+        {couponTypes && coupon && (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
               <Form.Label>שם קופון</Form.Label>
               <Form.Control
                 type='name'
-                placeholder='Enter name'
+                placeholder='הכנס שם קופון'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               ></Form.Control>
@@ -98,9 +121,21 @@ const CouponEditScreen = ({ match, history }) => {
               <Form.Label>מחיר חדש</Form.Label>
               <Form.Control
                 type='newPrice'
-                placeholder='הנכס מחיר חדש'
+                placeholder='הכנס מחיר חדש'
                 value={newPrice}
                 onChange={(e) => setNewPrice(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='expireDate'>
+              <Form.Label>תאריך תפוגה</Form.Label>
+              <Form.Control
+                type='date'
+                name='expireDate'
+                placeholder={expireDate}
+                locale={'he-IL  '}
+                value={new Date(expireDate).toLocaleDateString('en-CA')}
+                onChange={(e) => setExpireDate(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
@@ -108,7 +143,7 @@ const CouponEditScreen = ({ match, history }) => {
               <Form.Label>קוד קופון</Form.Label>
               <Form.Control
                 type='oldPrice'
-                placeholder='הנכס קוד קופון'
+                placeholder='הכנס קוד קופון'
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               ></Form.Control>
@@ -123,8 +158,8 @@ const CouponEditScreen = ({ match, history }) => {
                 onChange={(e) => setInStock(e.target.value)}
               >
                 <option>בחר...</option>
-                <option>כן</option>
-                <option>לא</option>
+                <option value={true}>כן</option>
+                <option value={false}>לא</option>
               </Form.Control>
             </Form.Group>
 
