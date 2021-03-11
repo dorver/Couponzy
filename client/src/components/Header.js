@@ -25,7 +25,7 @@ const Header = () => {
             <Navbar.Toggle aria-controls='basic-navbar-nav' />
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto'>
-                {userInfo && userInfo.isCustomer && (
+                {userInfo && (
                   <LinkContainer to='/myCoupons'>
                     <Nav.Link>
                       <i className='fas fa-receipt'></i>הקופונים שלי

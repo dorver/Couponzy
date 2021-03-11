@@ -74,7 +74,9 @@ const CouponListScreen = ({ history, match }) => {
     if (window.confirm('Are you sure')) {
       if (coupon.orders.length) {
         dispatch(setCouponToExpired(couponId));
-        setMessage('לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות');
+        setMessage(
+          'לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות - הקופון הפך לפג תוקף'
+        );
       } else {
         dispatch(deleteCoupon(couponId, shopId));
       }
