@@ -40,8 +40,8 @@ import { PageShopsMapComponent } from './pages/shops-map/shops-map.component';
 import { PageSignInSocialComponent } from './pages/roadstart-pages/sign-in-social/sign-in-social.component';
 import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.component';
 import { ManageBranchesService } from './services/manage-branches.service';
-
-
+import { AlertComponent } from './a2-components/alert/alert.component';
+import { ListComponent } from './a2-components/list/list.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +61,9 @@ import { ManageBranchesService } from './services/manage-branches.service';
     PageShopsMapComponent,
     RoadstartLayoutComponent,
     PageSignInSocialComponent,
-    PageSignUpComponent
+    PageSignUpComponent,
+    AlertComponent,
+    ListComponent,
     ],
   imports: [
     BrowserModule,
