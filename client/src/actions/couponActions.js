@@ -11,6 +11,9 @@ import {
   COUPON_DELETE_SUCCESS,
   COUPON_DELETE_REQUEST,
   COUPON_DELETE_FAIL,
+  COUPON_SET_TO_EXPIRED_REQUEST,
+  COUPON_SET_TO_EXPIRED_SUCCESS,
+  COUPON_SET_TO_EXPIRED_FAIL,
   COUPON_CREATE_REQUEST,
   COUPON_CREATE_SUCCESS,
   COUPON_CREATE_FAIL,
@@ -83,6 +86,132 @@ export const listShopCoupons = (shopId) => async (dispatch) => {
       type: COUPON_SHOP_LIST_FAIL,
       payload:
         error.response && error.response.data.message //future fix
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteCoupon = (couponId, shopId) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: COUPON_DELETE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.delete(`/api/coupons/delete/${couponId}/${shopId}`, config);
+    console.log({ shopId });
+    console.log({ couponId });
+    dispatch({
+      type: COUPON_DELETE_SUCCESS,
+    });
+  } catch (error) {
+    console.log({ shopId });
+    console.log({ couponId });
+    dispatch({
+      type: COUPON_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.massage
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const setCouponToExpired = (couponId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: COUPON_SET_TO_EXPIRED_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.put(`/api/coupons/setCouponToExpired/${couponId}`, config);
+
+    dispatch({
+      type: COUPON_SET_TO_EXPIRED_SUCCESS,
+    });
+  } catch (error) {
+    dispatch({
+      type: COUPON_SET_TO_EXPIRED_FAIL,
+      payload:
+        error.response && error.response.data.massage
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const createCoupon = (
+  name,
+  inStock,
+  //expireDate,
+  couponCode,
+  oldPrice,
+  newPrice,
+  decription,
+  couponType,
+  pictureName,
+  published
+) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: COUPON_CREATE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/coupons/createAndAddCouponToShop/${userInfo.shop}`,
+      {
+        name,
+        inStock,
+        //expireDate,
+        couponCode,
+        oldPrice,
+        newPrice,
+        decription,
+        couponType,
+        pictureName,
+        published,
+      },
+      config
+    );
+
+    dispatch({
+      type: COUPON_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: COUPON_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.massage
           ? error.response.data.message
           : error.message,
     });

@@ -28,12 +28,10 @@ const CouponScreen = ({ match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    console.log(match.params.id);
     dispatch(listCouponDetails(match.params.id));
   }, [dispatch, match]);
 
   const buyHandler = () => {
-    console.log('buyyyy');
     dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
   };
 

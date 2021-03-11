@@ -9,10 +9,12 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import CouponListScreen from './screens/CouponListScreen';
+import UseCouponScreen from './screens/UseCouponScreen';
+import MyCouponsScreen from './screens/MyCouponsScreen';
+import CouponCreateScreen from './screens/CouponCreateScreen';
+import CouponEditScreen from './screens/CouponEditScreen';
 
 import io from 'socket.io-client';
-import useCouponScreen from './screens/UseCouponScreen';
-import MyCouponsScreen from './screens/MyCouponsScreen';
 
 const socket = io.connect('http://localhost:5000', {
   transport: ['websocket'],
@@ -29,8 +31,10 @@ const App = () => {
           <Route path='/profile' component={ProfileScreen} />
           <Route path='/coupon/:id' component={CouponScreen} />
           <Route path='/seller/couponlist' component={CouponListScreen} />
-          <Route path='/useCoupon' component={useCouponScreen} />
+          <Route path='/useCoupon' component={UseCouponScreen} />
           <Route path='/myCoupons' component={MyCouponsScreen} />
+          <Route path='/seller/couponCreate' component={CouponCreateScreen} />
+          <Route path='/seller/couponEdit/:id' component={CouponEditScreen} />
 
           <Route path='/' component={HomeScreen} exact />
         </Container>

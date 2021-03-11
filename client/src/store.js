@@ -5,12 +5,12 @@ import {
   couponListReducer,
   couponDetailReducer,
   couponShopListReducer,
+  couponDeleteReducer,
+  couponSetToExpiredReducer,
+  couponCreateReducer,
 } from './reducers/couponReducers';
 
-import {
-  shopListReducer,
-  shopDetailReducer,
-} from './reducers/shopReducers';
+import { shopListReducer, shopDetailReducer } from './reducers/shopReducers';
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -19,18 +19,24 @@ import {
 } from './reducers/userReducers';
 
 import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
+import { setCouponToExpired } from './actions/couponActions';
+import { couponTypesListReducer } from './reducers/couponTypesReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
   shopList: shopListReducer,
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
+  couponCreate: couponCreateReducer,
+  couponDelete: couponDeleteReducer,
+  setCouponToExpired: couponSetToExpiredReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdatePrpfile: userUpdatePrpfileReducer,
   order: newOrderReducer,
   orderList: getOrdersReducer,
+  couponTypesList: couponTypesListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
