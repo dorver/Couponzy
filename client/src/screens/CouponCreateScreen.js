@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+
 import { Form, Button, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
@@ -157,9 +158,11 @@ const CouponCreateScreen = ({ location, history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Button type='submit' variant='primary'>
-            צור קופון
-          </Button>
+          <LinkContainer to={`/seller/couponlist`}>
+            <Button type='submit' variant='primary'>
+              צור קופון
+            </Button>
+          </LinkContainer>
         </Form>
       )}
     </FormContainer>

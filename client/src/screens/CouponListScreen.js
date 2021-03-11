@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import Shop from '../components/Shop';
 import { Link } from 'react-router-dom';
 import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import {
@@ -18,6 +20,16 @@ const CouponListScreen = ({ history, match }) => {
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
+
+  const [shops, setShops] = useState([]);
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      const { data } = await axios.get('/api/shops');
+      setShops(data);
+    };
+    fetchShops();
+  }, []);
 
   const couponList = useSelector((state) => state.couponShopList);
   const { loading, error, coupons } = couponList;
@@ -43,21 +55,27 @@ const CouponListScreen = ({ history, match }) => {
   useEffect(() => {
     dispatch({ type: COUPON_CREATE_RESET });
 
-    if (!userInfo.isSeller) {
-      history.push('/userLogin');
-    }
-    if (successCreate) {
-      history.push(`/admin/product/${createdCoupon._id}`);
+    // if (!userInfo.isSeller) {
+    //   history.push('/userLogin');
+    // }
+    // if (successCreate) {
+    //   history.push(`/admin/product/${createdCoupon._id}`);
+    // } else {
+    //   dispatch(listShopCoupons(userInfo.shop));
+    // }
+
+    if (userInfo && userInfo.isSeller) {
+      dispatch(listShopCoupons(userInfo.shop));
     } else {
-      dispatch(listCoupons());
+      history.push('/userLogin');
     }
   }, [
     dispatch,
     history,
     userInfo,
     successDelete,
-    successCreate,
-    createdCoupon,
+    //successCreate,
+    //createdCoupon,
   ]);
 
   const deleteHandler = (coupon, couponId, shopId) => {
@@ -73,7 +91,24 @@ const CouponListScreen = ({ history, match }) => {
 
   return (
     <>
-      <Link className='btn btn-light my-3' to='/seller/couponCreate'>
+      <Col as='h1'>
+        {shops
+          .filter((shop) => {
+            return shop._id == userInfo.shop;
+          })
+          .map((shop) => (
+            <Col>
+              <Shop shop={shop}></Shop>
+            </Col>
+          ))}
+      </Col>
+
+      <Link
+        className='btn btn-primary my-3'
+        type='submit'
+        variant='dark'
+        to='/seller/couponCreate'
+      >
         הוספת קופון
       </Link>
 
@@ -134,7 +169,7 @@ const CouponListScreen = ({ history, match }) => {
                     {new Date(coupon.published).toLocaleDateString('he-IL')}
                   </td>
                   <td>
-                    <LinkContainer to={`/seller/coupon/${coupon._id}/edit`}>
+                    <LinkContainer to={`/seller/coupon/edit/${coupon._id}`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>
                       </Button>

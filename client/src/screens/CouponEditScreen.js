@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -14,16 +14,20 @@ const CouponEditScreen = ({ match, history }) => {
   const [inStock, setInStock] = useState('');
   const [oldPrice, setOldPrice] = useState(0);
   const [newPrice, setNewPrice] = useState(0);
-  const [expiredDate, setExpireDate] = useState('');
+  //const [expiredDate, setExpireDate] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [pictureName, setPictureName] = useState('');
   const [published, setPublished] = useState('');
   const [decription, setDecription] = useState('');
+  const [couponType, setCouponType] = useState('');
 
   const dispatch = useDispatch();
 
   const couponDetails = useSelector((state) => state.couponDetails);
   const { loading, error, coupon } = couponDetails;
+
+  const couponTypesList = useSelector((state) => state.couponTypesList);
+  const { loadingCouponTypes, errorCouponTypes, couponTypes } = couponTypesList;
 
   useEffect(() => {
     if (!coupon.name || coupon._id !== couponId) {
@@ -33,8 +37,9 @@ const CouponEditScreen = ({ match, history }) => {
       setInStock(coupon.inStock);
       setOldPrice(coupon.oldPrice);
       setNewPrice(coupon.newPrice);
-      setExpireDate(coupon.expiredDate);
+      //setExpireDate(coupon.expiredDate);
       setCouponCode(coupon.couponCode);
+      setPictureName(coupon.pictureName);
       setPublished(coupon.published);
       setDecription(coupon.decription);
     }
@@ -58,7 +63,7 @@ const CouponEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to='/admin/couponlist' className='btn btn-light my-3'>
+      <Link to='/seller/couponlist' className='btn btn-primary my-3'>
         חזור
       </Link>
       <FormContainer>
@@ -107,6 +112,34 @@ const CouponEditScreen = ({ match, history }) => {
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               ></Form.Control>
+            </Form.Group>
+
+            <Form.Group as={Col} controlId='inStock'>
+              <Form.Label>במלאי?</Form.Label>
+              <Form.Control
+                as='select'
+                defaultValue='בחר...'
+                value={inStock}
+                onChange={(e) => setInStock(e.target.value)}
+              >
+                <option>בחר...</option>
+                <option>כן</option>
+                <option>לא</option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group as={Col} controlId='couponType'>
+              <Form.Label>סוג קופון</Form.Label>
+              <Form.Control
+                as='select'
+                defaultValue='בחר...'
+                value={couponType}
+                onChange={(e) => setCouponType(e.target.value)}
+              >
+                {couponTypes.map((couponType) => (
+                  <option value={couponType._id}>{couponType.name}</option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Form.Group controlId='decription'>
