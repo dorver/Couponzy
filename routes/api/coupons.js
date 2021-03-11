@@ -99,7 +99,7 @@ router.post(
       couponCode,
       oldPrice,
       newPrice,
-      description,
+      decription,
       couponType,
       pictureName,
       // published,
@@ -107,7 +107,7 @@ router.post(
     console.log(
       'blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     );
-    console.log(expireDate);
+    console.log(decription);
     const couponShop = req.params.id;
 
     const couponCodeExist = await Coupon.findOne({ couponCode: couponCode });
@@ -126,7 +126,7 @@ router.post(
     if (couponCode) CouponFields.couponCode = couponCode;
     if (newPrice) CouponFields.newPrice = newPrice;
     if (oldPrice) CouponFields.oldPrice = oldPrice;
-    if (description) CouponFields.description = description;
+    if (decription) CouponFields.decription = decription;
     if (pictureName) CouponFields.pictureName = pictureName;
     //if (published) CouponFields.published = published;
     if (couponType) CouponFields.couponType = couponType;
@@ -135,7 +135,11 @@ router.post(
     try {
       //Create
       coupon = new Coupon(CouponFields);
+      console.log('====================================================');
+      console.log(CouponFields);
+      console.log('-----------------------------------------------------');
       console.log(coupon);
+      console.log('-----------------------------------------------------');
 
       const shop = await Shop.findById(req.params.id);
       console.log(shop);
@@ -176,7 +180,7 @@ router.put(
       couponCode,
       newPrice,
       oldPrice,
-      description,
+      decription,
       pictureName,
       couponType,
       // published,
@@ -191,7 +195,7 @@ router.put(
         (coupon.couponCode = couponCode),
         (coupon.newPrice = newPrice),
         (coupon.oldPrice = oldPrice),
-        (coupon.description = description),
+        (coupon.decription = decription),
         (coupon.pictureName = pictureName),
         (coupon.couponType = couponType);
     }
@@ -209,7 +213,7 @@ router.put(
       // if (couponCode) CouponFields.couponCode = couponCode;
       // if (newPrice) CouponFields.newPrice = newPrice;
       // if (oldPrice) CouponFields.oldPrice = oldPrice;
-      // if (description) CouponFields.description = description;
+      // if (decription) CouponFields.decription = decription;
       // if (pictureName) CouponFields.pictureName = pictureName;
       // //if (published) CouponFields.published = published;
       // if (couponType) CouponFields.couponType = couponType;
@@ -325,6 +329,7 @@ router.get('/byShopId/:shopId', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const coupons = await Coupon.find();
+    console.lof;
     res.json(coupons);
   } catch (err) {
     console.error(err.message);

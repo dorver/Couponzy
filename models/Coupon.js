@@ -28,8 +28,7 @@ const CouponSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-
-  description: {
+  decription: {
     type: String,
     maxlength: 100,
     // required: true,
