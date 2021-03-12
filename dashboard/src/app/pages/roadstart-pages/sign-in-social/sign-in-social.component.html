@@ -1,33 +1,23 @@
 <card [title]="'היכנס עם חשבונך'" [align]="'center'">
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit(username.value, pass.value)">
       <mat-form-field>
-        <input matInput placeholder="Username" value="">
+        <input matInput #username placeholder="Username" value="" name="username">
       </mat-form-field>
   
       <mat-form-field>
-        <input matInput placeholder="Password" value="">
+        <input matInput #pass placeholder="Password" value="" id="pass">
       </mat-form-field>
   
-      <div class="text-left mb-module">
-        <mat-checkbox>
-          שמור את הכניסה שלי
-        </mat-checkbox>
-      </div>
   
       <button mat-raised-button color="primary" type="submit" class="submit">כניסה</button>
   
-      <div class="social-divider">כניסה באמצעות</div>
+      <!--<div class="social-divider">כניסה באמצעות</div>
   
       <div class="social-login">
         <button mat-raised-button type="button" class="bg-facebook text-white"><i class="fa fa-facebook"></i> Facebook</button>
         <button mat-raised-button type="button" class="bg-twitter text-white"><i class="fa fa-twitter"></i> Twitter</button>
-      </div>
+      </div>-->
   
-      <div class="additional-info">
-        <a href="#/roadstart-layout/sign-up">הרשמה</a>
-        <span class="divider"></span>
-        <!--a href="#/extra-layout/forgot">Forgot your password?</a-->
-      </div>
     </form>
   </card>
   
