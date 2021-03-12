@@ -1,0 +1,8 @@
+[
+    {"shopName": "ZARA", "pictureName": "assets/content/file-1.jpg", "coupons": [], "branches": []},
+    {"shopName": "CASTRO MEN", "pictureName": "assets/content/file-2.jpg", "coupons": [], "branches": []},
+    {"shopName": "הום סנטר", "pictureName": "assets/content/file-3.jpg", "coupons": [], "branches": []},
+    {"shopName": "GOLF", "pictureName": "assets/content/file-4.jpg", "coupons": [], "branches": []},
+    {"shopName": "מגה ספורט", "pictureName": "assets/content/file-5.jpg", "coupons": [], "branches": []},
+    {"shopName": "KSP", "pictureName": "assets/content/file.jpg", "coupons": [], "branches": []}
+]

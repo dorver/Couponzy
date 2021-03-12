@@ -1,235 +1,278 @@
-// const { authJwt } = require("../../middleware");
-// const controller = require("../../controllers/user");
-// const express = require('express');
-// const router = express.Router();
-
-
-// // module.exports = function(router) {
-// //   app.use(function(req, res, next) {
-// //     res.header(
-// //       "Access-Control-Allow-Headers",
-// //       "x-access-token, Origin, Content-Type, Accept"
-// //     );
-// //     next();
-// //   });
-
-//   router.get('/test', controller.allAccess);
-
-//   router.get("/test/user", [authJwt.verifyToken], controller.userBoard);
-
-//   router.get(
-//     "/test/mod",
-//     [authJwt.verifyToken, authJwt.isModerator],
-//     controller.moderatorBoard
-//   );
-
-//   router.get(
-//     "/test/admin",
-//      [authJwt.verifyToken, authJwt.isAdmin ],
-//     controller.adminBoard
-//   );
-// // };
-
-// module.exports = router;
-
-
 const asyncHandler = require('express-async-handler');
-  
-// import asyncHandler from 'express-async-handler'
 const generateToken = require('../../utils/generateToken');
-// import generateToken from '../utils/generateToken.js'
 const User = require('../../models/User');
-// import User from '../models/userModel.js'
+const Coupon = require('../../models/Coupon');
 const express = require('express');
-// import express from 'express'
-const router = express.Router()
-const{ protect, admin} = require('../../middleware/authMiddleware')
-// import { protect, admin } from '../middleware/authMiddleware.js'
+const router = express.Router();
+const { protect, admin } = require('../../middleware/authMiddleware');
+const moment = require('moment')
+var ObjectId = require('mongodb').ObjectID;
+const today = moment().startOf('day')
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
-router.post("/userLogin", asyncHandler(async (req, res) => {
-  const { email, password } = req.body
+router.post(
+  '/userLogin',
 
-  const user = await User.findOne({ email })
+  asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+    console.log(req.body);
+    const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
-    })
-  } else {
-    res.status(401)
-    throw new Error('Invalid email or password')
-  }
-}));
+    console.log(user);
+
+    if (user && (await user.matchPassword(password))) {
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        gender: user.gender,
+        orders: user.orders,
+        birthday: user.birthday,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isSeller: user.isSeller,
+        isCustomer: user.isCustomer,
+        shop: user.shop,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(401);
+      throw new Error('Invalid email or password');
+    }
+  })
+);
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
-router.post("/registerUser", asyncHandler(async (req, res) => {
-  const { name, email, password, isAdmin, phoneNumber, birthday, gender } = req.body
+router.post(
+  '/registerUser',
+  asyncHandler(async (req, res) => {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      //isAdmin,
+      //isCustomer,
+      //isSeller,
+      birthday,
+      gender,
+    } = req.body;
+    console.log(req.body);
 
-  const userExists = await User.findOne({ email })
+    const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    res.status(400)
-    throw new Error('User already exists')
-  }
+    if (userExists) {
+      res.status(400);
+      throw new Error('User already exists');
+    }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    isAdmin,
-   // isCustomer,
-   // isSeller,
-    phoneNumber,
-    birthday,
-    gender
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      birthday,
+      gender,
+    });
+
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isCustomer: user.isCustomer,
+        isSeller: user.isSeller,
+        phoneNumber: user.phoneNumber,
+        birthday: user.birthday,
+        gender: user.gender,
+        orders: user.orders,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error('Invalid user data');
+    }
   })
+);
 
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    //  isCustomer: user.isCustomer,
-    //  isSeller: user.isSeller,
-      phoneNumber: user.phoneNumber,
-      birthday: user.birthday,
-      gender: user.gender,
-      token: generateToken(user._id),
-    })
-  } else {
-    res.status(400)
-    throw new Error('Invalid user data')
+// @route    GET api/user/profile
+// @desc     Get user profile
+// @access   Private
+router.get(
+  '/getUserProfile',
+  protect,
+  asyncHandler(async (req, res) => {
+    console.log('server/getUserProfile');
+    console.log(req);
+
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  })
+);
+
+// @route    PUT api/user/profile
+// @desc     update user profile
+// @access   Private
+router.put(
+  '/updateUserProfile',
+  protect,
+  asyncHandler(async (req, res) => {
+    console.log(req.user);
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      user.firstName = req.body.firstName || user.firstName;
+      user.lastName = req.body.lastName || user.lastName;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        user.password = req.body.password;
+      }
+      user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: updatedUser._id,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  })
+);
+
+// @route    PUT api/user/setUserSeller
+// @desc     set User as Seller
+// @access   Private
+router.put(
+  '/setUserSeller',
+  protect,
+  asyncHandler(async (req, res) => {
+    console.log(req.user);
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      user.isSeller = true;
+      user.isCustomer = false;
+
+      const updatedUser = await user.save();
+
+      res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isCustomer: user.isCustomer,
+        isSeller: user.isSeller,
+        phoneNumber: user.phoneNumber,
+        birthday: user.birthday,
+        gender: user.gender,
+        orders: user.orders,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  })
+);
+
+// @route   GET api/user/getLastUsers
+// @desc    get last 5 users use sort
+// @access  Public
+router.get('/getLastUsers', async (req, res) => {
+
+  try {
+    User.find({}).limit(5).sort({ $natural: -1 }).exec(function (err, docs) {
+      if (err) console.error(err.stack || err);
+      res.json(docs);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
-}));
+});
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
-// const getUserProfile = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.user._id)
+// @route    PUT api/user/getCountLasvtUsers
+// @desc     get the count of last day users account
+// @access   Private
 
-//   if (user) {
-//     res.json({
-//       _id: user._id,
-//       name: user.name,
-//       email: user.email,
-//       isAdmin: user.isAdmin,
-//     })
-//   } else {
-//     res.status(404)
-//     throw new Error('User not found')
-//   }
-// })
+/*router.get(
+  '/getCountLasvtUsers',
+  asyncHandler(async (req, res) => {
+    Coupon.countDocuments({
+        createdAt: {
+        $gte: today.toDate(),
+        $lte: moment(today).endOf('day').moment
+      }
+    }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    })
+  })
+);*/
 
-// // @desc    Update user profile
-// // @route   PUT /api/users/profile
-// // @access  Private
-// const updateUserProfile = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.user._id)
+// @route    PUT api/user/getCountUsers
+// @desc     get the count of users
+// @access   Private
 
-//   if (user) {
-//     user.name = req.body.name || user.name
-//     user.email = req.body.email || user.email
-//     if (req.body.password) {
-//       user.password = req.body.password
-//     }
+router.get(
+  '/getCountUsers',
+  asyncHandler(async (req, res) => {
+    User.countDocuments({ isCustomer: true }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    });
+  })
+);
 
-//     const updatedUser = await user.save()
+// @route    PUT api/getCountUsers
+// @desc     get the count of users
+// @access   Private
 
-//     res.json({
-//       _id: updatedUser._id,
-//       name: updatedUser.name,
-//       email: updatedUser.email,
-//       isAdmin: updatedUser.isAdmin,
-//       token: generateToken(updatedUser._id),
-//     })
-//   } else {
-//     res.status(404)
-//     throw new Error('User not found')
-//   }
-// })
+router.get(
+  '/getMonthlyAccountUsers',
+  asyncHandler(async (req, res) => {
+    User.find({ '$where': 'this.created_on.toJSON().slice(0, 10) == "2012-07-14"' })
+    User.countDocuments({ isCustomer: true }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    });
 
-// // @desc    Get all users
-// // @route   GET /api/users
-// // @access  Private/Admin
-// const getUsers = asyncHandler(async (req, res) => {
-//   const users = await User.find({})
-//   res.json(users)
-// })
-
-// // @desc    Delete user
-// // @route   DELETE /api/users/:id
-// // @access  Private/Admin
-// const deleteUser = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id)
-
-//   if (user) {
-//     await user.remove()
-//     res.json({ message: 'User removed' })
-//   } else {
-//     res.status(404)
-//     throw new Error('User not found')
-//   }
-// })
-
-// // @desc    Get user by ID
-// // @route   GET /api/users/:id
-// // @access  Private/Admin
-// const getUserById = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id).select('-password')
-
-//   if (user) {
-//     res.json(user)
-//   } else {
-//     res.status(404)
-//     throw new Error('User not found')
-//   }
-// })
-
-// // @desc    Update user
-// // @route   PUT /api/users/:id
-// // @access  Private/Admin
-// const updateUser = asyncHandler(async (req, res) => {
-//   const user = await User.findById(req.params.id)
-
-//   if (user) {
-//     user.name = req.body.name || user.name
-//     user.email = req.body.email || user.email
-//     user.isAdmin = req.body.isAdmin
-
-//     const updatedUser = await user.save()
-
-//     res.json({
-//       _id: updatedUser._id,
-//       name: updatedUser.name,
-//       email: updatedUser.email,
-//       isAdmin: updatedUser.isAdmin,
-//     })
-//   } else {
-//     res.status(404)
-//     throw new Error('User not found')
-//   }
-// })
-
-// export {
-//   authUser,
-//   registerUser,
-//   getUserProfile,
-//   updateUserProfile,
-//   getUsers,
-//   deleteUser,
-//   getUserById,
-//   updateUser,
-// }
+  })
+);
 
 module.exports = router;

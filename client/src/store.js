@@ -1,16 +1,52 @@
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer from './reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+  couponListReducer,
+  couponDetailReducer,
+  couponShopListReducer,
+} from './reducers/couponReducers';
 
-const initialState = {};
+import {
+  shopListReducer,
+  shopDetailReducer,
+} from './reducers/shopReducers';
+import {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdatePrpfileReducer,
+} from './reducers/userReducers';
+
+import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
+
+const reducer = combineReducers({
+  couponList: couponListReducer,
+  shopList: shopListReducer,
+  couponShopList: couponShopListReducer,
+  couponDetails: couponDetailReducer,
+  userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdatePrpfile: userUpdatePrpfileReducer,
+  order: newOrderReducer,
+  orderList: getOrdersReducer,
+});
+
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo'))
+  : null;
+
+const initialState = {
+  userLogin: { userInfo: userInfoFromStorage },
+};
 
 const middleware = [thunk];
 
 const store = createStore(
-    rootReducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
-  );
+  reducer,
+  initialState,
+  composeWithDevTools(applyMiddleware(...middleware))
+);
 
 export default store;
