@@ -23,8 +23,12 @@ router.post(
     //   return res.status(400).json({ errors: errors.array() });
     // }
     // try{
-    const { orderDate, couponId, branch, userId } = req.body;
+    console.log('bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+    console.log(req.body);
+    console.log('bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
 
+    const { orderDate, couponId, branch, userId } = req.body;
+    console.log(branch);
     try {
       let coupon = await Coupon.findOne({ _id: couponId });
       if (!coupon) {
@@ -36,11 +40,13 @@ router.post(
       const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
       if (orderDate) OrderFields.orderDate = orderDate;
       if (coupon) OrderFields.coupon = coupon;
-      if (branch) OrderFields.branche = branch;
+      if (branch) OrderFields.branch = branch;
       if (user) OrderFields.user = user;
 
       //Create
       order = new Order(OrderFields);
+      console.log('222222222222222222222222222222222222222222');
+      console.log(order);
 
       //add order to user
       user.orders.push(order);
@@ -74,7 +80,7 @@ router.post(
       id,
       orderDate,
       coupons,
-      branches,
+      branch,
       users,
     } = req.body;
 
@@ -85,7 +91,7 @@ router.post(
     if (id) OrderFields.id = id;
     if (orderDate) OrderFields.orderDate = orderDate;
     if (coupons) OrderFields.coupons = coupons;
-    if (branches) OrderFields.branches = branches;
+    if (branch) OrderFields.branch = branch;
     if (users) OrderFields.users = users;
 
     try {

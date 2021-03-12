@@ -5,9 +5,6 @@ const config = require('../config/default.json');
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
-  console.log('-============');
-  console.log(req.headers);
-  console.log(req.headers.authorization.startsWith('Bearer'));
 
   if (
     req.headers.authorization &&

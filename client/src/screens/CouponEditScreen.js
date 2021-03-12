@@ -49,7 +49,7 @@ const CouponEditScreen = ({ match, history }) => {
       dispatch({ type: COUPON_UPDATE_RESET });
       history.push('/seller/couponlist');
     } else {
-      if (!coupon.name || coupon._id !== couponId) {
+      if (!coupon || !coupon.name || coupon._id !== couponId) {
         dispatch(listCouponDetails(couponId));
       } else {
         setName(coupon.name);

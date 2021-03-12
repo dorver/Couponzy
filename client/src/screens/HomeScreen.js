@@ -12,6 +12,8 @@ import { listCoupons } from '../actions/couponActions';
 import { listShops } from '../actions/shopActions';
 import { render } from 'react-dom';
 import { listCouponDetails } from '../actions/couponActions';
+import { BRANCH_LIST_RESET } from '../constants/branchConstants';
+
 import axios from 'axios';
 const HomeScreen = () => {
   const [shops, setShops] = useState([]);
@@ -23,6 +25,7 @@ const HomeScreen = () => {
   const [search, setSearch] = useState('');
   const couponList = useSelector((state) => state.couponList);
   const { loading, error, coupons } = couponList;
+
   useEffect(() => {
     const fetchShops = async () => {
       const { data } = await axios.get('/api/shops');
@@ -39,6 +42,7 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
+    dispatch({ type: BRANCH_LIST_RESET });
     dispatch(listCoupons());
   }, [dispatch]);
 

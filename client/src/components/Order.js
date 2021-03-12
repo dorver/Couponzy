@@ -25,6 +25,8 @@ const Order = ({ order }) => {
           </Card.Text>
         )}
 
+        <Card.Text> סניף {order.branch}</Card.Text>
+
         <Card.Text> מחיר חדש ${order.coupon.newPrice}</Card.Text>
 
         <Card.Text> מחיר קודם ${order.coupon.oldPrice}</Card.Text>

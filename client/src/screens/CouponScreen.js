@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { listBranchNames } from '../actions/branchActions';
 import image from '../img/tshirt.jpg';
+import { BRANCH_LIST_RESET } from '../constants/branchConstants';
+
 //import ListGroup from 'react-bootstrap/ListGroup';
 import {
   Row,
@@ -21,33 +25,48 @@ const CouponScreen = ({ match }) => {
   //const coupon = coupons.find((p) => p._id === match.params.id);
   const dispatch = useDispatch();
 
-  const couponDetails = useSelector((state) => state.couponDetails);
-  const { loading, error, coupon } = couponDetails;
+  const [branch, setBranch] = useState('');
+
+  const branchesList = useSelector((state) => state.branchesList);
+  const { branchList } = branchesList;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const couponDetails = useSelector((state) => state.couponDetails);
+  const { loading, error, coupon } = couponDetails;
+
   useEffect(() => {
     dispatch(listCouponDetails(match.params.id));
+    if (!branchList) {
+      dispatch(listBranchNames(match.params.id));
+    } else {
+      setBranch(branchList[0]);
+    }
   }, [dispatch, match]);
 
   const buyHandler = () => {
     if (userInfo) {
-      dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
+      dispatch(newOrder(Date.now, coupon._id, branch, userInfo._id));
+      dispatch({ type: BRANCH_LIST_RESET });
     }
+  };
+
+  const back = () => {
+    dispatch({ type: BRANCH_LIST_RESET });
   };
 
   return (
     <>
       <Link className='btn btn-primary my-3' to='/'>
-        חזור
+        <Button className='btn-block' type='button' onClick={() => back()}>
+          חזור
+        </Button>
       </Link>
 
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
+      {loading && <Loader />}
+      {error && <Message variant='danger'>{error}</Message>}
+      {branchList && (
         <Row>
           <Col md={3}>
             <Image src={coupon.pictureName} alt={coupon.name} fluid />
@@ -86,29 +105,19 @@ const CouponScreen = ({ match }) => {
                     <Col>{coupon.inStock == true ? 'במלאי' : 'לא במלאי'}</Col>
                   </Row>
                 </ListGroup.Item>
-                {/* 
-                  {product.countInStock > 0 && (
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Qty</Col>
-                        <Col>
-                          <Form.Control
-                            as='select'
-                            value={qty}
-                            onChange={(e) => setQty(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  )} */}
+                <Form.Group as={Col} controlId='branch'>
+                  <Form.Label>סניף</Form.Label>
+                  <Form.Control
+                    as='select'
+                    defaultValue='בחר...'
+                    value={branch}
+                    onChange={(e) => setBranch(e.target.value)}
+                  >
+                    {branchList.map((branch) => (
+                      <option value={branch._id}>{branch.name}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
                 <Link to={userInfo ? `/useCoupon` : '/userLogin'}>
                   <Button
                     className='btn-block'

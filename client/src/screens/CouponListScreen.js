@@ -15,6 +15,7 @@ import {
   listCoupons,
 } from '../actions/couponActions';
 import { COUPON_CREATE_RESET } from '../constants/couponConstants';
+import { BRANCH_LIST_RESET } from '../constants/branchConstants';
 
 const CouponListScreen = ({ history, match }) => {
   const [message, setMessage] = useState(null);
@@ -45,7 +46,8 @@ const CouponListScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    dispatch({ type: COUPON_CREATE_RESET });
+    //dispatch({ type: COUPON_CREATE_RESET });
+    dispatch({ type: BRANCH_LIST_RESET });
 
     // if (!userInfo.isSeller) {
     //   history.push('/userLogin');

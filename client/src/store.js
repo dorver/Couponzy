@@ -11,6 +11,8 @@ import {
   couponUpdateReducer,
 } from './reducers/couponReducers';
 
+import { branchNamesListReducer } from './reducers/branchReducers';
+
 import { shopListReducer, shopDetailReducer } from './reducers/shopReducers';
 import {
   userLoginReducer,
@@ -39,6 +41,7 @@ const reducer = combineReducers({
   order: newOrderReducer,
   orderList: getOrdersReducer,
   couponTypesList: couponTypesListReducer,
+  branchesList: branchNamesListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
