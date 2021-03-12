@@ -17,18 +17,7 @@ router.post(
   '/create',
 
   async (req, res) => {
-    console.log('create ordeerrr');
-    //const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    // try{
-    console.log('bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-    console.log(req.body);
-    console.log('bodyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-
     const { orderDate, couponId, branch, userId } = req.body;
-    console.log(branch);
     try {
       let coupon = await Coupon.findOne({ _id: couponId });
       if (!coupon) {
@@ -45,8 +34,6 @@ router.post(
 
       //Create
       order = new Order(OrderFields);
-      console.log('222222222222222222222222222222222222222222');
-      console.log(order);
 
       //add order to user
       user.orders.push(order);
@@ -157,21 +144,12 @@ router.get('/orderDate/:orderDate', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    Order.find({}).populate({ path: 'coupon' ,populate: { path: 'user' }}).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
+    const orders = await Order.find();
+    res.json(orders);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-
-  /*
-  Order.find({}).populate({ path: 'coupon' }).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
-  */
 });
 
 // @route   DELETE api/order/:id
@@ -210,8 +188,6 @@ router.get('/ordersByUserId/:id', async (req, res) => {
     }
 
     const orders = user.orders;
-
-    console.log(orders);
 
     res.json(orders);
   } catch (err) {

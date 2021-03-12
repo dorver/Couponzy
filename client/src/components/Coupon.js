@@ -7,7 +7,6 @@ import { Card } from 'react-bootstrap';
 import axios from 'axios';
 
 const Coupon = ({ coupon }) => {
-  console.log(coupon);
   const [shops, setShops] = useState([]);
 
   useEffect(() => {

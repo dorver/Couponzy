@@ -31,7 +31,6 @@ router.post(
       shop,
       orders,
     } = req.body;
-    console.log(name);
 
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
@@ -50,7 +49,6 @@ router.post(
     if (orders) {
       CouponFields.orders = orders.split(',').map((order) => order.trim());
     }
-    console.log(CouponFields.name);
 
     try {
       let coupon = await Coupon.findOne({ name: name }); //look for a coupon
@@ -61,10 +59,6 @@ router.post(
 
       //Create
       coupon = new Coupon(CouponFields);
-      console.log(coupon.name);
-
-      // console.log(shop.name);
-      // console.log(shop.coupons);
 
       await coupon.save();
 
@@ -104,10 +98,7 @@ router.post(
       pictureName,
       // published,
     } = req.body;
-    console.log(
-      'blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-    );
-    console.log(decription);
+
     const couponShop = req.params.id;
 
     const couponCodeExist = await Coupon.findOne({ couponCode: couponCode });
@@ -129,19 +120,12 @@ router.post(
     //if (published) CouponFields.published = published;
     if (couponType) CouponFields.couponType = couponType;
     if (couponShop) CouponFields.shop = couponShop;
-    console.log(couponType);
     try {
       //Create
       coupon = new Coupon(CouponFields);
-      console.log('====================================================');
-      console.log(CouponFields);
-      console.log('-----------------------------------------------------');
-      console.log(coupon);
-      console.log('-----------------------------------------------------');
 
       const shop = await Shop.findById(req.params.id);
-      console.log(shop);
-      console.log(coupon.oldPrice);
+
       if (coupon) {
         await coupon.save();
         await shop.coupons.push(coupon);
@@ -201,8 +185,6 @@ router.put(
       const updatedCoupon = await coupon.save();
       res.json(updatedCoupon);
 
-      console.log('1');
-
       //Build shop object
       // const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
       // if (name) CouponFields.name = name;
@@ -251,15 +233,12 @@ router.delete(
   async (req, res) => {
     try {
       const coupon = await Coupon.findById(req.params.couponId);
-      console.log(req.params.couponId);
-      console.log(req.params.shopId);
 
       if (!coupon) {
         return res.status(404).json({ msg: 'Coupon not found' });
       }
 
       const shop = await Shop.findById(req.params.shopId);
-      console.log(req.params.shopId);
 
       if (!shop) {
         return res.status(404).json({ msg: 'Shop not found' });
@@ -303,11 +282,9 @@ router.get('/byName/:shopName', async (req, res) => {
 // @access   Private
 router.get('/byShopId/:shopId', async (req, res) => {
   try {
-    console.log(req.params.shopId);
     const shop = await Shop.findOne({ _id: req.params.shopId }).populate(
       'coupons'
     );
-    console.log(shop);
 
     if (!shop) {
       return res.status(404).json({ msg: 'Shop not found' });
@@ -348,29 +325,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// @route    GET api/coupons/getCountCoupons
-// @desc     get the count of users
-// @access   Private
-
-router.get(
-  '/getCountCoupons',
-  (async (req, res) => {
-    Coupon.countDocuments({ }, function (err, branchCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchCount);
-      res.json(branchCount);
-    });
-  })
-);
-
 // @desc    Update coupon to expired
 // @route   PUT /api/coupons/setCouponToExpired/:id
 // @access  Private/Admin
 router.put('/setCouponToExpired/:id', async (req, res) => {
   try {
     const coupon = await Coupon.findById(req.params.id);
-    console.log('settoexpired');
     if (coupon) {
       // Update
       coupon.expireDate = Date.now();

@@ -7,8 +7,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker';
 
 const RegisterScreen = ({ location, history }) => {
   const [firstName, setFirstName] = useState('');
@@ -137,12 +136,18 @@ const RegisterScreen = ({ location, history }) => {
             <option>נקבה</option>
           </Form.Control>
         </Form.Group>
-        <Form.Group >
-        <Form.Label>תאריך לידה</Form.Label>
-        <br></br>
-        <DatePicker selected={startDate} onChange={date => {setStartDate(date);setBirthday(date)}} />
-        {console.log(birthday)}
-        </Form.Group >
+        <Form.Group>
+          <Form.Label>תאריך לידה</Form.Label>
+          <br></br>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              setBirthday(date);
+            }}
+          />
+          {console.log(birthday)}
+        </Form.Group>
         {/* <Form.Group controlId='date' bsSize='large'>
           <Form.Label>Birthday</Form.Label>
           <Form.Control type='date' style={{ width: '100%' }} />

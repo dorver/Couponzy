@@ -46,7 +46,7 @@ const CouponListScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    //dispatch({ type: COUPON_CREATE_RESET });
+    dispatch({ type: COUPON_CREATE_RESET });
     dispatch({ type: BRANCH_LIST_RESET });
 
     // if (!userInfo.isSeller) {

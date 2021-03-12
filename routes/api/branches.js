@@ -7,12 +7,8 @@ const { check, validationResult } = require('express-validator');
 const Branch = require('../../models/Branch');
 const Shop = require('../../models/Shop');
 const Coupon = require('../../models/Coupon');
-<<<<<<< HEAD
-=======
-const moment = require('moment')
-const today = moment().startOf('day')
-
->>>>>>> dev
+const moment = require('moment');
+const today = moment().startOf('day');
 
 // @route   POST api/branches
 // @desc     Create branch
@@ -274,61 +270,54 @@ router.get('/branchNames/:couponId', async (req, res) => {
 // @route    GET api/getCountBranches
 // @desc     get the count of branches
 // @access   Private
-router.get(
-  '/getCountBranches',
-  (async (req, res) => {
-    Branch.countDocuments({ }, function (err, branchCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchCount);
-      res.json(branchCount);
-    });
-  })
-);
+router.get('/getCountBranches', async (req, res) => {
+  Branch.countDocuments({}, function (err, branchCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log('There are %d Branches that account Couponzy App', branchCount);
+    res.json(branchCount);
+  });
+});
 
 // @route    GET api/coupons/getCountCoupons
 // @desc     get the count of users
 // @access   Private
-router.get(
-  '/getCountCoupons',
-  (async (req, res) => {
-    Coupon.countDocuments({ }, function (err, couponCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', couponCount);
-      res.json(couponCount);
-    });
-  })
-);
+router.get('/getCountCoupons', async (req, res) => {
+  Coupon.countDocuments({}, function (err, couponCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log('There are %d Branches that account Couponzy App', couponCount);
+    res.json(couponCount);
+  });
+});
 
 // @route    GET api/coupons/getCountValidCoupons
 // @desc     get the count of users
 // @access   Private
-router.get(
-  '/getCountValidCoupons',
-  (async (req, res) => {
-    Coupon.countDocuments({ "domain.ApplicationCase.fields.ExpireDate": { $lte : today.toDate() }}, function (err, couponCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', couponCount);
+router.get('/getCountValidCoupons', async (req, res) => {
+  Coupon.countDocuments(
+    { 'domain.ApplicationCase.fields.ExpireDate': { $lte: today.toDate() } },
+    function (err, couponCount) {
+      if (err) return res.status(404).json({ errors: ['Count failed'] });
+      console.log(
+        'There are %d Branches that account Couponzy App',
+        couponCount
+      );
       res.json(couponCount);
-    });
-  })
-);
+    }
+  );
+});
 
 // @route    GET api/getCountBranches
 // @desc     get the count of isOpen branches
 // @access   Private
-router.get(
-  '/getCountIsOpenBranches',
-  (async (req, res) => {
-    Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchIsOpenCount);
-      res.json(branchIsOpenCount);
-    });
-  })
-);
+router.get('/getCountIsOpenBranches', async (req, res) => {
+  Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log(
+      'There are %d Branches that account Couponzy App',
+      branchIsOpenCount
+    );
+    res.json(branchIsOpenCount);
+  });
+});
 
 module.exports = router;

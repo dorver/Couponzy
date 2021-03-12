@@ -39,8 +39,6 @@ const CouponCreateScreen = ({ location, history }) => {
   //const redirect = location.search ? location.search.split('=')[1] : '/';
 
   const couponTypeSelected = (e) => {
-    console.log('kjejgje');
-    console.log(e);
     setCouponType(e);
   };
 

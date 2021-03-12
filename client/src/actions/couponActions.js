@@ -111,14 +111,10 @@ export const deleteCoupon = (couponId, shopId) => async (
       },
     };
     await axios.delete(`/api/coupons/delete/${couponId}/${shopId}`, config);
-    console.log({ shopId });
-    console.log({ couponId });
     dispatch({
       type: COUPON_DELETE_SUCCESS,
     });
   } catch (error) {
-    console.log({ shopId });
-    console.log({ couponId });
     dispatch({
       type: COUPON_DELETE_FAIL,
       payload:

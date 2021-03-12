@@ -11,8 +11,6 @@ export const listBranchNames = (couponId) => async (dispatch) => {
     dispatch({ type: BRANCH_LIST_REQUEST });
 
     const { data } = await axios.get(`/api/branches/branchNames/${couponId}`);
-    console.log('flkvlkj');
-    console.log(data);
 
     dispatch({
       type: BRANCH_LIST_SUCCESS,
