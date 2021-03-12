@@ -8,7 +8,11 @@ export const environment = {
   production: false,
   branchesUrl : `http://localhost:${PORT}/api/branches`,
   shopsUrl : `http://localhost:${PORT}/api/shops`,
-  brandsUrl : 'http://localhost:5000/brands'
+  brandsUrl : `http://localhost:${PORT}/brands`,
+  usersUrl : `http://localhost:${PORT}/api/user`,
+  couponsUrl : `http://localhost:${PORT}/api/coupons`,
+  ordersUrl : `http://localhost:${PORT}/api/orders`,
+  adminssUrl : 'http://localhost:5000/admins'
 };
 
 /*

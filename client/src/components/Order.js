@@ -6,7 +6,7 @@ const Order = ({ order }) => {
   return (
     <Card className='my-3 p-3 rounded'>
       <Link to={`/coupon/${order.coupon._id}`}>
-        <Card.Img src={order.coupon.image} variant='top' />
+        <Card.Img src={order.coupon.pictureName} variant='top' />
       </Link>
 
       <Card.Body>
@@ -25,9 +25,9 @@ const Order = ({ order }) => {
           </Card.Text>
         )}
 
-        <Card.Text> מחיר חדש ${order.coupon.newPrice}</Card.Text>
+        <Card.Text> מחיר חדש ₪{order.coupon.newPrice}</Card.Text>
 
-        <Card.Text> מחיר קודם ${order.coupon.oldPrice}</Card.Text>
+        <Card.Text> מחיר קודם ₪<del>{order.coupon.oldPrice}</del></Card.Text>
 
         <Card.Text>
           {' '}
