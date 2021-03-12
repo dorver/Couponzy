@@ -101,6 +101,8 @@ export const register = (
 
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
+    console.log('catchhhh');
+    console.log(error);
     dispatch({
       type: USER_REGISTER_FAIL,
       payload:
@@ -112,7 +114,6 @@ export const register = (
 };
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
-  console.log('getuserdeatails');
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,

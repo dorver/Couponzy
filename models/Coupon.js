@@ -7,11 +7,11 @@ const CouponSchema = new mongoose.Schema({
   },
   inStock: {
     type: Boolean,
-    default: false,
+    //  default: false,
   },
   expireDate: {
     type: Date,
-    required: true,
+    // required: true,
   },
   couponCode: {
     type: String,
@@ -32,11 +32,11 @@ const CouponSchema = new mongoose.Schema({
   description: {
     type: String,
     maxlength: 100,
-    required: true,
+    // required: true,
   },
   pictureName: {
     type: String,
-    required: true,
+    //required: true,
   },
   published: {
     type: Date,

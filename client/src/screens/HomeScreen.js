@@ -2,6 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col,Dropdown,Option } from 'react-bootstrap';
 import Coupon from '../components/Coupon';
+import ShopCoupons from '../components/ShopCoupons';
 import Shop from '../components/Shop';
 import CouponType from '../components/CouponType';
 import Message from '../components/Message';
@@ -15,13 +16,13 @@ import axios from 'axios';
 const HomeScreen = () => {
   const [shops,setShops]= useState([]);
   const [couponTypes,setCouponTypes]= useState([]);
+  const [groupBy,setGroupBy]= useState(false);
   const [searchcouponTypes,setSearchcouponTypes]= useState("");
   const [range,setRange]= useState("");
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const couponList = useSelector((state) => state.couponList);
   const { loading, error, coupons } = couponList;
-
 useEffect(()=>{
 const fetchShops=async()=>{
   const {data} = await axios.get('/api/shops')
@@ -48,6 +49,7 @@ useEffect(()=>{
   //   return coupon.name.indexOf(search)!==-1
   // });
   const updateSearch = (event) => setSearch(event.target.value);
+  const updateGroupBy = () => setGroupBy(!groupBy);
   const updateRange = (event) => setRange(event.target.value);
   const getShopname=((shopName)=>{
     return shops.filter((shop)=>{return shopName==shop._id});
@@ -76,6 +78,11 @@ useEffect(()=>{
               ))}
         </select>
     </Col>
+    <Col>
+    <div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-secondary" onClick={updateGroupBy}>רגיל /סדר לפי חנות</button>
+  </div>
+  </Col>
         <Col>
         <p >  חיפוש לפי מחיר מ-0₪ עד </p>
         <input type="text" className="mr-sm-2 ml-sm-5" value={range} onChange={updateRange.bind(this)}></input>
@@ -84,44 +91,31 @@ useEffect(()=>{
         <p className="event_desc">{range}</p>
         <input type="range" min="0" max="1000" className="slider"  defaultValue="0" id="myRange" onChange={updateRange.bind(this)}></input>
         </Col>
-        
-        {/* //</Col><Dropdown> */}
-  {/* <Dropdown.Toggle variant="success" id="dropdown-basic">
-    Dropdown Button
-  </Dropdown.Toggle>
 
-  <Dropdown.Menu href="#/action-1" {couponTypes.map((couponType) => (
-            <Col key={couponType._id} >
-              <CouponType couponType={couponType} />
-            </Col>
-          ))}>
-    
-    <Dropdown.Item href="#/action-1">
-    </Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown> */}
-
-        
         </Row>
       </div>
-  {/*returns the shop*/ }    
-{/* <Row>
+  {/*returns the shop*/ }  
+  <div>
+ {(groupBy?(
+ <Col>
   {shops.map((shop)=>(
-    <Col>key={shop._id}
-    <Shop shop={shop}></Shop>    
+    <Col>
+    <Shop shop={shop}></Shop>
+    {console.log(shop)}
+    <ShopCoupons shopCoupon={shop}></ShopCoupons>
+    
     </Col>
   ))
 
   }
-</Row> */}
-      
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
+</Col> 
+):(
+<div>
+  {loading ? (
+  <Loader />
+) : error ? (
+  <Message variant='danger'>{error}</Message>
+) : (
         <Row>
           {coupons.filter((coupon)=>{
         var shpname=getShopname(coupon.shop)[0];
@@ -175,7 +169,11 @@ useEffect(()=>{
             </Col>
           ))}
         </Row>
-      )}
+
+      )} 
+      </div>
+))}
+      </div>
     </>
   );
           
