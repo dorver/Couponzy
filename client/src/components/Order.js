@@ -25,9 +25,12 @@ const Order = ({ order }) => {
           </Card.Text>
         )}
 
-        <Card.Text> מחיר חדש ₪{order.coupon.newPrice}</Card.Text>
+        <Card.Text> מחיר חדש ${order.coupon.newPrice}</Card.Text>
 
-        <Card.Text> מחיר קודם ₪<del>{order.coupon.oldPrice}</del></Card.Text>
+        <Card.Text>
+          {' '}
+          מחיר קודם ₪<del>{order.coupon.oldPrice}</del>
+        </Card.Text>
 
         <Card.Text>
           {' '}

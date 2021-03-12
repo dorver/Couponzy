@@ -8,7 +8,10 @@ import {
   couponDeleteReducer,
   couponSetToExpiredReducer,
   couponCreateReducer,
+  couponUpdateReducer,
 } from './reducers/couponReducers';
+
+import { branchNamesListReducer } from './reducers/branchReducers';
 
 import { shopListReducer, shopDetailReducer } from './reducers/shopReducers';
 import {
@@ -28,6 +31,7 @@ const reducer = combineReducers({
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
   couponCreate: couponCreateReducer,
+  couponUpdate: couponUpdateReducer,
   couponDelete: couponDeleteReducer,
   setCouponToExpired: couponSetToExpiredReducer,
   userLogin: userLoginReducer,
@@ -37,6 +41,7 @@ const reducer = combineReducers({
   order: newOrderReducer,
   orderList: getOrdersReducer,
   couponTypesList: couponTypesListReducer,
+  branchesList: branchNamesListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')

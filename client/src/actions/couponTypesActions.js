@@ -8,12 +8,9 @@ import axios from 'axios';
 
 export const listCouponTypes = () => async (dispatch) => {
   try {
-    console.log('lostcouontypes');
     dispatch({ type: COUPON_TYPE_LIST_REQUEST });
 
     const { data } = await axios.get('/api/couponsTypes');
-    console.log('flkvlkj');
-    console.log(data);
 
     dispatch({
       type: COUPON_TYPE_LIST_SUCCESS,

@@ -19,14 +19,7 @@ router.post(
   '/create',
 
   async (req, res) => {
-    console.log('create ordeerrr');
-    //const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    // try{
     const { orderDate, couponId, branch, userId } = req.body;
-
     try {
       let coupon = await Coupon.findOne({ _id: couponId });
       if (!coupon) {
@@ -38,7 +31,7 @@ router.post(
       const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
       if (orderDate) OrderFields.orderDate = orderDate;
       if (coupon) OrderFields.coupon = coupon;
-      if (branch) OrderFields.branche = branch;
+      if (branch) OrderFields.branch = branch;
       if (user) OrderFields.user = user;
 
       //Create
@@ -76,7 +69,7 @@ router.post(
       id,
       orderDate,
       coupons,
-      branches,
+      branch,
       users,
     } = req.body;
 
@@ -87,7 +80,7 @@ router.post(
     if (id) OrderFields.id = id;
     if (orderDate) OrderFields.orderDate = orderDate;
     if (coupons) OrderFields.coupons = coupons;
-    if (branches) OrderFields.branches = branches;
+    if (branch) OrderFields.branch = branch;
     if (users) OrderFields.users = users;
 
     try {
@@ -158,12 +151,13 @@ router.get('/', async (req, res) => {
 
       res.json(docs);
     });
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
-
+21
 // @route   DELETE api/order/:id
 // @desc    DELETE order
 // @access  Private
@@ -200,8 +194,6 @@ router.get('/ordersByUserId/:id', async (req, res) => {
     }
 
     const orders = user.orders;
-
-    console.log(orders);
 
     res.json(orders);
   } catch (err) {

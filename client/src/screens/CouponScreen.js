@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { listBranchNames } from '../actions/branchActions';
 import image from '../img/tshirt.jpg';
+import { BRANCH_LIST_RESET } from '../constants/branchConstants';
+
 //import ListGroup from 'react-bootstrap/ListGroup';
 import {
   Row,
@@ -20,47 +24,66 @@ import { newOrder } from '../actions/orderActions';
 const CouponScreen = ({ match }) => {
   //const coupon = coupons.find((p) => p._id === match.params.id);
   const dispatch = useDispatch();
-  var IsExpired=false;
-  const couponDetails = useSelector((state) => state.couponDetails);
-  const { loading, error, coupon } = couponDetails;
+
+  const [branch, setBranch] = useState('');
+
+  const branchesList = useSelector((state) => state.branchesList);
+  const { branchList } = branchesList;
+
+  var IsExpired = false;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const couponDetails = useSelector((state) => state.couponDetails);
+  const { loading, error, coupon } = couponDetails;
+
   useEffect(() => {
     dispatch(listCouponDetails(match.params.id));
+    if (!branchList) {
+      dispatch(listBranchNames(match.params.id));
+    } else {
+      setBranch(branchList[0]);
+    }
   }, [dispatch, match]);
 
   const buyHandler = () => {
-    dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
+    if (userInfo) {
+      dispatch(newOrder(Date.now, coupon._id, branch, userInfo._id));
+      dispatch({ type: BRANCH_LIST_RESET });
+    }
   };
 
-  const validateDate = (value) => { 
+  const back = () => {
+    dispatch({ type: BRANCH_LIST_RESET });
+  };
+
+  const validateDate = (value) => {
     var currentdate = new Date();
-    var expire = new Date(value);  
-    console.log("Current Date"+currentdate);
-    console.log("Expire Date"+expire);
-    if (expire>=currentdate) { 
+    var expire = new Date(value);
+    console.log('Current Date' + currentdate);
+    console.log('Expire Date' + expire);
+    if (expire >= currentdate) {
       return expire.toLocaleDateString('he-IL');
-    } else { 
-      IsExpired=true;
-      return "Expried";
-    } 
-  } 
+    } else {
+      IsExpired = true;
+      return 'Expried';
+    }
+  };
   return (
     <>
-      <Link className='btn btn-light my-3' to='/'>
-        חזור
+      <Link className='btn btn-primary my-3' to='/'>
+        <Button className='btn-block' type='button' onClick={() => back()}>
+          חזור
+        </Button>
       </Link>
 
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant='danger'>{error}</Message>
-      ) : (
+      {loading && <Loader />}
+      {error && <Message variant='danger'>{error}</Message>}
+      {branchList && (
         <Row>
           <Col md={3}>
-            <Image src={coupon.pictureName}  alt={coupon.name} fluid />
+            <Image src={coupon.pictureName} alt={coupon.name} fluid />
           </Col>
           <Col md={3}>
             <ListGroup variant='flush'>
@@ -68,11 +91,12 @@ const CouponScreen = ({ match }) => {
                 <h3>{coupon.name}</h3>
               </ListGroup.Item>
 
-              <ListGroup.Item>מחיר קודם: ₪<del>{coupon.oldPrice}</del></ListGroup.Item>
+              <ListGroup.Item>
+                מחיר קודם: ₪<del>{coupon.oldPrice}</del>
+              </ListGroup.Item>
               <ListGroup.Item>מחיר חדש: ₪{coupon.newPrice}</ListGroup.Item>
               <ListGroup.Item>
-                בתוקף עד:{' '}
-                {validateDate(coupon.expireDate)}
+                בתוקף עד: {validateDate(coupon.expireDate)}
               </ListGroup.Item>
               <ListGroup.Item>פירוט: {coupon.decription}</ListGroup.Item>
             </ListGroup>
@@ -94,34 +118,24 @@ const CouponScreen = ({ match }) => {
                     <Col>{coupon.inStock == true ? 'במלאי' : 'לא במלאי'}</Col>
                   </Row>
                 </ListGroup.Item>
-                {/* 
-                  {product.countInStock > 0 && (
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Qty</Col>
-                        <Col>
-                          <Form.Control
-                            as='select'
-                            value={qty}
-                            onChange={(e) => setQty(e.target.value)}
-                          >
-                            {[...Array(product.countInStock).keys()].map(
-                              (x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              )
-                            )}
-                          </Form.Control>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  )} */}
-                <Link to='/useCoupon'>
+                <Form.Group as={Col} controlId='branch'>
+                  <Form.Label>סניף</Form.Label>
+                  <Form.Control
+                    as='select'
+                    defaultValue='בחר...'
+                    value={branch}
+                    onChange={(e) => setBranch(e.target.value)}
+                  >
+                    {branchList.map((branch) => (
+                      <option value={branch._id}>{branch.name}</option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
+                <Link to={userInfo ? `/useCoupon` : '/userLogin'}>
                   <Button
                     className='btn-block'
                     type='button'
-                    disabled={coupon.countInStock === 0||IsExpired}
+                    disabled={coupon.countInStock === 0 || IsExpired}
                     onClick={() => buyHandler()}
                   >
                     למימוש

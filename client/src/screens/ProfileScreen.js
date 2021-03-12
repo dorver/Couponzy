@@ -36,7 +36,7 @@ const ProfileScreen = ({ location, history }) => {
     // if (!userInfo) {
     //   history.push('/userLogin');
     // } else {
-    if (!user.firstName) {
+    if (!user || !user.firstName) {
       dispatch(getUserDetails('getUserProfile'));
     } else {
       setFirstName(user.firstName);
@@ -79,61 +79,63 @@ const ProfileScreen = ({ location, history }) => {
         {error && <Message variant='danger'>{error}</Message>}
         {/* {success && <Message variant='success'>{success}</Message>} */}
         {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-          <Form.Group controlId='firstName'>
-            <Form.Label>שם פרטי</Form.Label>
-            <Form.Control
-              type='firstName'
-              placeholder='הכנס/י שם פרטי'
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+        {user && (
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId='firstName'>
+              <Form.Label>שם פרטי</Form.Label>
+              <Form.Control
+                type='firstName'
+                placeholder='הכנס/י שם פרטי'
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId='lastName'>
-            <Form.Label>שם משפחה</Form.Label>
-            <Form.Control
-              type='lastName'
-              placeholder='הכנס/י שם משפחה'
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId='lastName'>
+              <Form.Label>שם משפחה</Form.Label>
+              <Form.Control
+                type='lastName'
+                placeholder='הכנס/י שם משפחה'
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId='email'>
-            <Form.Label>כתובת אימייל</Form.Label>
-            <Form.Control
-              type='email'
-              placeholder='הכנס/י אימייל'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId='email'>
+              <Form.Label>כתובת אימייל</Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='הכנס/י אימייל'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId='password'>
-            <Form.Label>סיסמה</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='הכנס/י סיסמה'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId='password'>
+              <Form.Label>סיסמה</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='הכנס/י סיסמה'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId='confirmedPassword'>
-            <Form.Label>אשר סיסמה</Form.Label>
-            <Form.Control
-              type='password'
-              placeholder='הכנס/י סיסמה שוב'
-              value={confirmPassword}
-              onChange={(e) => setConfirmedPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+            <Form.Group controlId='confirmedPassword'>
+              <Form.Label>אשר סיסמה</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='הכנס/י סיסמה שוב'
+                value={confirmPassword}
+                onChange={(e) => setConfirmedPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-          <Button type='submit' variant='primary'>
-            עדכן/עדכני
-          </Button>
-        </Form>
+            <Button type='submit' variant='primary'>
+              עדכן/עדכני
+            </Button>
+          </Form>
+        )}
       </Col>
     </Row>
   );

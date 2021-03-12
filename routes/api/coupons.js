@@ -31,7 +31,6 @@ router.post(
       shop,
       orders,
     } = req.body;
-    console.log(name);
 
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
@@ -50,7 +49,6 @@ router.post(
     if (orders) {
       CouponFields.orders = orders.split(',').map((order) => order.trim());
     }
-    console.log(CouponFields.name);
 
     try {
       let coupon = await Coupon.findOne({ name: name }); //look for a coupon
@@ -61,10 +59,6 @@ router.post(
 
       //Create
       coupon = new Coupon(CouponFields);
-      console.log(coupon.name);
-
-      // console.log(shop.name);
-      // console.log(shop.coupons);
 
       await coupon.save();
 
@@ -95,56 +89,51 @@ router.post(
       // pull out everything form the body
       name,
       inStock,
-      // expireDate,
+      expireDate,
       couponCode,
       oldPrice,
       newPrice,
-      description,
+      decription,
       couponType,
       pictureName,
       // published,
     } = req.body;
-    console.log('bla');
+
     const couponShop = req.params.id;
-    console.log(couponShop);
-    console.log(couponShop);
+
     const couponCodeExist = await Coupon.findOne({ couponCode: couponCode });
 
     if (couponCodeExist) {
-      res.status(400);
-
-      //throw new Error('קוד קופון כבר קיים');
+      res.status(400).json({ message: 'coupon code exists' });
     }
 
     //Build shop object
     const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
     if (name) CouponFields.name = name;
     CouponFields.inStock = inStock;
-    //if (expireDate) CouponFields.expireDate = expireDate;
+    if (expireDate) CouponFields.expireDate = expireDate;
     if (couponCode) CouponFields.couponCode = couponCode;
     if (newPrice) CouponFields.newPrice = newPrice;
     if (oldPrice) CouponFields.oldPrice = oldPrice;
-    if (description) CouponFields.description = description;
+    if (decription) CouponFields.decription = decription;
     if (pictureName) CouponFields.pictureName = pictureName;
     //if (published) CouponFields.published = published;
     if (couponType) CouponFields.couponType = couponType;
     if (couponShop) CouponFields.shop = couponShop;
-    console.log(couponType);
     try {
       //Create
       coupon = new Coupon(CouponFields);
-      console.log(coupon);
 
       const shop = await Shop.findById(req.params.id);
-      console.log(shop);
-      console.log(coupon.oldPrice);
+
       if (coupon) {
         await coupon.save();
         await shop.coupons.push(coupon);
         await shop.save();
       }
-
-      res.json(coupon);
+      const coupons = await Coupon.find();
+      res.json(coupons);
+      // res.json(coupon);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -156,7 +145,9 @@ router.post(
 // @access   Private
 router.put(
   // check for body errors
-  '/edit',
+  '/edit/:id',
+  protect,
+  seller,
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -171,48 +162,60 @@ router.put(
       couponCode,
       newPrice,
       oldPrice,
-      description,
+      decription,
       pictureName,
-      published,
       couponType,
-      shop,
-      orders,
+      // published,
     } = req.body;
 
-    console.log('1');
+    const coupon = await Coupon.findById(req.params.id);
 
-    //Build shop object
-    const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
-    if (id) CouponFields.id = id;
-    if (name) CouponFields.name = name;
-    if (inStock) CouponFields.inStock = inStock;
-    if (expireDate) CouponFields.expireDate = expireDate;
-    if (couponCode) CouponFields.couponCode = couponCode;
-    if (newPrice) CouponFields.newPrice = newPrice;
-    if (oldPrice) CouponFields.oldPrice = oldPrice;
-    if (description) CouponFields.description = description;
-    if (pictureName) CouponFields.pictureName = pictureName;
-    if (published) CouponFields.published = published;
-    if (couponType) CouponFields.couponType = couponType;
-    if (shop) CouponFields.shop = shop;
-
-    if (orders) {
-      CouponFields.orders = orders.split(',').map((order) => order.trim());
+    if (coupon) {
+      (coupon.name = name),
+        (coupon.inStock = inStock),
+        (coupon.expireDate = expireDate),
+        (coupon.couponCode = couponCode),
+        (coupon.newPrice = newPrice),
+        (coupon.oldPrice = oldPrice),
+        (coupon.decription = decription),
+        (coupon.pictureName = pictureName),
+        (coupon.couponType = couponType);
     }
-
     try {
-      let coupon = await Coupon.findById(req.params.id); //look for a coupon and update
+      const updatedCoupon = await coupon.save();
+      res.json(updatedCoupon);
 
-      if (coupon) {
-        // Update
-        coupon = await Coupon.findOneAndUpdate(
-          { id: id },
-          { $set: CouponFields },
-          { new: true }
-        );
-      }
-      await coupon.save();
-      res.json(coupon);
+      //Build shop object
+      // const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
+      // if (name) CouponFields.name = name;
+      // if (inStock) CouponFields.inStock = inStock;
+      // if (expireDate) CouponFields.expireDate = expireDate;
+      // if (couponCode) CouponFields.couponCode = couponCode;
+      // if (newPrice) CouponFields.newPrice = newPrice;
+      // if (oldPrice) CouponFields.oldPrice = oldPrice;
+      // if (decription) CouponFields.decription = decription;
+      // if (pictureName) CouponFields.pictureName = pictureName;
+      // //if (published) CouponFields.published = published;
+      // if (couponType) CouponFields.couponType = couponType;
+      // // if (shop) CouponFields.shop = shop;
+
+      // // if (orders) {
+      // //   CouponFields.orders = orders.split(',').map((order) => order.trim());
+      // // }
+
+      // try {
+      //   let coupon = await Coupon.findById(req.params.id); //look for a coupon and update
+
+      //   if (coupon) {
+      //     // Update
+      //     coupon = await Coupon.findOneAndUpdate(
+      //       { id: id },
+      //       { $set: CouponFields },
+      //       { new: true }
+      //     );
+      //   }
+      // await coupon.save();
+      // res.json(coupon);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -230,15 +233,12 @@ router.delete(
   async (req, res) => {
     try {
       const coupon = await Coupon.findById(req.params.couponId);
-      console.log(req.params.couponId);
-      console.log(req.params.shopId);
 
       if (!coupon) {
         return res.status(404).json({ msg: 'Coupon not found' });
       }
 
       const shop = await Shop.findById(req.params.shopId);
-      console.log(req.params.shopId);
 
       if (!shop) {
         return res.status(404).json({ msg: 'Shop not found' });
@@ -282,11 +282,9 @@ router.get('/byName/:shopName', async (req, res) => {
 // @access   Private
 router.get('/byShopId/:shopId', async (req, res) => {
   try {
-    console.log(req.params.shopId);
     const shop = await Shop.findOne({ _id: req.params.shopId }).populate(
       'coupons'
     );
-    console.log(shop);
 
     if (!shop) {
       return res.status(404).json({ msg: 'Shop not found' });
@@ -306,6 +304,7 @@ router.get('/byShopId/:shopId', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const coupons = await Coupon.find();
+    console.lof;
     res.json(coupons);
   } catch (err) {
     console.error(err.message);
@@ -326,34 +325,20 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// @route    GET api/coupons/getCountCoupons
-// @desc     get the count of users
-// @access   Private
-
-router.get(
-  '/getCountCoupons',
-  (async (req, res) => {
-    Coupon.countDocuments({ }, function (err, branchCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchCount);
-      res.json(branchCount);
-    });
-  })
-);
-
 // @desc    Update coupon to expired
 // @route   PUT /api/coupons/setCouponToExpired/:id
 // @access  Private/Admin
-router.put('/api/coupons/setCouponToExpired/:id', async (req, res) => {
+router.put('/setCouponToExpired/:id', async (req, res) => {
   try {
     const coupon = await Coupon.findById(req.params.id);
     if (coupon) {
       // Update
-      coupon.expireDate = Date.now.toLocaleDateString('he-IL');
+      coupon.expireDate = Date.now();
     }
     const updatedCouponExpired = await coupon.save();
-    res.json(updatedCouponExpired);
+    const coupons = await Coupon.find();
+    res.json(coupons);
+    //res.json(updatedCouponExpired);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
