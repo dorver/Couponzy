@@ -334,4 +334,20 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route    GET api/coupons/getCountCoupons
+// @desc     get the count of users
+// @access   Private
+
+router.get(
+  '/getCountCoupons',
+  (async (req, res) => {
+    Coupon.countDocuments({ }, function (err, branchCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Branches that account Couponzy App', branchCount);
+      res.json(branchCount);
+    });
+  })
+);
+
 module.exports = router;

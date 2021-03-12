@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ElementRef, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material/material.module';
 
@@ -42,6 +42,7 @@ import { PageSignUpComponent } from './pages/roadstart-pages/sign-up/sign-up.com
 import { ManageBranchesService } from './services/manage-branches.service';
 import { AlertComponent } from './a2-components/alert/alert.component';
 import { ListComponent } from './a2-components/list/list.component';
+import { DesignchartDirective } from './directives/designchart.directive';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { ListComponent } from './a2-components/list/list.component';
     PageSignUpComponent,
     AlertComponent,
     ListComponent,
+    DesignchartDirective,
     ],
   imports: [
     BrowserModule,
