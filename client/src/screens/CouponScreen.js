@@ -20,7 +20,7 @@ import { newOrder } from '../actions/orderActions';
 const CouponScreen = ({ match }) => {
   //const coupon = coupons.find((p) => p._id === match.params.id);
   const dispatch = useDispatch();
-
+  var IsExpired=false;
   const couponDetails = useSelector((state) => state.couponDetails);
   const { loading, error, coupon } = couponDetails;
 
@@ -35,6 +35,18 @@ const CouponScreen = ({ match }) => {
     dispatch(newOrder(Date.now, coupon._id, '', userInfo._id));
   };
 
+  const validateDate = (value) => { 
+    var currentdate = new Date();
+    var expire = new Date(value);  
+    console.log("Current Date"+currentdate);
+    console.log("Expire Date"+expire);
+    if (expire>=currentdate) { 
+      return expire.toLocaleDateString('he-IL');
+    } else { 
+      IsExpired=true;
+      return "Expried";
+    } 
+  } 
   return (
     <>
       <Link className='btn btn-light my-3' to='/'>
@@ -60,7 +72,7 @@ const CouponScreen = ({ match }) => {
               <ListGroup.Item>מחיר חדש: ₪{coupon.newPrice}</ListGroup.Item>
               <ListGroup.Item>
                 בתוקף עד:{' '}
-                {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+                {validateDate(coupon.expireDate)}
               </ListGroup.Item>
               <ListGroup.Item>פירוט: {coupon.decription}</ListGroup.Item>
             </ListGroup>
@@ -72,7 +84,7 @@ const CouponScreen = ({ match }) => {
                   <Row>
                     <Col>מחיר:</Col>
                     <Col>
-                      <strong>${coupon.newPrice}</strong>
+                      <strong>₪{coupon.newPrice}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -109,7 +121,7 @@ const CouponScreen = ({ match }) => {
                   <Button
                     className='btn-block'
                     type='button'
-                    disabled={coupon.countInStock === 0}
+                    disabled={coupon.countInStock === 0||IsExpired}
                     onClick={() => buyHandler()}
                   >
                     למימוש
