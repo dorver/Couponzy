@@ -52,7 +52,7 @@ const CouponCreateScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch();
+    // dispatch();
     dispatch(
       createCoupon(
         name,
