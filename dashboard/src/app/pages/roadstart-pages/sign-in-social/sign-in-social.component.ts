@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/users';
+import { Users } from 'src/app/models/users';
 @Component({
   selector: 'page-sign-in-social',
   templateUrl: './sign-in-social.component.html',
@@ -10,7 +10,7 @@ import { User } from 'src/app/models/users';
 })
 export class PageSignInSocialComponent implements OnInit {
   pageTitle: string = 'כניסה';
-  data: User;
+  data: Users;
 
   constructor(private router: Router, private userService : UserService) {}
 
