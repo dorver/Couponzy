@@ -30,6 +30,8 @@ const CouponScreen = ({ match }) => {
   const branchesList = useSelector((state) => state.branchesList);
   const { branchList } = branchesList;
 
+  var IsExpired = false;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -56,6 +58,18 @@ const CouponScreen = ({ match }) => {
     dispatch({ type: BRANCH_LIST_RESET });
   };
 
+  const validateDate = (value) => {
+    var currentdate = new Date();
+    var expire = new Date(value);
+    console.log('Current Date' + currentdate);
+    console.log('Expire Date' + expire);
+    if (expire >= currentdate) {
+      return expire.toLocaleDateString('he-IL');
+    } else {
+      IsExpired = true;
+      return 'Expried';
+    }
+  };
   return (
     <>
       <Link className='btn btn-primary my-3' to='/'>
@@ -82,8 +96,7 @@ const CouponScreen = ({ match }) => {
               </ListGroup.Item>
               <ListGroup.Item>מחיר חדש: ₪{coupon.newPrice}</ListGroup.Item>
               <ListGroup.Item>
-                בתוקף עד:{' '}
-                {new Date(coupon.expireDate).toLocaleDateString('he-IL')}
+                בתוקף עד: {validateDate(coupon.expireDate)}
               </ListGroup.Item>
               <ListGroup.Item>פירוט: {coupon.decription}</ListGroup.Item>
             </ListGroup>
@@ -95,7 +108,7 @@ const CouponScreen = ({ match }) => {
                   <Row>
                     <Col>מחיר:</Col>
                     <Col>
-                      <strong>${coupon.newPrice}</strong>
+                      <strong>₪{coupon.newPrice}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -122,6 +135,7 @@ const CouponScreen = ({ match }) => {
                   <Button
                     className='btn-block'
                     type='button'
+                    disabled={coupon.countInStock === 0 || IsExpired}
                     onClick={() => buyHandler()}
                   >
                     למימוש

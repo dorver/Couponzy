@@ -4,11 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 import { Branches } from '../models/branches';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-/*interface Location {
-  latitude: string;
-  longtitude: string;
-}*/
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +13,6 @@ export class ManageBranchesService {
 
   constructor(private http: HttpClient) { }
 
-  /*getLocation(){
-    return this.http.get<Location>('https://api.ipapi.com/api/check?access_key=');
-  }*/
   getBranches(): Observable<Branches[]> {
     return this.http.get<Branches[]>(this.branchesUrl);
   }
@@ -38,5 +30,25 @@ export class ManageBranchesService {
   deleteBranch(ip: string): Observable<Branches> {
     const url = `${this.branchesUrl}/${ip}`;
     return this.http.delete<Branches>(url);
+  }
+
+  getCountBranches(): Observable<number> {
+    const url = `${this.branchesUrl}/${"getCountBranches"}`;
+    return this.http.get<number>(url);
+  }
+
+  getCountIsOpenBranches(): Observable<number> {
+    const url = `${this.branchesUrl}/${"getCountIsOpenBranches"}`;
+    return this.http.get<number>(url);
+  }
+
+  getCountCoupons(): Observable<number> {
+    const url = `${this.branchesUrl}/${"getCountCoupons"}`;
+    return this.http.get<number>(url);
+  }
+
+  getCountValidCoupons(): Observable<number> {
+    const url = `${this.branchesUrl}/${"getCountValidCoupons"}`;
+    return this.http.get<number>(url);
   }
 }

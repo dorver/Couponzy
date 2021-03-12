@@ -1,9 +1,13 @@
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../../utils/generateToken');
 const User = require('../../models/User');
+const Coupon = require('../../models/Coupon');
 const express = require('express');
 const router = express.Router();
 const { protect, admin } = require('../../middleware/authMiddleware');
+const moment = require('moment')
+var ObjectId = require('mongodb').ObjectID;
+const today = moment().startOf('day')
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -186,6 +190,77 @@ router.put(
     } else {
       res.status(404).json({ message: 'User not found' });
     }
+  })
+);
+
+// @route   GET api/user/getLastUsers
+// @desc    get last 5 users use sort
+// @access  Public
+router.get('/getLastUsers', async (req, res) => {
+
+  try {
+    User.find({}).limit(5).sort({ $natural: -1 }).exec(function (err, docs) {
+      if (err) console.error(err.stack || err);
+      res.json(docs);
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route    PUT api/user/getCountLasvtUsers
+// @desc     get the count of last day users account
+// @access   Private
+
+/*router.get(
+  '/getCountLasvtUsers',
+  asyncHandler(async (req, res) => {
+    Coupon.countDocuments({
+        createdAt: {
+        $gte: today.toDate(),
+        $lte: moment(today).endOf('day').moment
+      }
+    }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    })
+  })
+);*/
+
+// @route    PUT api/user/getCountUsers
+// @desc     get the count of users
+// @access   Private
+
+router.get(
+  '/getCountUsers',
+  asyncHandler(async (req, res) => {
+    User.countDocuments({ isCustomer: true }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    });
+  })
+);
+
+// @route    PUT api/getCountUsers
+// @desc     get the count of users
+// @access   Private
+
+router.get(
+  '/getMonthlyAccountUsers',
+  asyncHandler(async (req, res) => {
+    User.find({ '$where': 'this.created_on.toJSON().slice(0, 10) == "2012-07-14"' })
+    User.countDocuments({ isCustomer: true }, function (err, userCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Users that account Couponzy App', userCount);
+      res.json(userCount);
+    });
+
   })
 );
 

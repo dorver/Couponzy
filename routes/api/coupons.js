@@ -348,6 +348,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route    GET api/coupons/getCountCoupons
+// @desc     get the count of users
+// @access   Private
+
+router.get(
+  '/getCountCoupons',
+  (async (req, res) => {
+    Coupon.countDocuments({ }, function (err, branchCount) {
+      if (err)
+        return res.status(404).json({ errors: ['Count failed'] });
+      console.log('There are %d Branches that account Couponzy App', branchCount);
+      res.json(branchCount);
+    });
+  })
+);
+
 // @desc    Update coupon to expired
 // @route   PUT /api/coupons/setCouponToExpired/:id
 // @access  Private/Admin

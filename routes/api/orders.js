@@ -157,12 +157,21 @@ router.get('/orderDate/:orderDate', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const orders = await Order.find();
-    res.json(orders);
+    Order.find({}).populate({ path: 'coupon' ,populate: { path: 'user' }}).exec(function (err, docs) {
+      if (err) console.error(err.stack || err);
+      res.json(docs);
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
+
+  /*
+  Order.find({}).populate({ path: 'coupon' }).exec(function (err, docs) {
+      if (err) console.error(err.stack || err);
+      res.json(docs);
+    });
+  */
 });
 
 // @route   DELETE api/order/:id

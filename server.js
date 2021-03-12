@@ -4,6 +4,9 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const socketIo = require('socket.io');
+const Branch = require('./models/Branch');
+const url = 'mongodb://localhost:27017/chat';
+const router = require('./routes/api/branches');
 
 const app = express();
 
@@ -28,6 +31,7 @@ app.use('/api/branches', require('./routes/api/branches'));
 app.use('/api/orders', require('./routes/api/orders'));
 app.use('/api/couponsTypes', require('./routes/api/couponsTypes'));
 app.use('/brands', require('./routes/api/brands'));
+app.use('/admins', require('./routes/api/admins'));
 
 const server = http.createServer(app);
 
@@ -54,7 +58,30 @@ io.on('connection', (socket) => {
       console.log(count);
     });
   }
+  console.log('Client connected');
 });
+
+function chartUpdate(socket) {
+  /*socket.on("update", async (countbranches) => {
+        try {
+            Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
+                if (err)
+                  return res.status(404).json({ errors: ['Count failed'] });
+                console.log('There are %d Branches that account Couponzy App', branchIsOpenCount);
+                res.json(branchIsOpenCount);
+              });
+            socket.update(countbranches);
+            socket.emitter("chartupdate", countbranches);
+            socket.activeRoom = countbranches;
+        } catch (e) {
+            console.error(e);
+        }
+    });
+    
+    setTimeout(() => {
+        chartUpdate(socket)
+    }, 2000);*/
+}
 
 const PORT = process.env.PORT || 5000;
 

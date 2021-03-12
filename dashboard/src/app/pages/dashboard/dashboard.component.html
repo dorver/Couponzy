@@ -1,35 +1,60 @@
 <!-- Row 1 --- 4 Cards -->
 <div class="row">
-  <div class="col-md-6 col-xl-4">
+  <div class="col-md-6 col-xl-6">
     <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
       class="info-card">
-      <div class="title text-uppercase">כמות המשתמשים</div>
-      <div class="count">2,145</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+17%</badge> <small>from previous
-        period</small>
+      <div class="title text-uppercase">כמות הצרכנים והמוכרים</div>
+      <div class="count">{{countOfUsers}}</div>
     </card>
   </div>
 
-  <div class="col-md-6 col-xl-4">
+  <div class="col-md-6 col-xl-6">
     <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
       class="info-card">
-      <div class="title text-uppercase">משתמשים מחוברים</div>
+      <div class="title text-uppercase">כמות צרכנים ומוכרים מחוברים</div>
       <div class="count">{{counter}}</div>
-      <small>11750</small>
+    </card>
+  </div>
+</div>
+
+<!-- Row 2 --- 3 Cards -->
+<div class="row">
+  <div class="col-md-6 col-xl-6">
+    <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
+      class="info-card">
+      <div class="title text-uppercase">כמות החנויות</div>
+      <div class="count">{{countOfBranches}}</div>
     </card>
   </div>
 
-  <div class="col-md-6 col-xl-4">
-    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'"
+  <div class="col-md-6 col-xl-6">
+    <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
       class="info-card">
-      <div class="title text-uppercase">כמות משתמשים שהצטרפו החודש</div>
-      <div class="count">2,543</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+210</badge>
+      <div class="title text-uppercase">כמות חנויות פתוחות</div>
+      <div class="count">{{countIsOpenBranches}}</div>
     </card>
   </div>
 
 </div>
-<!-- Row 2 --- Bar Chart X 2 -->
+<!-- Row 3 --- 2 Cards -->
+<div class="row">
+  <div class="col-md-6 col-xl-6">
+    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
+      class="info-card">
+      <div class="title text-uppercase">רכישת קופונים מתחילת החודש</div>
+      <div class="count">{{countCoupons}}</div>
+    </card>
+  </div>
+
+  <div class="col-md-6 col-xl-6">
+    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'"
+      class="info-card">
+      <div class="title text-uppercase">ממוצע רכישת קופונים חודשי</div>
+      <div class="count">{{countValidCoupons}}</div>
+    </card>
+  </div>
+</div>
+<!-- Row 4 --- Line Chart -->
 <div class="row mb-lg-4">
   <!-- Bar Chart -->
   <div class="col-md-6">
@@ -38,7 +63,7 @@
             [options]="barChartOptions" [legend]="barChartLegend">
         </canvas>
     </card>
-</div>
+  </div>
   
   <!-- Bar Chart -->
   <div class="col-lg-6">
@@ -50,57 +75,6 @@
   </div>
 </div>
 
-<!-- Row 3 --- 3 Cards -->
-<div class="row">
-  <div class="col-md-6 col-xl-4">
-    <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">כמות חנויות</div>
-      <div class="count">2,145</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+17%</badge> <small>from previous
-        period</small>
-    </card>
-  </div>
-
-  <div class="col-md-6 col-xl-4">
-    <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">כמות חנויות פתוחות</div>
-      <div class="count">{{counter}}</div>
-      <small>11750</small>
-    </card>
-  </div>
-
-  <div class="col-md-6 col-xl-4">
-    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">כמות חנויות שהצטרפו החודש</div>
-      <div class="count">2,543</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+210</badge>
-    </card>
-  </div>
-</div>
-<!-- Row 4 --- 2 Cards -->
-<div class="row">
-  <div class="col-md-6 col-xl-6">
-    <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">רכישת קופונים מתחילת החודש</div>
-      <div class="count">2,145</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+17%</badge> <small>from previous
-        period</small>
-    </card>
-  </div>
-
-  <div class="col-md-6 col-xl-6">
-    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">ממוצע רכישת קופונים חודשי</div>
-      <div class="count">2,543</div>
-      <badge [customColor]="'rgba(255,255,255,0.3)'" [borderRadius]="false">+210</badge>
-    </card>
-  </div>
-</div>
 <!-- Row 5 --- 2 Table -->
 <div class="row">
   <div class="col-lg-6">
@@ -149,30 +123,19 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>תמונה</th>
               <th>שם פרטי</th>
               <th>שם משפחה</th>
               <th>מייל</th>
+              <th>טלפון</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
+            <tr *ngFor="let user of users; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{user.firstName}}</td>
+              <td>{{user.lastName}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.phoneNumber}}</td>
             </tr>
           </tbody>
         </table>
