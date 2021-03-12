@@ -8,6 +8,8 @@ const Branch = require('../../models/Order');
 const Order = require('../../models/Order');
 const User = require('../../models/User');
 const Coupon = require('../../models/Coupon');
+const { mapReduce } = require('../../models/User');
+
 
 // @route   POST api/branches
 // @desc     Create branch
@@ -151,21 +153,15 @@ router.get('/orderDate/:orderDate', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    Order.find({}).populate({ path: 'coupon' ,populate: { path: 'user' }}).exec(function (err, docs) {
+    Order.find({}).populate({ path: 'coupon', populate: { path: 'shop' } }).exec(function (err, docs) {
       if (err) console.error(err.stack || err);
+
       res.json(docs);
     });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-
-  /*
-  Order.find({}).populate({ path: 'coupon' }).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
-  */
 });
 
 // @route   DELETE api/order/:id
@@ -211,6 +207,34 @@ router.get('/ordersByUserId/:id', async (req, res) => {
   } catch (err) {
     console.error(err.message);
 
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route   GET api/order/mapChartData
+// @desc    Get all orders with mapChartData
+// @access  Public
+
+router.get('/mapChartData', async (req, res) => {
+  try {
+
+    Order.mapReduce(
+      function map() { emit(this.coupon, this.coupon.newPrice) },
+      function reduce(key, values) {
+        console.log(values + "Basheer")
+        return values;
+      },
+      {
+        query: {},
+        out: "order_totals"
+      }
+    )
+    Order.mapReduce(map, reduce, { out: { inline: 1 } })
+
+    res.json('Map');
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send('Server Error');
   }
 });

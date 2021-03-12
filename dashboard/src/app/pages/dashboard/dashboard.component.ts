@@ -9,9 +9,12 @@ import { ManageUsersService } from '../../services/manage-users.service';
 import { ManageCouponsService } from 'src/app/services/manage-coupons.service';
 import { ManageBranchesService } from 'src/app/services/manage-branches.service';
 import { ManageOrdersService } from 'src/app/services/manage-orders.service';
+import { ManageShopsService } from 'src/app/services/manage-shops.service';
+
 
 import { Orders } from '../../models/orders';
 import { Users } from '../../models/users';
+import { Shops } from 'src/app/models/shops';
 
 @Component({
   selector: 'page-dashboard',
@@ -32,6 +35,8 @@ export class PageDashboardComponent implements OnInit {
   countValidCoupons: Number;
   users: Users[] = [];
   orders: Orders[] = [];
+  ordersCheck: any[] = [];
+  shops: Shops[] = [];
 
 
   // Constractor
@@ -40,7 +45,8 @@ export class PageDashboardComponent implements OnInit {
     private _manageusers: ManageUsersService,
     private _managebranches: ManageBranchesService,
     private _managecoupons: ManageCouponsService,
-    private _manageorders: ManageOrdersService) {
+    private _manageorders: ManageOrdersService,
+    private _manageshops: ManageShopsService) {
     this.countOfBranches = 0;
     this._sharedService.emitChange(this.pageTitle);
     this._realtime.listen('count').subscribe((res: any) => {
@@ -58,6 +64,8 @@ export class PageDashboardComponent implements OnInit {
   ngOnInit() {
     this.showUsers();
     this.showOrders();
+    this.showShops();
+    this.drawChart();
   }
 
   showUsers() {
@@ -66,11 +74,32 @@ export class PageDashboardComponent implements OnInit {
     })
   }
 
+  showShops(){
+    this._manageshops.getAllShops().subscribe((shops) => {
+      this.shops = shops;
+      console.log(this.shops);
+      this.barChartLabels = this.shops.map((info) => info.shopName);
+      console.log(this.barChartLabels)
+    })
+  }
+
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
-      this.orders = orders;
+      this.orders = orders.filter(order => {
+        return order.coupon != null
+      });
       console.log(this.orders);
     });
+
+    /*this._manageorders.getMapReduceOrders().subscribe((mapOrder => {
+      this.ordersCheck = mapOrder;
+      console.log(this.ordersCheck);
+    }))*/
+    
+  }
+
+  drawChart(){
+    console.log(this.barChartData)
   }
   // barChart
   public barChartOptions: any = {
@@ -78,31 +107,25 @@ export class PageDashboardComponent implements OnInit {
     responsive: true,
     responsiveAnimationDuration: 500
   };
-
-  // get all the Shops -- עמודה לכל חנות/רשת חנויות
-  public barChartLabels: string[] = [
-    '2012', '2013', '2014', '2015', '2016', '2017'
-  ];
-
-  public barChartLabelsShops: string[] = [
-    'Shops'
-  ];
+  // All shops
+  public barChartLabels: string[] = [];
 
   public barChartType: string = 'bar';
+
   public barChartLegend: boolean = true;
 
   public barChartData: any[] = [
     {
       data: [59, 80, 81, 56, 55, 40],
-      label: 'Angular JS',
-      borderWidth: 1,
-      pointRadius: 1
+      label: 'מכירת קופונים ב48 שעות אחרונות',
+      /*borderWidth: 2,
+      pointRadius: 1*/
     },
     {
       data: [48, 40, 19, 86, 27, 90],
-      label: 'React JS',
-      borderWidth: 1,
-      pointRadius: 1
+      label: 'מכירת קופונים ב24 שעות אחרונות',
+      /*borderWidth: 1,
+      pointRadius: 1*/
     }
   ];
 

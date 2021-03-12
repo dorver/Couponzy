@@ -9,6 +9,8 @@ const Shop = require('../../models/Shop');
 const Coupon = require('../../models/Coupon');
 const moment = require('moment')
 const today = moment().startOf('day')
+var ObjectId = require('mongodb').ObjectID;
+
 
 
 // @route   POST api/branches
@@ -208,7 +210,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     const parentShopId = await Shop.findById(branch.shop);
-    
+
     if (!parentShopId) {
       return res.status(404).json({ msg: 'Shop not found' });
     }
@@ -240,7 +242,8 @@ router.get('/', async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-});
+}
+);
 
 // @route    GET api/getCountBranches
 // @desc     get the count of branches
@@ -248,7 +251,7 @@ router.get('/', async (req, res) => {
 router.get(
   '/getCountBranches',
   (async (req, res) => {
-    Branch.countDocuments({ }, function (err, branchCount) {
+    Branch.countDocuments({}, function (err, branchCount) {
       if (err)
         return res.status(404).json({ errors: ['Count failed'] });
       console.log('There are %d Branches that account Couponzy App', branchCount);
@@ -263,7 +266,7 @@ router.get(
 router.get(
   '/getCountCoupons',
   (async (req, res) => {
-    Coupon.countDocuments({ }, function (err, couponCount) {
+    Coupon.countDocuments({}, function (err, couponCount) {
       if (err)
         return res.status(404).json({ errors: ['Count failed'] });
       console.log('There are %d Branches that account Couponzy App', couponCount);
@@ -275,15 +278,30 @@ router.get(
 // @route    GET api/coupons/getCountValidCoupons
 // @desc     get the count of users
 // @access   Private
+
 router.get(
   '/getCountValidCoupons',
+
   (async (req, res) => {
-    Coupon.countDocuments({ "domain.ApplicationCase.fields.ExpireDate": { $lte : today.toDate() }}, function (err, couponCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', couponCount);
-      res.json(couponCount);
-    });
+    try {
+      Coupon.countDocuments({
+        expireDate: {
+          $lte: new Date().getTime()
+        }
+        /*published: {
+          $gte: new Date().getTime() - 60 * 10080 * 1000 // last 7 days
+          //(60 * 5 * 1000--> 5 minute)  (60 * 120 * 1000 --> 2 hours) ===== > (60 seconds * 5 minutes)
+        }*/
+      },function (err, couponCount) {
+        if (err)
+          return res.status(404).json({ errors: ['Count failed'] });
+        console.log('There are %d Branches that account Couponzy App',couponCount);
+        res.json(couponCount);
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   })
 );
 
