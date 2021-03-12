@@ -1,58 +1,57 @@
 <!-- Row 1 --- 4 Cards -->
 <div class="row">
-  <div class="col-md-6 col-xl-6">
+  <div class="col-md-6 col-xl-4">
     <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
       class="info-card">
       <div class="title text-uppercase">כמות הצרכנים והמוכרים</div>
       <div class="count">{{countOfUsers}}</div>
     </card>
   </div>
-
-  <div class="col-md-6 col-xl-6">
-    <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
+  <div class="col-md-6 col-xl-4">
+    <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
       class="info-card">
-      <div class="title text-uppercase">כמות צרכנים ומוכרים מחוברים</div>
-      <div class="count">{{counter}}</div>
+      <div class="title text-uppercase">כמות החנויות</div>
+      <div class="count">{{countOfBranches}}</div>
+    </card>
+  </div>
+  <div class="col-md-6 col-xl-4">
+    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
+      class="info-card">
+      <div class="title text-uppercase">כמות קופונים בחנויות</div>
+      <div class="count">{{countCoupons}}</div>
     </card>
   </div>
 </div>
 
 <!-- Row 2 --- 3 Cards -->
 <div class="row">
-  <div class="col-md-6 col-xl-6">
-    <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
+  <div class="col-md-6 col-xl-4">
+    <card [customBgColor]="'rgba(220,20,60,0.6)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
       class="info-card">
-      <div class="title text-uppercase">כמות החנויות</div>
-      <div class="count">{{countOfBranches}}</div>
+      <div class="title text-uppercase">כמות צרכנים ומוכרים מחוברים</div>
+      <div class="count">{{counter}}</div>
     </card>
   </div>
-
-  <div class="col-md-6 col-xl-6">
+  <div class="col-md-6 col-xl-4">
     <card [customBgColor]="'rgba(255,140,0,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-5.jpg'"
       class="info-card">
       <div class="title text-uppercase">כמות חנויות פתוחות</div>
       <div class="count">{{countIsOpenBranches}}</div>
     </card>
   </div>
-
-</div>
-<!-- Row 3 --- 2 Cards -->
-<div class="row">
-  <div class="col-md-6 col-xl-6">
-    <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-4.jpg'"
-      class="info-card">
-      <div class="title text-uppercase">רכישת קופונים מתחילת החודש</div>
-      <div class="count">{{countCoupons}}</div>
-    </card>
-  </div>
-
-  <div class="col-md-6 col-xl-6">
+  <div class="col-md-6 col-xl-4">
     <card [customBgColor]="'rgba(0,191,252,0.9)'" [customColor]="'#fff'" [bgImage]="'assets/content/card-6.jpg'"
       class="info-card">
-      <div class="title text-uppercase">ממוצע רכישת קופונים חודשי</div>
+      <div class="title text-uppercase">כמות קופונים פגי תוקף</div>
       <div class="count">{{countValidCoupons}}</div>
     </card>
   </div>
+</div>
+<!-- Row 3 --- 2 Cards -->
+<div class="row">
+  
+
+  
 </div>
 <!-- Row 4 --- Line Chart -->
 <div class="row mb-lg-4">
