@@ -38,7 +38,7 @@ export class PageDashboardComponent implements OnInit {
   ordersCheck: Orders[] = [];
   shops: Shops[] = [];
   chartBar: any[] = [];
-  
+  shopK: any[];  
   
 
   // Constractor
@@ -88,37 +88,39 @@ export class PageDashboardComponent implements OnInit {
   }
 
 
-
-
-  public ChartLabels: string[] = [];
-  public ChartData: string[] = [];
-  shopOrder: any[] = [];
+  arr: number[] = [];
+  Lastcoupons: any[] = [];
+  LastDateCoupons:any[]=[];
 
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
       this.orders = orders.filter(order => {
         return order.coupon != null
       });
-      this.chartBar = this.orders.map(order => {
-        return order.coupon
-     })
-      //console.log(this.chartBar);
-      //console.log(this.orders);
-      this.shopOrder = this.chartBar
-     .map(z => {return { shopName: z.shop['shopName'], price: z.newPrice }})
-     .reduce(function(obj, shopc){
-        if(!obj[shopc.shopName]){
-          obj[shopc.shopName] = 1;
+
+     this.chartBar=this.orders.map(order=>{return order.coupon});
+     this.LastDateCoupons=this.orders.map(order=>{return order.orderDate}).reverse().slice(0,5);
+     this.Lastcoupons=this.chartBar.reverse().slice(0,5);
+      this.shopK=this.chartBar.map(z=>{
+        return {shopName:z.shop['shopName'],price:z.newPrice}
+      }).reduce(function(obj, shopc,arr){
+        if (!obj[shopc.shopName]) {
+            obj[shopc.shopName] = 1;
         } else {
-          obj[shopc.shopName] += shopc.price
+            obj[shopc.shopName]+=shopc.price;
         }
         return obj;
-      }, [])
-
-      console.log(this.barChartLabels);
-      console.log(this.shopOrder);
-
+    } ,[]);
+    this.barChartLabels.forEach(shop => {
+      this.arr.push(this.shopK[shop]);
+    });
+    this.barChartData["data"]=(this.arr);
+    });
     
+    /*this._manageorders.getMapReduceOrders().subscribe((mapOrder => {
+      this.ordersCheck = mapOrder;
+      console.log(this.ordersCheck);
+    }))*/
       
     });
   }
@@ -145,15 +147,9 @@ export class PageDashboardComponent implements OnInit {
 
   public barChartData: any[] = [
     {
-      data: [59, 80, 81, 56, 55, 40],
+      data: this.arr,
       label: 'מכירת קופונים ב48 שעות אחרונות',
       /*borderWidth: 2,
-      pointRadius: 1*/
-    },
-    {
-      data: [48, 40, 19, 86, 27, 90],
-      label: 'מכירת קופונים ב24 שעות אחרונות',
-      /*borderWidth: 1,
       pointRadius: 1*/
     }
   ];
