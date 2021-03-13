@@ -40,8 +40,18 @@ const RegisterScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (
+      firstName.length == 0 ||
+      lastName.length == 0 ||
+      email.length == 0 ||
+      password.length == 0 ||
+      phoneNumber.length == 0
+    ) {
+      setMessage('יש למלא את כל השדות');
+    } else if (password !== confirmPassword) {
       setMessage('ססמאות לא תואמות');
+    } else if (phoneNumber.length != 10) {
+      setMessage('מספר טלפון לא תקין');
     } else {
       dispatch(
         register(
