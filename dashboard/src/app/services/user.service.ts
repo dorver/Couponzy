@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 
 
 export class UserService {
-  private UsersUrl = environment.adminssUrl;
+  private UsersUrl = environment.adminsUrl;
   
 
   constructor(private http: HttpClient) { }
@@ -17,5 +17,14 @@ export class UserService {
   getUser(email:string,password:string): Observable<Users> {
     const url=`${this.UsersUrl}/${email}&${password}`
     return this.http.get<Users>(url);
+  }
+
+  getUsers(): Observable<Users[]>{
+    return this.http.get<Users[]>(this.UsersUrl);
+  }
+
+  updatePos(id,position:number){
+    const url=`${this.UsersUrl}/${id}`;
+    return this.http.patch<Users>(url,{pos:position}).subscribe();
   }
 }

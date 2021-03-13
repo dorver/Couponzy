@@ -1,108 +1,69 @@
 <div class="row">
-    <div class="col-lg">
-      <card title="משתמשים רשומים" class="mb-lg-0">
-        <div class="table-responsive">
+    <div class="row mb-lg-4" >
+      <card title="משתמשים רשומים" class="mb-lg-0" *ngIf="showUsers">
+        <div class="col-lg-8">
           <table class="table">
             <thead>
             <tr>
-              <th>#</th>
-              <th>Column heading</th>
-              <th>Column heading</th>
-              <th>Column heading</th>
+              <th>שם מלא</th>
+              <th>סוג משתמש</th>
+              <th>שם חנות</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="table-active">
-              <th scope="row">1</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr class="table-success">
-              <th scope="row">3</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr>
-              <th scope="row">4</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr class="table-info">
-              <th scope="row">5</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr>
-              <th scope="row">6</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr class="table-warning">
-              <th scope="row">7</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr>
-              <th scope="row">8</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
-            <tr class="table-danger">
-              <th scope="row">9</th>
-              <td>Column content</td>
-              <td>Column content</td>
-              <td>Column content</td>
-            </tr>
+              <tr *ngFor="let user of users">
+                <td><strong>{{user.firstName}} {{user.lastName}}</strong></td>
+                <td>{{checkP(user)}}</td>
+                <td>{{checkShop(user)}}</td>
+                <td><button mat-raised-button color="accent" (click)="onUpdate(true, user._id)">עריכה</button></td>
+              </tr>
             </tbody>
           </table>
         </div>
       </card>
     </div>
 </div>
+<div class="row mb-lg-4" *ngIf="updatePressed" >
+  <div class="col-lg-8">
+    <card [title]="name">
+      <form (ngSubmit)="onUpdateSubmit(position.value)">
+        <div class="row">  
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-select #position placeholder="בחר תפקיד" dir="rtl" [formControl]="posControl" required>
+              <mat-option *ngFor="let pos of posi" [value]=pos.value>
+                {{pos.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="posControl.hasError('required')">אנא בחר תפקיד</mat-error>
+          </mat-form-field>
+          </div>
+          <div>
+            <button mat-raised-button color="accent">שמור</button>
+            <span class="span"></span>
+            <button mat-raised-button color="accent" (click)="onUpdate(false, 0)">חזור</button>
+          </div>
+        </div>
+      </form>
+      <form (ngSubmit)="onShopSubmit(shop.value)" *ngIf="isSeller">
+        <div class="row">  
+        <div class="col-md-4">
+          <mat-form-field>
+            <mat-select #shop placeholder="בחר חנות" dir="rtl" [formControl]="shopControl" required>
+              <mat-option *ngFor="let shop of shops" [value]=shop._id>
+                {{shop.shopName}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="shopControl.hasError('required')">אנא בחר חנות</mat-error>
+          </mat-form-field>
+          </div>
+          <div>
+            <button mat-raised-button color="accent">שמור</button>
+            <span class="span"></span>
+            <button mat-raised-button color="accent" (click)="onUpdate(false, 0)">חזור</button>
+          </div>
+        </div>
+      </form>
+    </card>
+  </div>
 
-<!--mat-table #table [dataSource]="dataSource"-->
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-  
-    <!-- Position Column -->
-    <!--ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
-    </ng-container-->
-  
-    <!-- Name Column -->
-    <!--ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-    </ng-container-->
-  
-    <!-- Weight Column -->
-    <!--ng-container matColumnDef="weight">
-      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
-    </ng-container-->
-  
-    <!-- Color Column -->
-    <!--ng-container matColumnDef="symbol">
-      <mat-header-cell *matHeaderCellDef> Symbol </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
-    </ng-container>
-  
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table-->
-  
