@@ -35,7 +35,7 @@ export class PageDashboardComponent implements OnInit {
   countValidCoupons: Number;
   users: Users[] = [];
   orders: Orders[] = [];
-  ordersCheck: any[] = [];
+  ordersCheck: Orders[] = [];
   shops: Shops[] = [];
   chartBar: any[] = [];
   shopK: any[];  
@@ -79,20 +79,25 @@ export class PageDashboardComponent implements OnInit {
   showShops(){
     this._manageshops.getAllShops().subscribe((shops) => {
       this.shops = shops;
-      console.log(this.shops);
-      this.barChartLabels = this.shops.map((info) => info.shopName);
-      console.log(this.barChartLabels)
+      //console.log(this.shops);
+      this.barChartLabels = this.shops.map((shop) => shop.shopName);
+      this.barChartShopId = this.shops.map((shop) => shop._id);
+      //console.log(this.barChartLabels)
+      //console.log(this.barChartShopId)
     })
   }
+
 
   arr: number[] = [];
   Lastcoupons: any[] = [];
   LastDateCoupons:any[]=[];
+
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
       this.orders = orders.filter(order => {
         return order.coupon != null
       });
+
      this.chartBar=this.orders.map(order=>{return order.coupon});
      this.LastDateCoupons=this.orders.map(order=>{return order.orderDate}).reverse().slice(0,5);
      this.Lastcoupons=this.chartBar.reverse().slice(0,5);
@@ -116,11 +121,13 @@ export class PageDashboardComponent implements OnInit {
       this.ordersCheck = mapOrder;
       console.log(this.ordersCheck);
     }))*/
-    
+      
+    });
   }
 
   drawChart(){
-    console.log(this.barChartData)
+
+    
   }
   // barChart
   public barChartOptions: any = {
@@ -128,8 +135,11 @@ export class PageDashboardComponent implements OnInit {
     responsive: true,
     responsiveAnimationDuration: 500
   };
+
   // All shops
   public barChartLabels: string[] = [];
+
+  public barChartShopId: string[] = [];
 
   public barChartType: string = 'bar';
 
@@ -146,7 +156,7 @@ export class PageDashboardComponent implements OnInit {
 
   // CHART CLICK EVENT.
   onChartClick(event) {
-    console.log(event);
+    //console.log(event);
   }
 
   updateChartData(chart, data, dataSetIndex) {
