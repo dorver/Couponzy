@@ -207,9 +207,9 @@ export const createCoupon = (
     dispatch({
       type: COUPON_CREATE_FAIL,
       payload:
-        error.response && error.response.data.massage
-          ? error.response.data.message
-          : error.message,
+        error.message == 'Request failed with status code 400'
+          ? 'קוד הקופון קיים, אנא בחר קוד אחר'
+          : 'אירעה שגיאה, אנא נסה שוב',
     });
   }
 };

@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const RegisterScreen = ({ location, history }) => {
   const [firstName, setFirstName] = useState('');
@@ -59,9 +60,6 @@ const RegisterScreen = ({ location, history }) => {
           lastName,
           email,
           password,
-          //  isAdmin,
-          //  isCustomer,
-          //  isSeller,
           phoneNumber,
           birthday,
           gender

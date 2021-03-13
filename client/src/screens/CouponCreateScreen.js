@@ -20,6 +20,7 @@ const CouponCreateScreen = ({ location, history }) => {
   const [published, setPublished] = useState('');
   const [decription, setDecription] = useState('');
   const [couponType, setCouponType] = useState('');
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -53,30 +54,46 @@ const CouponCreateScreen = ({ location, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     // dispatch();
-    dispatch(
-      createCoupon(
-        name,
-        inStock == 'כן' ? true : false,
-        expireDate,
-        couponCode,
-        oldPrice,
-        newPrice,
-        decription,
-        couponType,
-        pictureName,
-        published
-      )
-    );
+    if (
+      name.length == 0 ||
+      !expireDate ||
+      couponCode.length == 0 ||
+      oldPrice.length == 0 ||
+      newPrice.length == 0 ||
+      decription.length == 0 ||
+      couponType.length == 0
+    ) {
+      setMessage('יש למלא את כל הפרטים');
+    } else if (couponCode.length != 6) {
+      setMessage('יש להזין קוד קופון באורך 6 תווים');
+    } else {
+      dispatch(
+        createCoupon(
+          name,
+          inStock == 'כן' ? true : false,
+          expireDate,
+          couponCode,
+          oldPrice,
+          newPrice,
+          decription,
+          couponType,
+          pictureName,
+          published
+        )
+      );
+    }
   };
 
   return (
     <FormContainer>
       <h1>יצירת קופון</h1>
-      {/* {message && <Message variant='danger'>{message}</Message>} */}
+      {message && <Message variant='danger'>{message}</Message>}
 
       {(error || errorCouponTypes) && (
         <Message variant='danger'>{error}</Message>
       )}
+
+      {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
       {(loading || loadingCouponTypes) && <Loader />}
       {couponTypes && (

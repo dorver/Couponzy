@@ -81,6 +81,7 @@ const CouponListScreen = ({ history, match }) => {
         );
       } else {
         dispatch(deleteCoupon(couponId, shopId));
+        setMessage(null);
       }
     }
   };
