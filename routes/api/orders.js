@@ -4,7 +4,7 @@ const config = require('config');
 const router = express.Router();
 const protect = require('../../middleware/authMiddleware');
 const { check, validationResult } = require('express-validator');
-const Branch = require('../../models/Order');
+const Branch = require('../../models/Branch');
 const Order = require('../../models/Order');
 const User = require('../../models/User');
 const Coupon = require('../../models/Coupon');
@@ -24,12 +24,12 @@ router.post(
         return res.json('Coupon not found');
       }
 
-      let user = await User.findById({ _id: userId });
+      let user = await User.findOne({ _id: userId });
       if (!user) {
         return res.json({ message: 'User not found' });
       }
 
-      let branch = await Branch.findById({ _id: branchId });
+      let branch = await Branch.findOne({ _id: branchId });
       if (!branch) {
         return res.json({ message: 'Branch not found' });
       }
@@ -193,7 +193,7 @@ router.get('/ordersByUserId/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate({
       path: 'orders',
-      populate: { path: 'coupon' },
+      populate: { path: 'coupon branch' },
     });
 
     if (!user) {
