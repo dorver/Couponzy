@@ -199,7 +199,7 @@ router.put(
 router.get('/getLastUsers', async (req, res) => {
 
   try {
-    User.find({}).limit(5).sort({ $natural: -1 }).exec(function (err, docs) {
+    User.find({}).limit(10).sort({ $natural: -1 }).exec(function (err, docs) {
       if (err) console.error(err.stack || err);
       res.json(docs);
     });

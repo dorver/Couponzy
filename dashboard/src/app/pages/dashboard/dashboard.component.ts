@@ -9,9 +9,12 @@ import { ManageUsersService } from '../../services/manage-users.service';
 import { ManageCouponsService } from 'src/app/services/manage-coupons.service';
 import { ManageBranchesService } from 'src/app/services/manage-branches.service';
 import { ManageOrdersService } from 'src/app/services/manage-orders.service';
+import { ManageShopsService } from 'src/app/services/manage-shops.service';
+
 
 import { Orders } from '../../models/orders';
 import { Users } from '../../models/users';
+import { Shops } from 'src/app/models/shops';
 
 @Component({
   selector: 'page-dashboard',
@@ -32,7 +35,11 @@ export class PageDashboardComponent implements OnInit {
   countValidCoupons: Number;
   users: Users[] = [];
   orders: Orders[] = [];
-
+  ordersCheck: Orders[] = [];
+  shops: Shops[] = [];
+  chartBar: any[] = [];
+  shopK: any[];  
+  
 
   // Constractor
   constructor(private _sharedService: SharedService,
@@ -40,7 +47,8 @@ export class PageDashboardComponent implements OnInit {
     private _manageusers: ManageUsersService,
     private _managebranches: ManageBranchesService,
     private _managecoupons: ManageCouponsService,
-    private _manageorders: ManageOrdersService) {
+    private _manageorders: ManageOrdersService,
+    private _manageshops: ManageShopsService) {
     this.countOfBranches = 0;
     this._sharedService.emitChange(this.pageTitle);
     this._realtime.listen('count').subscribe((res: any) => {
@@ -58,6 +66,8 @@ export class PageDashboardComponent implements OnInit {
   ngOnInit() {
     this.showUsers();
     this.showOrders();
+    this.showShops();
+    this.drawChart();
   }
 
   showUsers() {
@@ -66,11 +76,58 @@ export class PageDashboardComponent implements OnInit {
     })
   }
 
+  showShops(){
+    this._manageshops.getAllShops().subscribe((shops) => {
+      this.shops = shops;
+      //console.log(this.shops);
+      this.barChartLabels = this.shops.map((shop) => shop.shopName);
+      this.barChartShopId = this.shops.map((shop) => shop._id);
+      //console.log(this.barChartLabels)
+      //console.log(this.barChartShopId)
+    })
+  }
+
+
+  arr: number[] = [];
+  Lastcoupons: any[] = [];
+  LastDateCoupons:any[]=[];
+
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
-      this.orders = orders;
-      console.log(this.orders);
+      this.orders = orders.filter(order => {
+        return order.coupon != null
+      });
+
+     this.chartBar=this.orders.map(order=>{return order.coupon});
+     this.LastDateCoupons=this.orders.map(order=>{return order.orderDate}).reverse().slice(0,5);
+     this.Lastcoupons=this.chartBar.reverse().slice(0,5);
+      this.shopK=this.chartBar.map(z=>{
+        return {shopName:z.shop['shopName'],price:z.newPrice}
+      }).reduce(function(obj, shopc,arr){
+        if (!obj[shopc.shopName]) {
+            obj[shopc.shopName] = 1;
+        } else {
+            obj[shopc.shopName]+=shopc.price;
+        }
+        return obj;
+    } ,[]);
+    this.barChartLabels.forEach(shop => {
+      this.arr.push(this.shopK[shop]);
     });
+    this.barChartData["data"]=(this.arr);
+    });
+    
+    /*this._manageorders.getMapReduceOrders().subscribe((mapOrder => {
+      this.ordersCheck = mapOrder;
+      console.log(this.ordersCheck);
+    }))*/
+      
+    });
+  }
+
+  drawChart(){
+
+    
   }
   // barChart
   public barChartOptions: any = {
@@ -79,36 +136,27 @@ export class PageDashboardComponent implements OnInit {
     responsiveAnimationDuration: 500
   };
 
-  // get all the Shops -- עמודה לכל חנות/רשת חנויות
-  public barChartLabels: string[] = [
-    '2012', '2013', '2014', '2015', '2016', '2017'
-  ];
+  // All shops
+  public barChartLabels: string[] = [];
 
-  public barChartLabelsShops: string[] = [
-    'Shops'
-  ];
+  public barChartShopId: string[] = [];
 
   public barChartType: string = 'bar';
+
   public barChartLegend: boolean = true;
 
   public barChartData: any[] = [
     {
-      data: [59, 80, 81, 56, 55, 40],
-      label: 'Angular JS',
-      borderWidth: 1,
-      pointRadius: 1
-    },
-    {
-      data: [48, 40, 19, 86, 27, 90],
-      label: 'React JS',
-      borderWidth: 1,
-      pointRadius: 1
+      data: this.arr,
+      label: 'מכירת קופונים ב48 שעות אחרונות',
+      /*borderWidth: 2,
+      pointRadius: 1*/
     }
   ];
 
   // CHART CLICK EVENT.
   onChartClick(event) {
-    console.log(event);
+    //console.log(event);
   }
 
   updateChartData(chart, data, dataSetIndex) {

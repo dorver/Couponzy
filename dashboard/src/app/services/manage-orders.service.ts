@@ -17,4 +17,9 @@ export class ManageOrdersService {
   getAllOrders(): Observable<Orders[]> {
     return this.http.get<Orders[]>(this.ordersUrl);
   }
+
+  getMapReduceOrders(): Observable<any[]> {
+    const url = `${this.ordersUrl}/${"mapChartData"}`;
+    return this.http.get<any[]>(url);
+  }
 }

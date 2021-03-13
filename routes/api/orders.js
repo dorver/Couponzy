@@ -8,6 +8,8 @@ const Branch = require('../../models/Branch');
 const Order = require('../../models/Order');
 const User = require('../../models/User');
 const Coupon = require('../../models/Coupon');
+const { mapReduce } = require('../../models/User');
+
 
 // @route   POST api/branches
 // @desc     Create branch
@@ -157,14 +159,18 @@ router.get('/orderDate/:orderDate', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const orders = await Order.find();
-    res.json(orders);
+    Order.find({}).populate({ path: 'coupon', populate: { path: 'shop' } }).exec(function (err, docs) {
+      if (err) console.error(err.stack || err);
+
+      res.json(docs);
+    });
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
-
+21
 // @route   DELETE api/order/:id
 // @desc    DELETE order
 // @access  Private

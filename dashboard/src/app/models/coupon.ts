@@ -1,5 +1,5 @@
 import { couponType } from "./couponType";
-import { Order } from "./orders";
+import { Orders } from "./orders";
 import { Shops } from "./shops";
 
 export interface Coupon {
@@ -14,5 +14,5 @@ export interface Coupon {
     published:Date,
     couponType:couponType,
     shop:Shops,
-    orders:Order[]
+    orders:Orders[]
 }
