@@ -203,32 +203,4 @@ router.get('/ordersByUserId/:id', async (req, res) => {
   }
 });
 
-
-// @route   GET api/order/mapChartData
-// @desc    Get all orders with mapChartData
-// @access  Public
-
-router.get('/mapChartData', async (req, res) => {
-  try {
-
-    Order.mapReduce(
-      function map() { emit(this.coupon, this.coupon.newPrice) },
-      function reduce(key, values) {
-        console.log(values + "Basheer")
-        return values;
-      },
-      {
-        query: {},
-        out: "order_totals"
-      }
-    )
-    Order.mapReduce(map, reduce, { out: { inline: 1 } })
-
-    res.json('Map');
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
 module.exports = router;

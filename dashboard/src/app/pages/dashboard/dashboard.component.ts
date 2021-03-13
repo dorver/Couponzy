@@ -35,9 +35,11 @@ export class PageDashboardComponent implements OnInit {
   countValidCoupons: Number;
   users: Users[] = [];
   orders: Orders[] = [];
-  ordersCheck: any[] = [];
+  ordersCheck: Orders[] = [];
   shops: Shops[] = [];
-
+  chartBar: any[] = [];
+  
+  
 
   // Constractor
   constructor(private _sharedService: SharedService,
@@ -77,29 +79,53 @@ export class PageDashboardComponent implements OnInit {
   showShops(){
     this._manageshops.getAllShops().subscribe((shops) => {
       this.shops = shops;
-      console.log(this.shops);
-      this.barChartLabels = this.shops.map((info) => info.shopName);
-      console.log(this.barChartLabels)
+      //console.log(this.shops);
+      this.barChartLabels = this.shops.map((shop) => shop.shopName);
+      this.barChartShopId = this.shops.map((shop) => shop._id);
+      //console.log(this.barChartLabels)
+      //console.log(this.barChartShopId)
     })
   }
+
+
+
+
+  public ChartLabels: string[] = [];
+  public ChartData: string[] = [];
+  shopOrder: any[] = [];
 
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
       this.orders = orders.filter(order => {
         return order.coupon != null
       });
-      console.log(this.orders);
-    });
+      this.chartBar = this.orders.map(order => {
+        return order.coupon
+     })
+      //console.log(this.chartBar);
+      //console.log(this.orders);
+      this.shopOrder = this.chartBar
+     .map(z => {return { shopName: z.shop['shopName'], price: z.newPrice }})
+     .reduce(function(obj, shopc){
+        if(!obj[shopc.shopName]){
+          obj[shopc.shopName] = 1;
+        } else {
+          obj[shopc.shopName] += shopc.price
+        }
+        return obj;
+      }, [])
 
-    /*this._manageorders.getMapReduceOrders().subscribe((mapOrder => {
-      this.ordersCheck = mapOrder;
-      console.log(this.ordersCheck);
-    }))*/
+      console.log(this.barChartLabels);
+      console.log(this.shopOrder);
+
     
+      
+    });
   }
 
   drawChart(){
-    console.log(this.barChartData)
+
+    
   }
   // barChart
   public barChartOptions: any = {
@@ -107,8 +133,11 @@ export class PageDashboardComponent implements OnInit {
     responsive: true,
     responsiveAnimationDuration: 500
   };
+
   // All shops
   public barChartLabels: string[] = [];
+
+  public barChartShopId: string[] = [];
 
   public barChartType: string = 'bar';
 
@@ -131,7 +160,7 @@ export class PageDashboardComponent implements OnInit {
 
   // CHART CLICK EVENT.
   onChartClick(event) {
-    console.log(event);
+    //console.log(event);
   }
 
   updateChartData(chart, data, dataSetIndex) {
