@@ -17,13 +17,22 @@ router.post(
   '/create',
 
   async (req, res) => {
-    const { orderDate, couponId, branch, userId } = req.body;
+    const { orderDate, couponId, branchId, userId } = req.body;
     try {
       let coupon = await Coupon.findOne({ _id: couponId });
       if (!coupon) {
         return res.json('Coupon not found');
       }
+
       let user = await User.findById({ _id: userId });
+      if (!user) {
+        return res.json({ message: 'User not found' });
+      }
+
+      let branch = await Branch.findById({ _id: branchId });
+      if (!branch) {
+        return res.json({ message: 'Branch not found' });
+      }
 
       //Build branch object
       const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
@@ -38,10 +47,14 @@ router.post(
       //add order to user
       user.orders.push(order);
       coupon.orders.push(order);
+      branch.orders.push(order);
+      //orderBranch.orders.push(order);
 
       await order.save();
       await user.save();
       await coupon.save();
+      await branch.save();
+      //await orderBranch.save();
 
       res.json(user);
     } catch (err) {

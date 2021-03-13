@@ -49,7 +49,7 @@ const CouponScreen = ({ match }) => {
 
   const buyHandler = () => {
     if (userInfo) {
-      dispatch(newOrder(Date.now, coupon._id, branch, userInfo._id));
+      dispatch(newOrder(Date.now, coupon._id, branch._id, userInfo._id));
       dispatch({ type: BRANCH_LIST_RESET });
     }
   };

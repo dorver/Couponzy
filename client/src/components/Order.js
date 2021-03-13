@@ -32,6 +32,8 @@ const Order = ({ order }) => {
           מחיר קודם ₪<del>{order.coupon.oldPrice}</del>
         </Card.Text>
 
+        {order.branch && <Card.Text>סניף {order.branch.name}</Card.Text>}
+
         <Card.Text>
           {' '}
           תאריך מימוש {new Date(order.orderDate).toLocaleDateString('he-IL')}
