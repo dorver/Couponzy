@@ -29,14 +29,13 @@ const ProfileScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  //   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  //   const { success } = userUpdateProfile;
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const { updateSuccess } = userUpdateProfile;
 
   useEffect(() => {
-    // if (!userInfo) {
-    //   history.push('/userLogin');
-    // } else {
-    if (!user || !user.firstName) {
+    if (updateSuccess) {
+      history.push('/');
+    } else if (!user || !user.firstName) {
       dispatch(getUserDetails('getUserProfile'));
     } else {
       setFirstName(user.firstName);
@@ -48,7 +47,7 @@ const ProfileScreen = ({ location, history }) => {
       setGender(user.gender);
     }
     //}
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, userInfo, user, updateSuccess]);
 
   const submitHandler = (e) => {
     e.preventDefault();

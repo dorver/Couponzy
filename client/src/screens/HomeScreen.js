@@ -13,6 +13,7 @@ import { listShops } from '../actions/shopActions';
 import { render } from 'react-dom';
 import { listCouponDetails } from '../actions/couponActions';
 import { BRANCH_LIST_RESET } from '../constants/branchConstants';
+import { USER_UPDATE_RESET } from '../constants/userConstants';
 
 import axios from 'axios';
 const HomeScreen = () => {
@@ -43,6 +44,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     dispatch({ type: BRANCH_LIST_RESET });
+    dispatch({ type: USER_UPDATE_RESET });
     dispatch(listCoupons());
   }, [dispatch]);
 
