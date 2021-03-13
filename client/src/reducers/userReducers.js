@@ -9,6 +9,7 @@ import {
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
+  USER_UPDATE_RESET,
 } from '../constants/userConstants.js';
 import { USER_LOGOUT } from '../constants/userConstants.js';
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants.js';
@@ -45,7 +46,7 @@ export const userRegisterReducer = (state = {}, action) => {
 export const userDetailsReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER_DETAILS_REQUEST:
-      return { ...state, loading: true };
+      return { loading: true };
     case USER_DETAILS_SUCCESS:
       return { loading: false, user: action.payload };
     case USER_DETAILS_FAIL:
@@ -55,14 +56,20 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
   }
 };
 
-export const userUpdatePrpfileReducer = (state = {}, action) => {
+export const userUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_UPDATE_PROFILE_REQUEST:
-      return { loading: true };
+      return { updateLoading: true };
     case USER_UPDATE_PROFILE_SUCCESS:
-      return { loading: false, success: true, useInfo: action.payload };
+      return {
+        updateLoading: false,
+        updateSuccess: true,
+        userInfo: action.payload,
+      };
     case USER_UPDATE_PROFILE_FAIL:
-      return { loading: false, error: action.payload };
+      return { updateLoading: false, updateError: action.payload };
+    case USER_UPDATE_RESET:
+      return {};
     default:
       return state;
   }

@@ -8,7 +8,7 @@ import {
   GET_ORDERS_FAIL,
 } from '../constants/orderConstants';
 
-export const newOrder = (orderDate, couponId, branch, userId) => async (
+export const newOrder = (orderDate, couponId, branchId, userId) => async (
   dispatch
 ) => {
   try {
@@ -27,7 +27,7 @@ export const newOrder = (orderDate, couponId, branch, userId) => async (
       {
         orderDate,
         couponId,
-        branch,
+        branchId,
         userId,
       } //,
       //config

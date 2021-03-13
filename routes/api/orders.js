@@ -4,10 +4,12 @@ const config = require('config');
 const router = express.Router();
 const protect = require('../../middleware/authMiddleware');
 const { check, validationResult } = require('express-validator');
-const Branch = require('../../models/Order');
+const Branch = require('../../models/Branch');
 const Order = require('../../models/Order');
 const User = require('../../models/User');
 const Coupon = require('../../models/Coupon');
+const { mapReduce } = require('../../models/User');
+
 
 // @route   POST api/branches
 // @desc     Create branch
@@ -17,26 +19,28 @@ router.post(
   '/create',
 
   async (req, res) => {
-    console.log('create ordeerrr');
-    //const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
-    // try{
-    const { orderDate, couponId, branch, userId } = req.body;
-
+    const { orderDate, couponId, branchId, userId } = req.body;
     try {
       let coupon = await Coupon.findOne({ _id: couponId });
       if (!coupon) {
         return res.json('Coupon not found');
       }
-      let user = await User.findById({ _id: userId });
+
+      let user = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.json({ message: 'User not found' });
+      }
+
+      let branch = await Branch.findOne({ _id: branchId });
+      if (!branch) {
+        return res.json({ message: 'Branch not found' });
+      }
 
       //Build branch object
       const OrderFields = {}; // build up shop fields object to insert into the db and check if coming in
       if (orderDate) OrderFields.orderDate = orderDate;
       if (coupon) OrderFields.coupon = coupon;
-      if (branch) OrderFields.branche = branch;
+      if (branch) OrderFields.branch = branch;
       if (user) OrderFields.user = user;
 
       //Create
@@ -45,10 +49,14 @@ router.post(
       //add order to user
       user.orders.push(order);
       coupon.orders.push(order);
+      branch.orders.push(order);
+      //orderBranch.orders.push(order);
 
       await order.save();
       await user.save();
       await coupon.save();
+      await branch.save();
+      //await orderBranch.save();
 
       res.json(user);
     } catch (err) {
@@ -74,7 +82,7 @@ router.post(
       id,
       orderDate,
       coupons,
-      branches,
+      branch,
       users,
     } = req.body;
 
@@ -85,7 +93,7 @@ router.post(
     if (id) OrderFields.id = id;
     if (orderDate) OrderFields.orderDate = orderDate;
     if (coupons) OrderFields.coupons = coupons;
-    if (branches) OrderFields.branches = branches;
+    if (branch) OrderFields.branch = branch;
     if (users) OrderFields.users = users;
 
     try {
@@ -151,23 +159,18 @@ router.get('/orderDate/:orderDate', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    Order.find({}).populate({ path: 'coupon' ,populate: { path: 'user' }}).exec(function (err, docs) {
+    Order.find({}).populate({ path: 'coupon', populate: { path: 'shop' } }).exec(function (err, docs) {
       if (err) console.error(err.stack || err);
+
       res.json(docs);
     });
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-
-  /*
-  Order.find({}).populate({ path: 'coupon' }).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
-  */
 });
-
+21
 // @route   DELETE api/order/:id
 // @desc    DELETE order
 // @access  Private
@@ -196,7 +199,7 @@ router.get('/ordersByUserId/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).populate({
       path: 'orders',
-      populate: { path: 'coupon' },
+      populate: { path: 'coupon branch' },
     });
 
     if (!user) {
@@ -204,8 +207,6 @@ router.get('/ordersByUserId/:id', async (req, res) => {
     }
 
     const orders = user.orders;
-
-    console.log(orders);
 
     res.json(orders);
   } catch (err) {

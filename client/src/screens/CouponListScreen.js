@@ -1,50 +1,122 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import Shop from '../components/Shop';
+import { Link } from 'react-router-dom';
 import { Table, Button, Row, Col, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listShopCoupons } from '../actions/couponActions';
+import {
+  listShopCoupons,
+  deleteCoupon,
+  setCouponToExpired,
+  createCoupon,
+  listCoupons,
+} from '../actions/couponActions';
+import { COUPON_CREATE_RESET } from '../constants/couponConstants';
+import { BRANCH_LIST_RESET } from '../constants/branchConstants';
 
 const CouponListScreen = ({ history, match }) => {
+  const [message, setMessage] = useState(null);
+
   const dispatch = useDispatch();
+
+  const [shops, setShops] = useState([]);
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      const { data } = await axios.get('/api/shops');
+      setShops(data);
+    };
+    fetchShops();
+  }, []);
 
   const couponList = useSelector((state) => state.couponShopList);
   const { loading, error, coupons } = couponList;
+
+  const couponDelete = useSelector((state) => state.couponDelete);
+  const {
+    loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = couponDelete;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   useEffect(() => {
+    dispatch({ type: COUPON_CREATE_RESET });
+    dispatch({ type: BRANCH_LIST_RESET });
+
+    // if (!userInfo.isSeller) {
+    //   history.push('/userLogin');
+    // }
+    // if (successCreate) {
+    //   history.push(`/admin/product/${createdCoupon._id}`);
+    // } else {
+    //   dispatch(listShopCoupons(userInfo.shop));
+    // }
+
     if (userInfo && userInfo.isSeller) {
       dispatch(listShopCoupons(userInfo.shop));
     } else {
       history.push('/userLogin');
     }
-  }, [dispatch, history, userInfo]);
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successDelete,
+    //successCreate,
+    //createdCoupon,
+  ]);
 
-  const deleteHandler = (id) => {
+  const deleteHandler = (coupon, couponId, shopId) => {
     if (window.confirm('Are you sure')) {
-      //DELEYTE COUPON
+      if (coupon.orders.length) {
+        dispatch(setCouponToExpired(couponId));
+        setMessage(
+          'לא ניתן למחוק קופון זה, קיימות לקופון זה הזמנות - הקופון הפך לפג תוקף'
+        );
+      } else {
+        dispatch(deleteCoupon(couponId, shopId));
+        setMessage(null);
+      }
     }
-  };
-
-  const createCouponHandler = (coupon) => {
-    //CREATE COUPON
   };
 
   return (
     <>
+      <Col as='h1'>
+        {shops
+          .filter((shop) => {
+            return shop._id == userInfo.shop;
+          })
+          .map((shop) => (
+            <Col>
+              <Shop shop={shop}></Shop>
+            </Col>
+          ))}
+      </Col>
+
+      <Link
+        className='btn btn-primary my-3'
+        type='submit'
+        variant='dark'
+        to='/seller/couponCreate'
+      >
+        הוספת קופון
+      </Link>
+
       <Row className='align-items-center'>
         <Col>
           <h1>קופונים</h1>
-        </Col>
-        <Col className='text-right'>
-          <Button className='my-3' onClick={createCouponHandler}>
-            <i className='fas fa-plus'></i> צור קופון חדש
-          </Button>
+          {message && <Message variant='danger'>{message}</Message>}
         </Col>
       </Row>
+      {loadingDelete && <Loader />}
+      {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
@@ -70,8 +142,8 @@ const CouponListScreen = ({ history, match }) => {
                 <tr key={coupon._id}>
                   <td>{coupon._id}</td>
                   <td>{coupon.name}</td>
-                  <td>${coupon.oldPrice}</td>
-                  <td>${coupon.newPrice}</td>
+                  <td>₪{coupon.oldPrice}</td>
+                  <td>₪{coupon.newPrice}</td>
                   <td>
                     {' '}
                     {coupon.inStock ? (
@@ -92,7 +164,7 @@ const CouponListScreen = ({ history, match }) => {
                     {new Date(coupon.published).toLocaleDateString('he-IL')}
                   </td>
                   <td>
-                    <LinkContainer to={`/seller/coupon/${coupon._id}/edit`}>
+                    <LinkContainer to={`/seller/coupon/edit/${coupon._id}`}>
                       <Button variant='light' className='btn-sm'>
                         <i className='fas fa-edit'></i>
                       </Button>
@@ -100,7 +172,9 @@ const CouponListScreen = ({ history, match }) => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(coupon._id)}
+                      onClick={() =>
+                        deleteHandler(coupon, coupon._id, coupon.shop)
+                      }
                     >
                       <i className='fas fa-trash'></i>
                     </Button>

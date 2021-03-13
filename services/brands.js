@@ -12,7 +12,8 @@ const createBrand = async (place,name, marketCap) => {
 
 
 const getBrands = async () => {
-    return await Brand.find({});
+    var mysort = { place: 1 };
+    return await Brand.find({}).sort(mysort);
 };
 
 

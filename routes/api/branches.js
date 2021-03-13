@@ -9,23 +9,30 @@ const Shop = require('../../models/Shop');
 const Coupon = require('../../models/Coupon');
 const moment = require('moment')
 const today = moment().startOf('day')
+var ObjectId = require('mongodb').ObjectID;
 
 
 // @route   POST api/branches
 // @desc     Create branch
 // @access   Private
-router.post( // check for body errors
+router.post(
+  // check for body errors
   '/create',
-  [
-    [check('name', 'name is required').not().isEmpty()]
-  ],
+  [[check('name', 'name is required').not().isEmpty()]],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { // pull out everything form the body
-      name, city, address, phoneNumber, lat, long, shop,
+    const {
+      // pull out everything form the body
+      name,
+      city,
+      address,
+      phoneNumber,
+      lat,
+      long,
+      shop,
     } = req.body;
     // Build up branch fields object to insert into the db and check if coming in
     const BranchFields = {};
@@ -41,7 +48,9 @@ router.post( // check for body errors
 
     try {
       let branch = await Branch.findOne({ name: name }); //look for a branch
-      if (branch) { return res.json("branch already exists"); }
+      if (branch) {
+        return res.json('branch already exists');
+      }
       //Create
       branch = new Branch(BranchFields);
 
@@ -49,10 +58,10 @@ router.post( // check for body errors
         shopId.branches.push(newBranch);
         shopId.save();
         res.json(branch);
-      })
+      });
     } catch (err) {
       console.error(err.message);
-      console.log("err.message");
+      console.log('err.message');
       res.status(500).send('Server Error');
       res.json({ status: 'failed' });
     }
@@ -62,23 +71,29 @@ router.post( // check for body errors
 // @route   POST api/branches
 // @desc     Edit branch by id
 // @access   Private
-router.post( // check for body errors
+router.post(
+  // check for body errors
   '/:id',
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { // pull out everything form the body
-      name, city, address, phoneNumber, lat, long, shop,
+    const {
+      // pull out everything form the body
+      name,
+      city,
+      address,
+      phoneNumber,
+      lat,
+      long,
+      shop,
     } = req.body;
 
     try {
-
       let branch = await Branch.findById(req.params.id); //look for a branch and update
 
-      if (!branch)
-        return null;
+      if (!branch) return null;
       // Update
       branch.name = name;
       branch.city = city;
@@ -105,7 +120,7 @@ router.get('/name/:name', async (req, res) => {
     const branch = await Branch.findOne({ name: `${req.params.name}` });
 
     if (!branch) {
-      return res.status(404).json({ msg: 'Branch not found' })
+      return res.status(404).json({ msg: 'Branch not found' });
     }
 
     res.json(branch);
@@ -114,8 +129,6 @@ router.get('/name/:name', async (req, res) => {
 
     res.status(500).send('Server Error');
   }
-
-
 });
 
 // @route    GET api/branch/:id
@@ -124,9 +137,9 @@ router.get('/name/:name', async (req, res) => {
 router.get('/id/:id', async (req, res) => {
   try {
     const branch = await Branch.findOne({ id: `${req.params.id}` });
-    console.log("bla");
+    console.log('bla');
     if (!branch) {
-      return res.status(404).json({ msg: 'Branch not found' })
+      return res.status(404).json({ msg: 'Branch not found' });
     }
 
     res.json(branch);
@@ -135,20 +148,17 @@ router.get('/id/:id', async (req, res) => {
 
     res.status(500).send('Server Error');
   }
-
-
 });
 
 // @route    GET api/shop/:adress
 // @desc     Get shop by adress
 // @access   Private
 router.get('/adress/:adress', async (req, res) => {
-
   try {
     const branch = await Branch.findOne({ adress: `${req.params.adress}` });
 
     if (!branch) {
-      return res.status(404).json({ msg: 'Branch not found' })
+      return res.status(404).json({ msg: 'Branch not found' });
     }
 
     res.json(branch);
@@ -163,12 +173,11 @@ router.get('/adress/:adress', async (req, res) => {
 // @desc     Get shop by adress
 // @access   Private
 router.get('/city/:city', async (req, res) => {
-
   try {
     const branch = await Branch.findOne({ adress: `${req.params.city}` });
 
     if (!branch) {
-      return res.status(404).json({ msg: 'Branch not found' })
+      return res.status(404).json({ msg: 'Branch not found' });
     }
 
     res.json(branch);
@@ -183,12 +192,13 @@ router.get('/city/:city', async (req, res) => {
 // @desc    Get all branches
 // @access  Public
 router.get('/', async (req, res) => {
-
   try {
-    Branch.find({}).populate({ path: 'shop' }).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
+    Branch.find({})
+      .populate({ path: 'shop' })
+      .exec(function (err, docs) {
+        if (err) console.error(err.stack || err);
+        res.json(docs);
+      });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -200,7 +210,6 @@ router.get('/', async (req, res) => {
 // @access  Private
 router.delete('/:id', async (req, res) => {
   try {
-
     const branch = await Branch.findById(req.params.id);
 
     if (!branch) {
@@ -208,7 +217,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     const parentShopId = await Shop.findById(branch.shop);
-    
+
     if (!parentShopId) {
       return res.status(404).json({ msg: 'Shop not found' });
     }
@@ -218,7 +227,6 @@ router.delete('/:id', async (req, res) => {
 
     await branch.remove();
     res.json({ msg: 'Branch removed' });
-
   } catch (err) {
     console.error(err.message);
 
@@ -230,76 +238,117 @@ router.delete('/:id', async (req, res) => {
 // @desc    Search by {} branches
 // @access  Public
 router.get('/', async (req, res) => {
-
   try {
-    Branch.find({}).populate({ path: 'shop' }).exec(function (err, docs) {
-      if (err) console.error(err.stack || err);
-      res.json(docs);
-    });
+    Branch.find({})
+      .populate({ path: 'shop' })
+      .exec(function (err, docs) {
+        if (err) console.error(err.stack || err);
+        res.json(docs);
+      });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
+// @route   GET api/branches/branchNames
+// @desc    Get all branchNames
+// @access  Public
+router.get('/branchNames/:couponId', async (req, res) => {
+  console.log(req.params.couponId);
+  try {
+    const coupon = await Coupon.findOne({ _id: req.params.couponId });
+    const shop = await Shop.findOne({ _id: coupon.shop }).populate('branches');
+
+    console.log(shop.branches);
+
+    res.json(shop.branches);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+}
+);
+
 // @route    GET api/getCountBranches
 // @desc     get the count of branches
 // @access   Private
-router.get(
-  '/getCountBranches',
-  (async (req, res) => {
-    Branch.countDocuments({ }, function (err, branchCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchCount);
-      res.json(branchCount);
-    });
-  })
-);
+
+router.get('/getCountBranches', async (req, res) => {
+  Branch.countDocuments({}, function (err, branchCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log('There are %d Branches that account Couponzy App', branchCount);
+    res.json(branchCount);
+  });
+});
 
 // @route    GET api/coupons/getCountCoupons
 // @desc     get the count of users
 // @access   Private
-router.get(
-  '/getCountCoupons',
-  (async (req, res) => {
-    Coupon.countDocuments({ }, function (err, couponCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', couponCount);
-      res.json(couponCount);
-    });
-  })
-);
+
+router.get('/getCountCoupons', async (req, res) => {
+  Coupon.countDocuments({}, function (err, couponCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log('There are %d Branches that account Couponzy App', couponCount);
+    res.json(couponCount);
+  });
+});
 
 // @route    GET api/coupons/getCountValidCoupons
 // @desc     get the count of users
 // @access   Private
+
 router.get(
   '/getCountValidCoupons',
+
   (async (req, res) => {
-    Coupon.countDocuments({ "domain.ApplicationCase.fields.ExpireDate": { $lte : today.toDate() }}, function (err, couponCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', couponCount);
-      res.json(couponCount);
-    });
+    try {
+      Coupon.countDocuments({
+        expireDate: {
+          $lte: new Date().getTime()
+        }
+        /*published: {
+          $gte: new Date().getTime() - 60 * 10080 * 1000 // last 7 days
+          //(60 * 5 * 1000--> 5 minute)  (60 * 120 * 1000 --> 2 hours) ===== > (60 seconds * 5 minutes)
+        }*/
+      },function (err, couponCount) {
+        if (err)
+          return res.status(404).json({ errors: ['Count failed'] });
+        console.log('There are %d Branches that account Couponzy App',couponCount);
+        res.json(couponCount);
+      });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   })
 );
+router.get('/getCountValidCoupons', async (req, res) => {
+  Coupon.countDocuments(
+    { 'domain.ApplicationCase.fields.ExpireDate': { $lte: today.toDate() } },
+    function (err, couponCount) {
+      if (err) return res.status(404).json({ errors: ['Count failed'] });
+      console.log(
+        'There are %d Branches that account Couponzy App',
+        couponCount
+      );
+      res.json(couponCount);
+    }
+  );
+});
 
 // @route    GET api/getCountBranches
 // @desc     get the count of isOpen branches
 // @access   Private
-router.get(
-  '/getCountIsOpenBranches',
-  (async (req, res) => {
-    Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
-      if (err)
-        return res.status(404).json({ errors: ['Count failed'] });
-      console.log('There are %d Branches that account Couponzy App', branchIsOpenCount);
-      res.json(branchIsOpenCount);
-    });
-  })
-);
+router.get('/getCountIsOpenBranches', async (req, res) => {
+  Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
+    if (err) return res.status(404).json({ errors: ['Count failed'] });
+    console.log(
+      'There are %d Branches that account Couponzy App',
+      branchIsOpenCount
+    );
+    res.json(branchIsOpenCount);
+  });
+});
 
 module.exports = router;

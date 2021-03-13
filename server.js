@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const socketIo = require('socket.io');
 const Branch = require('./models/Branch');
-const url = "mongodb://localhost:27017/chat";
+const url = 'mongodb://localhost:27017/chat';
 const router = require('./routes/api/branches');
 
 const app = express();
@@ -31,41 +31,39 @@ app.use('/api/branches', require('./routes/api/branches'));
 app.use('/api/orders', require('./routes/api/orders'));
 app.use('/api/couponsTypes', require('./routes/api/couponsTypes'));
 app.use('/brands', require('./routes/api/brands'));
+app.use('/admins', require('./routes/api/admins'))
+app.use('/shops', require('./routes/api/adminshops'))
 
 const server = http.createServer(app);
 
-const whitelist = ["http://localhost:4200", "http://localhost:3000"];
+const whitelist = ['http://localhost:4200', 'http://localhost:3000'];
 
 const io = socketIo(server, {
-    cros: {
-        origins: [whitelist],
-        methods: ["GET", "POST"],
-        credentials: false
-    }
+  cros: {
+    origins: [whitelist],
+    methods: ['GET', 'POST'],
+    credentials: false,
+  },
 });
 
 var count = 0;
 io.on('connection', (socket) => {
-    if (socket.handshake.headers.origin === "http://localhost:3000") {
-        count++;
-        socket.broadcast.emit('count', count);
+  if (socket.handshake.headers.origin === 'http://localhost:3000') {
+    count++;
+    socket.broadcast.emit('count', count);
 
-        console.log(count);
-        socket.on('disconnect', () => {
-            count--;
-            socket.broadcast.emit('count', count);
-            console.log(count);
-        });
-    }
-    console.log('Client connected');
-    //chartUpdate(socket);
-
-
+    console.log(count);
+    socket.on('disconnect', () => {
+      count--;
+      socket.broadcast.emit('count', count);
+      console.log(count);
+    });
+  }
+  console.log('Client connected');
 });
 
 function chartUpdate(socket) {
-
-    /*socket.on("update", async (countbranches) => {
+  /*socket.on("update", async (countbranches) => {
         try {
             Branch.countDocuments({ isOpen: true }, function (err, branchIsOpenCount) {
                 if (err)
@@ -85,7 +83,6 @@ function chartUpdate(socket) {
         chartUpdate(socket)
     }, 2000);*/
 }
-
 
 const PORT = process.env.PORT || 5000;
 

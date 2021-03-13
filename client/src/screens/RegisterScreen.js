@@ -7,6 +7,8 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const RegisterScreen = ({ location, history }) => {
   const [firstName, setFirstName] = useState('');
@@ -15,6 +17,8 @@ const RegisterScreen = ({ location, history }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmedPassword] = useState('');
   const [message, setMessage] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+  //const [error, setError] = useState('');
   // const [isAdmin, setIsAdmin] = useState('');
   //const [isCustomer, setIsCustomer] = useState('');
   //const [isSeller, setIsSeller] = useState('');
@@ -24,7 +28,7 @@ const RegisterScreen = ({ location, history }) => {
 
   const dispatch = useDispatch();
 
-  const userRegister = useSelector((state) => state.userLogin);
+  const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
@@ -33,12 +37,22 @@ const RegisterScreen = ({ location, history }) => {
     if (userInfo) {
       history.push(redirect);
     }
-  }, [history, userInfo, redirect]);
+  }, [history, error, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (
+      firstName.length == 0 ||
+      lastName.length == 0 ||
+      email.length == 0 ||
+      password.length == 0 ||
+      phoneNumber.length == 0
+    ) {
+      setMessage('יש למלא את כל השדות');
+    } else if (password !== confirmPassword) {
       setMessage('ססמאות לא תואמות');
+    } else if (phoneNumber.length != 10) {
+      setMessage('מספר טלפון לא תקין');
     } else {
       dispatch(
         register(
@@ -46,9 +60,6 @@ const RegisterScreen = ({ location, history }) => {
           lastName,
           email,
           password,
-          //  isAdmin,
-          //  isCustomer,
-          //  isSeller,
           phoneNumber,
           birthday,
           gender
@@ -133,7 +144,18 @@ const RegisterScreen = ({ location, history }) => {
             <option>נקבה</option>
           </Form.Control>
         </Form.Group>
-
+        <Form.Group>
+          <Form.Label>תאריך לידה</Form.Label>
+          <br></br>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              setBirthday(date);
+            }}
+          />
+          {console.log(birthday)}
+        </Form.Group>
         {/* <Form.Group controlId='date' bsSize='large'>
           <Form.Label>Birthday</Form.Label>
           <Form.Control type='date' style={{ width: '100%' }} />

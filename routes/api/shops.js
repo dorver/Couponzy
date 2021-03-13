@@ -34,8 +34,6 @@ router.post(
       users,
     } = req.body;
 
-    console.log('1');
-
     //Build shop object
     const ShopFields = {}; // build up shop fields object to insert into the db and check if coming in
     if (id) ShopFields.id = id;
@@ -91,8 +89,6 @@ router.post(
       branches,
       users,
     } = req.body;
-
-    console.log('1');
 
     //Build shop object
     const ShopFields = {}; // build up shop fields object to insert into the db and check if coming in

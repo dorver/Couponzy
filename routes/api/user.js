@@ -20,8 +20,6 @@ router.post(
     console.log(req.body);
     const user = await User.findOne({ email });
 
-    console.log(user);
-
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
@@ -39,8 +37,7 @@ router.post(
         token: generateToken(user._id),
       });
     } else {
-      res.status(401);
-      throw new Error('Invalid email or password');
+      res.status(401).json({ message: 'Invalid email or password' });
     }
   })
 );
@@ -57,49 +54,44 @@ router.post(
       email,
       password,
       phoneNumber,
-      //isAdmin,
-      //isCustomer,
-      //isSeller,
       birthday,
       gender,
     } = req.body;
-    console.log(req.body);
 
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      res.status(400);
-      throw new Error('User already exists');
-    }
-
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-      birthday,
-      gender,
-    });
-
-    if (user) {
-      res.status(201).json({
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        isCustomer: user.isCustomer,
-        isSeller: user.isSeller,
-        phoneNumber: user.phoneNumber,
-        birthday: user.birthday,
-        gender: user.gender,
-        orders: user.orders,
-        token: generateToken(user._id),
-      });
+      console.log('user exists');
+      res.status(400).json({ message: 'User already exists' });
     } else {
-      res.status(400);
-      throw new Error('Invalid user data');
+      const user = await User.create({
+        firstName,
+        lastName,
+        email,
+        password,
+        phoneNumber,
+        birthday,
+        gender,
+      });
+
+      if (user) {
+        res.status(201).json({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          isCustomer: user.isCustomer,
+          isSeller: user.isSeller,
+          phoneNumber: user.phoneNumber,
+          birthday: user.birthday,
+          gender: user.gender,
+          orders: user.orders,
+          token: generateToken(user._id),
+        });
+      } else {
+        res.status(400).json({ message: 'Invalid user data' });
+      }
     }
   })
 );
@@ -125,8 +117,7 @@ router.get(
         isAdmin: user.isAdmin,
       });
     } else {
-      res.status(404);
-      throw new Error('User not found');
+      res.status(404).json({ message: 'User not found' });
     }
   })
 );
@@ -161,8 +152,7 @@ router.put(
         token: generateToken(updatedUser._id),
       });
     } else {
-      res.status(404);
-      throw new Error('User not found');
+      res.status(404).json({ message: 'User not found' });
     }
   })
 );
@@ -198,8 +188,7 @@ router.put(
         token: generateToken(user._id),
       });
     } else {
-      res.status(404);
-      throw new Error('User not found');
+      res.status(404).json({ message: 'User not found' });
     }
   })
 );
@@ -210,7 +199,7 @@ router.put(
 router.get('/getLastUsers', async (req, res) => {
 
   try {
-    User.find({}).limit(5).sort({ $natural: -1 }).exec(function (err, docs) {
+    User.find({}).limit(10).sort({ $natural: -1 }).exec(function (err, docs) {
       if (err) console.error(err.stack || err);
       res.json(docs);
     });

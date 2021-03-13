@@ -5,32 +5,43 @@ import {
   couponListReducer,
   couponDetailReducer,
   couponShopListReducer,
+  couponDeleteReducer,
+  couponSetToExpiredReducer,
+  couponCreateReducer,
+  couponUpdateReducer,
 } from './reducers/couponReducers';
 
-import {
-  shopListReducer,
-  shopDetailReducer,
-} from './reducers/shopReducers';
+import { branchNamesListReducer } from './reducers/branchReducers';
+
+import { shopListReducer, shopDetailReducer } from './reducers/shopReducers';
 import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
-  userUpdatePrpfileReducer,
+  userUpdateProfileReducer,
 } from './reducers/userReducers';
 
 import { newOrderReducer, getOrdersReducer } from './reducers/orderReducers';
+import { setCouponToExpired } from './actions/couponActions';
+import { couponTypesListReducer } from './reducers/couponTypesReducers';
 
 const reducer = combineReducers({
   couponList: couponListReducer,
   shopList: shopListReducer,
   couponShopList: couponShopListReducer,
   couponDetails: couponDetailReducer,
+  couponCreate: couponCreateReducer,
+  couponUpdate: couponUpdateReducer,
+  couponDelete: couponDeleteReducer,
+  setCouponToExpired: couponSetToExpiredReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
-  userUpdatePrpfile: userUpdatePrpfileReducer,
+  userUpdateProfile: userUpdateProfileReducer,
   order: newOrderReducer,
   orderList: getOrdersReducer,
+  couponTypesList: couponTypesListReducer,
+  branchesList: branchNamesListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
