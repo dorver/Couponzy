@@ -1,106 +1,112 @@
 import { Component, OnInit } from '@angular/core';
+import { Form, FormControl, Validators } from '@angular/forms';
+import { Shops } from 'src/app/models/shops';
+import { Users } from 'src/app/models/users';
+import { UserService } from 'src/app/services/user.service';
 import { SharedService } from '../../layouts/shared.service';
+import { ShopService } from 'src/app/services/manage-shops';
+interface Pos{
+  value:number;
+  viewValue:string;
+}
 
 @Component({
   selector: 'page-users-manage',
   templateUrl: './users-manage.component.html',
   styleUrls: ['./users-manage.component.scss']
 })
+
+
 
 export class PageUsersManageComponent implements OnInit {
   pageTitle: string = 'ניהול משתמשים';
 
+  users : Users[] = [];  
+  shops: Shops[]=[];
+  updatePressed:boolean= false;
+  showUsers:boolean=true;
+  updateUser:Users;
+  name:string;
+  posSelected:string;
+  isSeller:boolean=false;
   // Constractor
-  constructor( private _sharedService: SharedService) {
+  constructor( private _sharedService: SharedService, private userServices: UserService, private shopServices:ShopService) {
     this._sharedService.emitChange(this.pageTitle);
   }
 
-  ngOnInit(): void {}
-}
-
-
-
-
-
-
-
-
-/*import { Component, OnInit } from '@angular/core';
-import { SharedService } from '../../layouts/shared.service';
-
-import { DataSource } from '@angular/cdk/collections';
-import { Observable, of } from 'rxjs';
-
-@Component({
-  selector: 'page-users-manage',
-  templateUrl: './users-manage.component.html',
-  styleUrls: ['./users-manage.component.scss']
-})
-
-export class PageUsersManageComponent implements OnInit {
-  pageTitle: string = 'Simple table';
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new ExampleDataSource();
-
-  constructor( private _sharedService: SharedService ) {
-    this._sharedService.emitChange(this.pageTitle);
+  ngOnInit() {
+    this.load();
   }
 
-  ngOnInit() {}
-}
+  posi: Pos[]=[
+    {value: 0, viewValue : "מנהל"},
+    {value: 1, viewValue : "מוכר"},
+    {value: 2, viewValue : "קונה"}
+  ];
 
-export interface Element {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+  posControl = new FormControl('', Validators.required);
+  shopControl= new FormControl('', Validators.required);
+  load(){
+    this.getShops();
+    this.userServices.getUsers().subscribe(data => {
+      this.users = data;
+    });
 
-const data: Element[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
-
-/**
- * Data source to provide what data should be rendered in the table. The observable provided
- * in connect should emit exactly the data that should be rendered by the table. If the data is
- * altered, the observable should emit that new set of data on the stream. In our case here,
- * we return a stream that contains only one set of data that doesn't change.
- */
-
-
-
-
-
-/*export class ExampleDataSource extends DataSource<any> {
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  
-  
-  
-  
-  
-  
-  /*connect(): Observable<Element[]> {
-    return of(data);
   }
 
-  disconnect() {}
-}*/
+  checkP(user:Users){
+    if(user.isAdmin)
+      return "מנהל"
+    else if(user.isSeller)
+      return "מוכר"
+    return "קונה"
+  }
+
+  checkShop(user:Users){
+    if(user.shop){
+     return this.shops.find(shop=>shop._id===user.shop).shopName;
+    }
+    return "---";
+  }
+
+  onUpdate(state: boolean, id: string){
+    if(state){
+      console.log(id);
+      this.updatePressed = true;
+      this.showUsers=false;
+      this.updateUser = this.users.find(user => user._id === id);
+      this.posSelected=this.checkP(this.updateUser);
+      this.name=this.updateUser.firstName + " " + this.updateUser.lastName + ", סוג משתמש: " + this.posSelected;
+      if(this.updateUser.isSeller)
+        this.isSeller=true;
+      this.posControl = new FormControl('', Validators.required);
+      this.shopControl = new FormControl('', Validators.required);
+      if(this.isSeller)
+        this.getShops();
+      
+    }
+    if(!state){
+      this.updatePressed = false;
+      this.showUsers=true;
+      this.isSeller=false;
+    }
+  }
+
+   onUpdateSubmit(pos){
+    this.userServices.updatePos(this.updateUser._id,pos);
+    this.onUpdate(false,this.updateUser._id);
+    window.location.reload();
+  }
+
+  getShops(){
+    this.shopServices.getShops().subscribe(data => {
+      this.shops = data;
+    });
+  }
+
+   onShopSubmit(shop){
+    this.shopServices.addShopToUser(this.updateUser._id,shop);
+    this.onUpdate(false,this.updateUser._id);
+    window.location.reload();
+  }
+}

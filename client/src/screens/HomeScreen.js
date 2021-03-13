@@ -153,6 +153,8 @@ const HomeScreen = () => {
                     var x = coupon.newPrice.toString().indexOf(search) !== -1;
                     var y = coupon.name.toString().indexOf(search) !== -1;
                     console.log(searchcouponTypes + 'xx');
+                    if( shpname==null)
+                    return ;
                     if (
                       searchcouponTypes == '' ||
                       searchcouponTypes == 'בחר/י סוג קופון'

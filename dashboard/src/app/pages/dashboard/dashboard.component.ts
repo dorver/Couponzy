@@ -122,7 +122,7 @@ export class PageDashboardComponent implements OnInit {
       console.log(this.ordersCheck);
     }))*/
       
-    });
+  
   }
 
   drawChart(){
