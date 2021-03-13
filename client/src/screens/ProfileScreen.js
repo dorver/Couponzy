@@ -13,9 +13,6 @@ const ProfileScreen = ({ location, history }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmedPassword] = useState('');
   const [message, setMessage] = useState(null);
-  // const [isAdmin, setIsAdmin] = useState('');
-  //const [isCustomer, setIsCustomer] = useState('');
-  //const [isSeller, setIsSeller] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birthday, setBirthday] = useState('');
   const [gender, setGender] = useState('');
@@ -46,7 +43,6 @@ const ProfileScreen = ({ location, history }) => {
       setBirthday(user.birthday);
       setGender(user.gender);
     }
-    //}
   }, [dispatch, history, userInfo, user, updateSuccess]);
 
   const submitHandler = (e) => {
