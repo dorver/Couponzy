@@ -52,9 +52,9 @@
 <div class="row mb-lg-4">
   <!-- Bar Chart -->
   <div class="col-md">
-    <card class="mb-lg">
-        <canvas baseChart [chartType]="barChartType" [datasets]="barChartData" [labels]="barChartLabels"
-            [options]="barChartOptions" [legend]="barChartLegend">
+    <card  class="mb-lg">
+        <canvas appDesignchart baseChart [datasets]="barChartData" [labels]="barChartLabels"
+            [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
         </canvas>
     </card>
   </div>

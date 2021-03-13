@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SharedService } from '../../layouts/shared.service';
 import { Brand } from '../../models/brands';
 import { RealtimeService } from '../../services/realtime.service';
@@ -20,26 +20,24 @@ import { Shops } from 'src/app/models/shops';
   selector: 'page-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
-
 })
 export class PageDashboardComponent implements OnInit {
   pageTitle: string = 'עמוד ראשי';
 
+  @Input() borderW: number = 1;  
   // Amount of users connected
   counter: Number;
   countOfUsers: Number;
   countOfBranches: Number;
   countIsOpenBranches: Number;
-  countLastDayUsersAccount: Number;
   countCoupons: Number;
   countValidCoupons: Number;
   users: Users[] = [];
   orders: Orders[] = [];
-  ordersCheck: Orders[] = [];
   shops: Shops[] = [];
   chartBar: any[] = [];
-  shopK: any[];  
-  
+  shopK: any[];
+
 
   // Constractor
   constructor(private _sharedService: SharedService,
@@ -57,7 +55,6 @@ export class PageDashboardComponent implements OnInit {
     this._manageusers.getCountUsers().subscribe(countOfUsers => this.countOfUsers = countOfUsers);
     this._managebranches.getCountBranches().subscribe(countOfBranches => this.countOfBranches = countOfBranches);
     this._managebranches.getCountIsOpenBranches().subscribe(countIsOpenBranches => this.countIsOpenBranches = countIsOpenBranches);
-    //this._manageusers.getCountLasvtUsers().subscribe(countLastDayUsersAccount => this.countLastDayUsersAccount = countLastDayUsersAccount);
     this._managebranches.getCountCoupons().subscribe(countCoupons => this.countCoupons = countCoupons);
     this._managebranches.getCountValidCoupons().subscribe(countValidCoupons => this.countValidCoupons = countValidCoupons);
 
@@ -67,7 +64,6 @@ export class PageDashboardComponent implements OnInit {
     this.showUsers();
     this.showOrders();
     this.showShops();
-    this.drawChart();
   }
 
   showUsers() {
@@ -76,21 +72,16 @@ export class PageDashboardComponent implements OnInit {
     })
   }
 
-  showShops(){
+  showShops() {
     this._manageshops.getAllShops().subscribe((shops) => {
       this.shops = shops;
-      //console.log(this.shops);
       this.barChartLabels = this.shops.map((shop) => shop.shopName);
-      this.barChartShopId = this.shops.map((shop) => shop._id);
-      //console.log(this.barChartLabels)
-      //console.log(this.barChartShopId)
     })
   }
 
-
   arr: number[] = [];
   Lastcoupons: any[] = [];
-  LastDateCoupons:any[]=[];
+  LastDateCoupons: any[] = [];
 
   showOrders() {
     this._manageorders.getAllOrders().subscribe((orders) => {
@@ -98,37 +89,28 @@ export class PageDashboardComponent implements OnInit {
         return order.coupon != null
       });
 
-     this.chartBar=this.orders.map(order=>{return order.coupon});
-     this.LastDateCoupons=this.orders.map(order=>{return order.orderDate}).reverse().slice(0,5);
-     this.Lastcoupons=this.chartBar.reverse().slice(0,5);
-      this.shopK=this.chartBar.map(z=>{
-        return {shopName:z.shop['shopName'],price:z.newPrice}
-      }).reduce(function(obj, shopc,arr){
+      this.chartBar = this.orders.map(order => { return order.coupon });
+      this.LastDateCoupons = this.orders.map(order => { return order.orderDate }).reverse().slice(0, 5);
+      this.Lastcoupons = this.chartBar.reverse().slice(0, 5);
+
+      this.shopK = this.chartBar
+      .map(z => {return { shopName: z.shop['shopName'], price: z.newPrice }})
+      .reduce(function (obj, shopc, arr) {
         if (!obj[shopc.shopName]) {
-            obj[shopc.shopName] = 1;
+          obj[shopc.shopName] = 1;
         } else {
-            obj[shopc.shopName]+=shopc.price;
+          obj[shopc.shopName] += shopc.price;
         }
         return obj;
-    } ,[]);
-    this.barChartLabels.forEach(shop => {
-      this.arr.push(this.shopK[shop]);
-    });
-    this.barChartData["data"]=(this.arr);
-    });
-    
-    /*this._manageorders.getMapReduceOrders().subscribe((mapOrder => {
-      this.ordersCheck = mapOrder;
-      console.log(this.ordersCheck);
-    }))*/
-      
+      }, []);
+  
+      this.barChartLabels.forEach(shop => {
+        this.arr.push(this.shopK[shop]);
+      });
+      this.barChartData["data"] = (this.arr);
     });
   }
 
-  drawChart(){
-
-    
-  }
   // barChart
   public barChartOptions: any = {
     scaleShowVerticalLines: false,
@@ -138,31 +120,16 @@ export class PageDashboardComponent implements OnInit {
 
   // All shops
   public barChartLabels: string[] = [];
-
-  public barChartShopId: string[] = [];
-
   public barChartType: string = 'bar';
-
   public barChartLegend: boolean = true;
 
   public barChartData: any[] = [
     {
       data: this.arr,
       label: 'מכירת קופונים ב48 שעות אחרונות',
-      /*borderWidth: 2,
-      pointRadius: 1*/
+      borderWidth: this.borderW,
+      pointRadius: 1
     }
   ];
-
-  // CHART CLICK EVENT.
-  onChartClick(event) {
-    //console.log(event);
-  }
-
-  updateChartData(chart, data, dataSetIndex) {
-    chart.data.datasets[dataSetIndex].data = data;
-    chart.update();
-  }
-
 
 }
