@@ -12,7 +12,8 @@ export const environment = {
   usersUrl : `http://localhost:${PORT}/api/user`,
   couponsUrl : `http://localhost:${PORT}/api/coupons`,
   ordersUrl : `http://localhost:${PORT}/api/orders`,
-  adminssUrl : 'http://localhost:5000/admins'
+  adminsUrl : `http://localhost:${PORT}/admins`,
+  shopssUrl : `http://localhost:${PORT}/shops`,
 };
 
 /*

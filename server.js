@@ -32,6 +32,7 @@ app.use('/api/orders', require('./routes/api/orders'));
 app.use('/api/couponsTypes', require('./routes/api/couponsTypes'));
 app.use('/brands', require('./routes/api/brands'));
 app.use('/admins', require('./routes/api/admins'))
+app.use('/shops', require('./routes/api/adminshops'))
 
 const server = http.createServer(app);
 
