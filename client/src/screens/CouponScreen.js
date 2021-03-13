@@ -83,7 +83,7 @@ const CouponScreen = ({ match }) => {
       {branchList && (
         <Row>
           <Col md={3}>
-            <Image src={coupon.pictureName} alt={coupon.name} fluid />
+            <Image src={coupon.pictureName} style={{ width: 221, height: 276.98 }} alt={coupon.name} fluid />
           </Col>
           <Col md={3}>
             <ListGroup variant='flush'>
