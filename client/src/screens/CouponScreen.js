@@ -42,7 +42,8 @@ const CouponScreen = ({ match }) => {
     dispatch(listCouponDetails(match.params.id));
     if (!branchList) {
       dispatch(listBranchNames(match.params.id));
-    } else {
+    } else if(branchList && branchList[0])
+    {
       setBranch(branchList[0]._id);
     }
   }, [dispatch, match, branchList]);
