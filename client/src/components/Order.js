@@ -5,16 +5,16 @@ import { Card } from 'react-bootstrap';
 const Order = ({ order }) => {
   return (
     <Card className='my-3 p-3 rounded'>
-      <Link to={`/coupon/${order.coupon._id}`}>
-        <Card.Img src={order.coupon.pictureName} variant='top' />
-      </Link>
+      {/* <Link to={`/coupon/${order.coupon._id}`}> */}
+        <Card.Img src={order.coupon.pictureName} style={{ width: 221, height: 276.98 }} variant='top' />
+      {/* </Link> */}
 
       <Card.Body>
-        <Link dir='rtl' to={`/coupon/${order.coupon._id}`}>
+        {/* <Link dir='rtl' to={`/coupon/${order.coupon._id}`}> */}
           <Card.Title dir='rtl' as='div'>
             <strong>{order.coupon.name}</strong>
           </Card.Title>
-        </Link>
+        {/* </Link> */}
         {order.coupon.inStock ? (
           <Card.Text as='div'>
             <div className='my-3'>במלאי</div>
