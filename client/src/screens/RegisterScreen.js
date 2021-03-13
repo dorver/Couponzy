@@ -8,6 +8,7 @@ import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { register } from '../actions/userActions';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const RegisterScreen = ({ location, history }) => {
   const [firstName, setFirstName] = useState('');
@@ -40,8 +41,18 @@ const RegisterScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    if (
+      firstName.length == 0 ||
+      lastName.length == 0 ||
+      email.length == 0 ||
+      password.length == 0 ||
+      phoneNumber.length == 0
+    ) {
+      setMessage('יש למלא את כל השדות');
+    } else if (password !== confirmPassword) {
       setMessage('ססמאות לא תואמות');
+    } else if (phoneNumber.length != 10) {
+      setMessage('מספר טלפון לא תקין');
     } else {
       dispatch(
         register(
@@ -49,9 +60,6 @@ const RegisterScreen = ({ location, history }) => {
           lastName,
           email,
           password,
-          //  isAdmin,
-          //  isCustomer,
-          //  isSeller,
           phoneNumber,
           birthday,
           gender

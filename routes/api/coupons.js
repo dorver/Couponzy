@@ -105,38 +105,39 @@ router.post(
 
     if (couponCodeExist) {
       res.status(400).json({ message: 'coupon code exists' });
-    }
+    } else {
+      //Build shop object
+      const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
+      if (name) CouponFields.name = name;
+      CouponFields.inStock = inStock;
+      if (expireDate) CouponFields.expireDate = expireDate;
+      if (couponCode) CouponFields.couponCode = couponCode;
+      if (newPrice) CouponFields.newPrice = newPrice;
+      if (oldPrice) CouponFields.oldPrice = oldPrice;
+      if (decription) CouponFields.decription = decription;
+      if (pictureName) CouponFields.pictureName = pictureName;
+      //if (published) CouponFields.published = published;
+      if (couponType) CouponFields.couponType = couponType;
+      if (couponShop) CouponFields.shop = couponShop;
+      try {
+        //Create
+        coupon = new Coupon(CouponFields);
 
-    //Build shop object
-    const CouponFields = {}; // build up shop fields object to insert into the db and check if coming in
-    if (name) CouponFields.name = name;
-    CouponFields.inStock = inStock;
-    if (expireDate) CouponFields.expireDate = expireDate;
-    if (couponCode) CouponFields.couponCode = couponCode;
-    if (newPrice) CouponFields.newPrice = newPrice;
-    if (oldPrice) CouponFields.oldPrice = oldPrice;
-    if (decription) CouponFields.decription = decription;
-    if (pictureName) CouponFields.pictureName = pictureName;
-    //if (published) CouponFields.published = published;
-    if (couponType) CouponFields.couponType = couponType;
-    if (couponShop) CouponFields.shop = couponShop;
-    try {
-      //Create
-      coupon = new Coupon(CouponFields);
+        const shop = await Shop.findById(req.params.id);
 
-      const shop = await Shop.findById(req.params.id);
-
-      if (coupon) {
-        await coupon.save();
-        await shop.coupons.push(coupon);
-        await shop.save();
+        if (coupon && shop) {
+          await coupon.save();
+          await shop.coupons.push(coupon);
+          await shop.save();
+          const coupons = await Coupon.find();
+          res.json(coupons);
+        } else {
+          res.status(500).send('Server Error');
+        }
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
       }
-      const coupons = await Coupon.find();
-      res.json(coupons);
-      // res.json(coupon);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
     }
   }
 );

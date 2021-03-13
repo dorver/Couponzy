@@ -81,6 +81,7 @@ const CouponListScreen = ({ history, match }) => {
         );
       } else {
         dispatch(deleteCoupon(couponId, shopId));
+        setMessage(null);
       }
     }
   };
@@ -141,8 +142,8 @@ const CouponListScreen = ({ history, match }) => {
                 <tr key={coupon._id}>
                   <td>{coupon._id}</td>
                   <td>{coupon.name}</td>
-                  <td>${coupon.oldPrice}</td>
-                  <td>${coupon.newPrice}</td>
+                  <td>₪{coupon.oldPrice}</td>
+                  <td>₪{coupon.newPrice}</td>
                   <td>
                     {' '}
                     {coupon.inStock ? (

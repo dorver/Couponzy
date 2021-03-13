@@ -13,9 +13,6 @@ const ProfileScreen = ({ location, history }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmedPassword] = useState('');
   const [message, setMessage] = useState(null);
-  // const [isAdmin, setIsAdmin] = useState('');
-  //const [isCustomer, setIsCustomer] = useState('');
-  //const [isSeller, setIsSeller] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [birthday, setBirthday] = useState('');
   const [gender, setGender] = useState('');
@@ -29,14 +26,13 @@ const ProfileScreen = ({ location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  //   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  //   const { success } = userUpdateProfile;
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const { updateSuccess } = userUpdateProfile;
 
   useEffect(() => {
-    // if (!userInfo) {
-    //   history.push('/userLogin');
-    // } else {
-    if (!user || !user.firstName) {
+    if (updateSuccess) {
+      history.push('/');
+    } else if (!user || !user.firstName) {
       dispatch(getUserDetails('getUserProfile'));
     } else {
       setFirstName(user.firstName);
@@ -47,8 +43,7 @@ const ProfileScreen = ({ location, history }) => {
       setBirthday(user.birthday);
       setGender(user.gender);
     }
-    //}
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, userInfo, user, updateSuccess]);
 
   const submitHandler = (e) => {
     e.preventDefault();

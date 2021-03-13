@@ -109,6 +109,7 @@ export class PageDashboardComponent implements OnInit {
       });
       this.barChartData["data"] = (this.arr);
     });
+
   }
 
   // barChart

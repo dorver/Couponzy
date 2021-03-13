@@ -43,9 +43,9 @@ const CouponScreen = ({ match }) => {
     if (!branchList) {
       dispatch(listBranchNames(match.params.id));
     } else {
-      setBranch(branchList[0]);
+      setBranch(branchList[0]._id);
     }
-  }, [dispatch, match]);
+  }, [dispatch, match, branchList]);
 
   const buyHandler = () => {
     if (userInfo) {
@@ -83,7 +83,7 @@ const CouponScreen = ({ match }) => {
       {branchList && (
         <Row>
           <Col md={3}>
-            <Image src={coupon.pictureName} alt={coupon.name} fluid />
+            <Image src={coupon.pictureName} style={{ width: 221, height: 276.98 }} alt={coupon.name} fluid />
           </Col>
           <Col md={3}>
             <ListGroup variant='flush'>
@@ -147,26 +147,6 @@ const CouponScreen = ({ match }) => {
           </Col>
         </Row>
       )}
-
-      {/* <ListGroup.Item>Price: ${coupon.price}</ListGroup.Item>
-            <ListGroup.Item>Description: {coupon.description}</ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={3}>
-          <Card>
-            <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Price:</Col>
-                  <Col>
-                    <strong>${coupon.price}</strong>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
-        </Col>
-      </Row> */}
     </>
   );
 };
