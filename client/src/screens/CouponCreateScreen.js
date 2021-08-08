@@ -3,6 +3,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Form, Button, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
+import shoppingPic from '../img/shopping.jpg';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { listCouponDetails, createCoupon } from '../actions/couponActions';
